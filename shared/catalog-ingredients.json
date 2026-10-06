@@ -114,37 +114,6 @@
     "notes": "ใช้สันนอกช่วง top loin ไม่มีกระดูก รวมเนื้อและไขมันที่แยกได้ ดิบ; ไม่ใช่สันใน"
   },
   {
-    "id": "pork-hock",
-    "nameTh": "ขาหมู",
-    "nameEn": "Pork hock",
-    "category": "เนื้อสัตว์และอาหารทะเล",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "รอข้อมูลขาหมูดิบส่วนที่กินได้ซึ่งระบุหนังและไขมันชัดเจน; USDA shank half ของ ham ไม่ยืนยันว่าเป็นขาหมูส่วน hock พร้อมหนัง จึงไม่ใช้แทน"
-  },
-  {
     "id": "pork-liver",
     "nameTh": "ตับหมู",
     "nameEn": "Pork liver",
@@ -373,99 +342,6 @@
     "notes": "เป็ดเลี้ยงดิบ รวมเนื้อและหนัง ไม่รวมกระดูก; ต่างจากเนื้อเป็ดล้วนหรือเป็ดย่าง"
   },
   {
-    "id": "vietnamese-pork-sausage",
-    "nameTh": "หมูยอ",
-    "nameEn": "Vietnamese-style pork sausage",
-    "category": "เนื้อสัตว์และอาหารทะเล",
-    "state": "processed",
-    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่พบข้อมูลทางการที่ยืนยันหมูยอไทยชนิดและสูตรตรงกัน; ไม่ใช้ไส้กรอกตะวันตกแทน รอข้อมูลอ้างอิงที่ระบุผลิตภัณฑ์และวิธีผลิต"
-  },
-  {
-    "id": "chinese-pork-sausage",
-    "nameTh": "กุนเชียง",
-    "nameEn": "Chinese-style dried pork sausage",
-    "category": "เนื้อสัตว์และอาหารทะเล",
-    "state": "processed",
-    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่พบข้อมูลทางการที่ยืนยันกุนเชียงไทยชนิดและสูตรตรงกัน; ไม่ใช้ไส้กรอกตะวันตกแทน รอข้อมูลอ้างอิงที่ระบุผลิตภัณฑ์และวิธีผลิต"
-  },
-  {
-    "id": "whiteleg-shrimp",
-    "nameTh": "กุ้งขาว",
-    "nameEn": "Whiteleg shrimp",
-    "category": "เนื้อสัตว์และอาหารทะเล",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "รอข้อมูลกุ้งขาว Litopenaeus vannamei ดิบที่ระบุชนิดชัดเจน; USDA shrimp แบบไม่ระบุชนิดหรือ mixed species ไม่ยืนยันว่าเป็นกุ้งขาว จึงไม่ใช้แทน"
-  },
-  {
     "id": "squid",
     "nameTh": "ปลาหมึก",
     "nameEn": "Squid, mixed species",
@@ -502,68 +378,6 @@
     "needsImage": true,
     "dataStatus": "verified",
     "notes": "ปลาหมึกดิบหลายชนิดรวมตาม USDA (Loligoidae และ Ommastrephidae) ส่วนที่กินได้; ไม่ใช่ข้อมูลเฉพาะปลาหมึกหอมหรือหมึกกระดอง"
-  },
-  {
-    "id": "short-mackerel",
-    "nameTh": "ปลาทู",
-    "nameEn": "Short mackerel",
-    "category": "เนื้อสัตว์และอาหารทะเล",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "รอข้อมูลปลาทู Rastrelliger brachysoma ดิบ; USDA Atlantic mackerel เป็นคนละชนิด จึงไม่ใช้แทน และไม่ใช้ปลาทูนึ่งแทนสถานะดิบ"
-  },
-  {
-    "id": "nile-tilapia",
-    "nameTh": "ปลานิล",
-    "nameEn": "Nile tilapia",
-    "category": "เนื้อสัตว์และอาหารทะเล",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "รอข้อมูลปลานิล Oreochromis niloticus ดิบที่ยืนยันชนิด; USDA tilapia และ farm-raised tilapia ที่ตรวจไม่มีชื่อวิทยาศาสตร์ยืนยัน จึงยังไม่ใช้แทน"
   },
   {
     "id": "salmon",
@@ -642,68 +456,6 @@
     "notes": "ทูน่าเนื้ออ่อนบรรจุกระป๋องในน้ำ ใช้เฉพาะเนื้อสะเด็ดน้ำ ตาม USDA; ไม่ใช่ทูน่าในน้ำมันหรือรวมน้ำบรรจุ"
   },
   {
-    "id": "green-mussel",
-    "nameTh": "หอยแมลงภู่",
-    "nameEn": "Asian green mussel",
-    "category": "เนื้อสัตว์และอาหารทะเล",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "รอข้อมูลหอยแมลงภู่ Perna viridis ดิบ ส่วนเนื้อ; USDA blue mussel (Mytilus edulis) เป็นคนละชนิด จึงไม่ใช้แทน"
-  },
-  {
-    "id": "short-neck-clam",
-    "nameTh": "หอยลาย",
-    "nameEn": "Short-neck clam",
-    "category": "เนื้อสัตว์และอาหารทะเล",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "รอข้อมูลหอยลาย Paphia undulata ดิบ ส่วนเนื้อ; USDA clam mixed species ไม่ยืนยันชนิดหอยลาย จึงไม่ใช้แทน"
-  },
-  {
     "id": "blue-crab",
     "nameTh": "ปูม้า",
     "nameEn": "Blue crab, raw",
@@ -740,130 +492,6 @@
     "needsImage": true,
     "dataStatus": "partial",
     "notes": "ใช้รายการปู blue crab ดิบตาม USDA; ไม่ใช่ปูม้าชนิด Portunus pelagicus โดยเฉพาะ จึงระบุชนิดของรายการอ้างอิงให้ชัด"
-  },
-  {
-    "id": "fish-ball",
-    "nameTh": "ลูกชิ้นปลา",
-    "nameEn": "Fish ball, Thai style",
-    "category": "เนื้อสัตว์และอาหารทะเล",
-    "state": "processed",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันลูกชิ้นปลาไทยและสูตรตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
-  },
-  {
-    "id": "pork-ball",
-    "nameTh": "ลูกชิ้นหมู",
-    "nameEn": "Pork ball, Thai style",
-    "category": "เนื้อสัตว์และอาหารทะเล",
-    "state": "processed",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันลูกชิ้นหมูไทยและสูตรตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
-  },
-  {
-    "id": "fermented-pork",
-    "nameTh": "แหนม",
-    "nameEn": "Fermented pork, Thai style",
-    "category": "เนื้อสัตว์และอาหารทะเล",
-    "state": "processed",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันแหนมไทยและสูตรตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
-  },
-  {
-    "id": "pork-blood",
-    "nameTh": "เลือดหมู",
-    "nameEn": "Pork blood, raw",
-    "category": "เนื้อสัตว์และอาหารทะเล",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันเลือดหมูสดตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
   },
   {
     "id": "chicken-egg",
@@ -940,37 +568,6 @@
     "needsImage": true,
     "dataStatus": "verified",
     "notes": "ไข่เป็ดทั้งฟองสดดิบตามรายการ USDA; ค่าต่อ 100 กรัมของส่วนที่กินได้ ไม่รวมเปลือก"
-  },
-  {
-    "id": "salted-egg",
-    "nameTh": "ไข่เค็ม",
-    "nameEn": "Salted egg, cooked",
-    "category": "ไข่และนม",
-    "state": "processed",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันไข่เค็มไทยตามวิธีดองและสภาพปรุงสุก; เว้นค่าสารอาหารทั้งหมดเป็น null"
   },
   {
     "id": "whole-milk",
@@ -1239,99 +836,6 @@
     "notes": "ข้าวกล้องเมล็ดยาวหุงสุกตาม USDA; ไม่จำเพาะพันธุ์ข้าวกล้องไทย"
   },
   {
-    "id": "sen-lek-rice-noodles",
-    "nameTh": "เส้นเล็ก",
-    "nameEn": "Thai rice noodles, cooked",
-    "category": "ธัญพืชและแป้ง",
-    "state": "cooked",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการทางการที่ยืนยันเส้นเล็กไทยและสภาพปรุงสุกตรงกัน; เว้นค่าสารอาหารทั้งหมดเป็น null"
-  },
-  {
-    "id": "sen-yai-rice-noodles",
-    "nameTh": "เส้นใหญ่",
-    "nameEn": "Wide Thai rice noodles, cooked",
-    "category": "ธัญพืชและแป้ง",
-    "state": "cooked",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการทางการที่ยืนยันเส้นใหญ่ไทยสดและสภาพปรุงสุกตรงกัน; เว้นค่าสารอาหารทั้งหมดเป็น null"
-  },
-  {
-    "id": "rice-vermicelli",
-    "nameTh": "เส้นหมี่",
-    "nameEn": "Rice vermicelli, cooked",
-    "category": "ธัญพืชและแป้ง",
-    "state": "cooked",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการทางการที่ยืนยันเส้นหมี่ไทยและสภาพปรุงสุกตรงกัน; เว้นค่าสารอาหารทั้งหมดเป็น null"
-  },
-  {
     "id": "glass-noodles",
     "nameTh": "วุ้นเส้น",
     "nameEn": "Cellophane noodles, mung bean, dry",
@@ -1406,68 +910,6 @@
     "needsImage": true,
     "dataStatus": "verified",
     "notes": "ใช้เส้นบะหมี่ไข่ปรุงสุกเสริมสารอาหารตามรายการ USDA; ไม่จำเพาะสีเหลืองหรือสูตรบะหมี่ไทย"
-  },
-  {
-    "id": "khanom-chin",
-    "nameTh": "ขนมจีน",
-    "nameEn": "Thai fermented rice noodles, cooked",
-    "category": "ธัญพืชและแป้ง",
-    "state": "cooked",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการทางการที่ยืนยันขนมจีนหมักไทยและสภาพปรุงสุกตรงกัน; เว้นค่าสารอาหารทั้งหมดเป็น null"
-  },
-  {
-    "id": "sen-chan",
-    "nameTh": "เส้นจันท์",
-    "nameEn": "Chanthaburi rice noodles, dry",
-    "category": "ธัญพืชและแป้ง",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการทางการที่ยืนยันเส้นจันท์แห้งตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
   },
   {
     "id": "white-bread",
@@ -1658,37 +1100,6 @@
     "needsImage": true,
     "dataStatus": "partial",
     "notes": "เต้าหู้เนื้อแน่นทำให้จับตัวด้วยแคลเซียมซัลเฟตตาม USDA; ไม่ใช่เต้าหู้ไทยทุกความแน่น"
-  },
-  {
-    "id": "egg-tofu",
-    "nameTh": "เต้าหู้ไข่",
-    "nameEn": "Egg tofu, cooked",
-    "category": "ถั่วและเต้าหู้",
-    "state": "processed",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันเต้าหู้ไข่ไทยและสูตรตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
   },
   {
     "id": "fried-tofu",
@@ -1917,68 +1328,6 @@
     "needsImage": true,
     "dataStatus": "verified",
     "notes": "ผักกาดหอมชนิด green leaf ดิบตาม USDA; ไม่ใช่ผักกาดแก้ว"
-  },
-  {
-    "id": "water-spinach",
-    "nameTh": "ผักบุ้ง",
-    "nameEn": "Water spinach, raw",
-    "category": "ผัก",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันผักบุ้งไทยตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
-  },
-  {
-    "id": "chinese-kale",
-    "nameTh": "คะน้า",
-    "nameEn": "Chinese kale, raw",
-    "category": "ผัก",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการทางการที่ยืนยันคะน้า Brassica oleracea var. alboglabra; ไม่ใช้ kale หรือ broccoli แทน"
   },
   {
     "id": "bok-choy",
@@ -2323,130 +1672,6 @@
     "notes": "กระเทียมดิบตาม USDA"
   },
   {
-    "id": "bird-eye-chili",
-    "nameTh": "พริกขี้หนู",
-    "nameEn": "Thai bird's eye chili, raw",
-    "category": "ผัก",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการทางการที่ยืนยันพริกขี้หนูไทย (Capsicum annuum) ตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
-  },
-  {
-    "id": "spur-chili",
-    "nameTh": "พริกชี้ฟ้า",
-    "nameEn": "Thai spur chili, raw",
-    "category": "ผัก",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการทางการที่ยืนยันพริกชี้ฟ้าไทยตรงชนิด; ไม่ใช้พริกหวานหรือพริกต่างสายพันธุ์แทน"
-  },
-  {
-    "id": "holy-basil",
-    "nameTh": "ใบกะเพรา",
-    "nameEn": "Thai holy basil, raw",
-    "category": "ผัก",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันกะเพราไทยตรงชนิด; ไม่ใช้ sweet basil แทน"
-  },
-  {
-    "id": "thai-basil",
-    "nameTh": "ใบโหระพา",
-    "nameEn": "Thai basil, raw",
-    "category": "ผัก",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันโหระพาไทยตรงชนิด; ไม่ใช้ sweet basil แทน"
-  },
-  {
     "id": "lemongrass",
     "nameTh": "ตะไคร้",
     "nameEn": "Lemongrass, raw",
@@ -2483,37 +1708,6 @@
     "needsImage": true,
     "dataStatus": "partial",
     "notes": "ตะไคร้สดตามรายการ USDA"
-  },
-  {
-    "id": "galangal",
-    "nameTh": "ข่า",
-    "nameEn": "Galangal, raw",
-    "category": "ผัก",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันข่าไทยตรงชนิด; ไม่ใช้ขิงแทน"
   },
   {
     "id": "mung-bean-sprouts",
@@ -2554,99 +1748,6 @@
     "notes": "ถั่วงอกจากเมล็ดถั่วเขียวดิบตามรายการ USDA"
   },
   {
-    "id": "yardlong-bean",
-    "nameTh": "ถั่วฝักยาว",
-    "nameEn": "Yardlong bean, raw",
-    "category": "ผัก",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันถั่วฝักยาวไทยตรงชนิด; ไม่ใช้ถั่วแขกแทน"
-  },
-  {
-    "id": "thai-eggplant",
-    "nameTh": "มะเขือเปราะ",
-    "nameEn": "Thai eggplant, raw",
-    "category": "ผัก",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการทางการที่ยืนยันมะเขือเปราะไทยตรงชนิด; ไม่ใช้มะเขือม่วงแทน"
-  },
-  {
-    "id": "long-eggplant",
-    "nameTh": "มะเขือยาว",
-    "nameEn": "Thai long eggplant, raw",
-    "category": "ผัก",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการทางการที่ยืนยันมะเขือยาวไทยตรงชนิด; ไม่ใช้มะเขือม่วงพันธุ์อื่นแทน"
-  },
-  {
     "id": "pumpkin",
     "nameTh": "ฟักทอง",
     "nameEn": "Pumpkin, raw",
@@ -2683,37 +1784,6 @@
     "needsImage": true,
     "dataStatus": "verified",
     "notes": "ฟักทองดิบตามรายการ USDA; สายพันธุ์ฟักทองไทยอาจต่างจากตัวอย่าง"
-  },
-  {
-    "id": "green-papaya",
-    "nameTh": "มะละกอดิบ",
-    "nameEn": "Green papaya, raw",
-    "category": "ผัก",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการทางการที่แยกมะละกอดิบจากมะละกอสุกตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
   },
   {
     "id": "straw-mushroom",
@@ -2790,37 +1860,6 @@
     "needsImage": true,
     "dataStatus": "verified",
     "notes": "เห็ด oyster ดิบตามรายการ USDA; ชนิดเห็ดนางฟ้าไทยอาจต่างจากสายพันธุ์ที่ใช้ในแหล่งข้อมูล"
-  },
-  {
-    "id": "baby-corn",
-    "nameTh": "ข้าวโพดอ่อน",
-    "nameEn": "Baby corn, raw",
-    "category": "ผัก",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันข้าวโพดอ่อนไทยตรงชนิด; ไม่ใช้ข้าวโพดหวานแก่แทน"
   },
   {
     "id": "coriander",
@@ -2935,37 +1974,6 @@
     "needsImage": true,
     "dataStatus": "verified",
     "notes": "มะม่วงดิบตามคำอธิบาย record USDA ไม่ระบุพันธุ์หรือระดับความสุก; ค่าอ้างอิงจึงไม่จำเพาะพันธุ์ไทย"
-  },
-  {
-    "id": "namwa-banana",
-    "nameTh": "กล้วยน้ำว้า",
-    "nameEn": "Namwa banana, raw",
-    "category": "ผลไม้",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ระบุพันธุ์กล้วยน้ำว้า; ไม่ใช้กล้วยสายพันธุ์อื่นแทน"
   },
   {
     "id": "ripe-papaya",
@@ -3156,37 +2164,6 @@
     "needsImage": true,
     "dataStatus": "verified",
     "notes": "ฝรั่ง common ดิบตาม USDA; พันธุ์ไทยอาจต่างจากรายการอ้างอิง"
-  },
-  {
-    "id": "lime",
-    "nameTh": "มะนาว",
-    "nameEn": "Thai lime, raw",
-    "category": "ผลไม้",
-    "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันมะนาวไทยทั้งผลตรงชนิด; ไม่ใช้ค่าน้ำมะนาวแทน"
   },
   {
     "id": "longan",
@@ -3491,67 +2468,5 @@
     "needsImage": true,
     "dataStatus": "partial",
     "notes": "กะทิกระป๋องตาม USDA; ไม่ใช่กะทิคั้นสดและอาจมีไขมันต่างกัน"
-  },
-  {
-    "id": "roasted-chili-paste",
-    "nameTh": "น้ำพริกเผา",
-    "nameEn": "Thai roasted chili paste",
-    "category": "เครื่องปรุง",
-    "state": "processed",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันน้ำพริกเผาไทยตามสูตรตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
-  },
-  {
-    "id": "red-curry-paste",
-    "nameTh": "พริกแกงเผ็ด",
-    "nameEn": "Thai red curry paste",
-    "category": "เครื่องปรุง",
-    "state": "processed",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
-    "referenceGrams": 100,
-    "nutrients": {
-      "energyKcal": null,
-      "proteinG": null,
-      "carbohydrateG": null,
-      "fatG": null,
-      "saturatedFatG": null,
-      "sugarG": null,
-      "fiberG": null,
-      "sodiumMg": null,
-      "cholesterolMg": null
-    },
-    "source": null,
-    "image": {
-      "imageUrl": "/images/catalog/placeholder.svg",
-      "photographer": "",
-      "sourceUrl": "",
-      "source": "Placeholder",
-      "license": "Original placeholder"
-    },
-    "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันพริกแกงเผ็ดไทยตามสูตรตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
   }
 ]

@@ -7,6 +7,7 @@ router.get("/", controller.getCatalog);
 router.get("/credits", controller.getCredits);
 router.get("/ingredients/:id", controller.getIngredient);
 router.get("/recipes/:id", controller.getRecipe);
+router.post("/prune-without-energy", authenticate, authorize("admin"), controller.pruneWithoutEnergy);
 router.post("/ingredients", authenticate, authorize("admin"), controller.createIngredient);
 router.patch("/ingredients/:id", authenticate, authorize("admin"), controller.updateIngredient);
 router.delete("/ingredients/:id", authenticate, authorize("admin"), controller.deleteIngredient);

@@ -1,7 +1,7 @@
 const Catalog = require("../models/catalog.model");
 const { isDeepStrictEqual } = require("node:util");
 const { validateBlob } = require("../config/blob");
-const { CATALOG_ID, exactKeys, identifier, revisionValid, validIngredient, validRecipe, validTables, loadSeed, catalogResponse, imageCredits } = require("../config/catalog");
+const { CATALOG_ID, exactKeys, identifier, revisionValid, validIngredient, validRecipe, validTables, loadSeed, catalogResponse, imageCredits, calculateRecipe } = require("../config/catalog");
 
 const read = () => Catalog.findById(CATALOG_ID).lean();
 const conflict = res => res.status(409).json({ message: "Catalog changed. Reload the latest catalog before saving." });
@@ -29,6 +29,35 @@ const getCredits = async (req, res, next) => {
   try {
     const catalog = catalogResponse(await read());
     res.json({ images: imageCredits(catalog), revision: catalog.revision, disclaimer: catalog.disclaimer });
+  } catch (error) { next(error); }
+};
+const pruneWithoutEnergy = async (req, res, next) => {
+  try {
+    if (!exactKeys(req.body, ["revision", "expectedIngredients", "expectedRecipes"])
+      || !revisionValid(req.body.revision)
+      || !Number.isSafeInteger(req.body.expectedIngredients) || req.body.expectedIngredients < 0
+      || !Number.isSafeInteger(req.body.expectedRecipes) || req.body.expectedRecipes < 0) return bad(res);
+    const document = await read();
+    const revision = document?.revision || 0;
+    if (revision !== req.body.revision) return conflict(res);
+    const current = structuredClone(document?.tables || loadSeed());
+    if (!validTables(current)) throw new Error("The existing nutrition catalog could not be validated.");
+    const ingredients = current.ingredients.filter(item => Number.isFinite(item.nutrients.energyKcal));
+    const retainedIngredientIds = new Set(ingredients.map(item => item.id));
+    const recipes = current.recipes.filter(recipe => Number.isFinite(calculateRecipe(recipe, current.ingredients).nutrients.energyKcal)
+      && recipe.ingredients.every(item => retainedIngredientIds.has(item.ingredientId)));
+    const removedIngredients = current.ingredients.length - ingredients.length;
+    const removedRecipes = current.recipes.length - recipes.length;
+    if (removedIngredients !== req.body.expectedIngredients || removedRecipes !== req.body.expectedRecipes) {
+      return conflict(res);
+    }
+    if (!removedIngredients && !removedRecipes) {
+      return res.json({ catalog: catalogResponse(document), removedIngredients, removedRecipes });
+    }
+    const tables = { ingredients, recipes };
+    if (!validTables(tables)) throw new Error("Pruning would leave invalid catalog tables or dangling recipe ingredients.");
+    const saved = await save(tables, revision, res);
+    if (saved) res.json({ catalog: catalogResponse(saved), removedIngredients, removedRecipes });
   } catch (error) { next(error); }
 };
 const save = async (tables, revision, res) => {
@@ -81,5 +110,6 @@ const edit = (kind, action) => async (req, res, next) => {
 };
 
 module.exports = { getCatalog, getIngredient, getRecipe, getCredits,
+  pruneWithoutEnergy,
   createIngredient: edit("ingredients", "create"), updateIngredient: edit("ingredients", "update"), deleteIngredient: edit("ingredients", "delete"),
   createRecipe: edit("recipes", "create"), updateRecipe: edit("recipes", "update"), deleteRecipe: edit("recipes", "delete") };

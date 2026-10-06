@@ -176,6 +176,11 @@ goals, meals, guides, users, and community moderation. Site settings use
 in one `sites` document. Existing default meals and text are preserved until
 an administrator saves a change. Concurrent edits return HTTP 409 and retain
 the editor's draft rather than replacing the other administrator's changes.
+The nutrition catalog admin also previews and can atomically remove ingredients
+without energy values and recipes whose calculated energy is incomplete. This
+action requires an administrator, confirms the exact counts and catalog
+revision, preserves the remaining catalog edits, and does not delete food-log
+nutrition snapshots.
 
 After this deployment, content changes saved through `/admin` appear on reload
 and are checked by open pages every 30 seconds or when a tab regains focus.

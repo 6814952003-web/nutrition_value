@@ -47,6 +47,13 @@ export function validateBatchImages(rows, items, photographer, rights) {
   return "";
 }
 
+export function energyPruneCounts(catalog) {
+  return {
+    ingredients: catalog.ingredients.filter(item => !Number.isFinite(item.nutrients?.energyKcal)).length,
+    recipes: catalog.recipes.filter(item => !Number.isFinite(item.nutrients?.energyKcal)).length,
+  };
+}
+
 export default function CatalogAdmin({ user, markDirty, markBusy }) {
   const [catalog, setCatalog] = useState(null);
   const [kind, setKind] = useState("ingredients");
@@ -149,11 +156,28 @@ export default function CatalogAdmin({ user, markDirty, markBusy }) {
     catch (failure) { setError(failure.message); }
     finally { setBusy(false); }
   };
+  const pruneWithoutEnergy = async () => {
+    if (busy || !catalog) return;
+    const counts = energyPruneCounts(catalog);
+    if (!counts.ingredients && !counts.recipes) return;
+    const confirmed = window.confirm(`ลบวัตถุดิบ ${counts.ingredients} รายการและเมนู ${counts.recipes} รายการที่ไม่มีค่าพลังงานออกจากคลังหรือไม่? การลบย้อนกลับไม่ได้ แต่ไม่ลบบันทึกการกินเดิม`);
+    if (!confirmed) return;
+    setBusy(true); setError(""); setMessage("");
+    try {
+      const result = await api.pruneCatalogWithoutEnergy(catalog.revision, counts.ingredients, counts.recipes);
+      setCatalog(result.catalog);
+      setDraft(null);
+      setMessage(`ลบวัตถุดิบ ${result.removedIngredients} รายการและเมนู ${result.removedRecipes} รายการแล้ว`);
+    } catch (failure) {
+      setError(failure.status === 409 ? "คลังเปลี่ยนระหว่างตรวจสอบ กรุณาโหลดข้อมูลล่าสุดก่อนลองอีกครั้ง" : failure.message);
+    } finally { setBusy(false); }
+  };
   return <section className="catalog-admin"><h2>คลังวัตถุดิบและเมนูอาหารไทย</h2><p className="catalog-muted">วัตถุดิบใช้ข้อมูลอ้างอิงต่อ 100 กรัม ส่วนเมนูคำนวณจากกรัมวัตถุดิบ ไม่มีช่องกรอกยอดโภชนาการเมนูเอง</p>
     {error && <p role="alert" className="catalog-admin-status catalog-admin-error">{error}</p>}{message && <p role="status" className="catalog-admin-status">{message}</p>}
     {!catalog ? <p role="status">กำลังโหลดคลังอาหาร…</p> : <><div className="catalog-tabs"><button type="button" aria-pressed={kind === "ingredients"} disabled={busy} onClick={() => changeKind("ingredients")}>วัตถุดิบ {catalog.ingredients.length}</button><button type="button" aria-pressed={kind === "recipes"} disabled={busy} onClick={() => changeKind("recipes")}>เมนู {catalog.recipes.length}</button></div>
       <p className="catalog-muted">ขาดรูป {catalog[kind].filter(item => item.needsImage).length} รายการ · ค่าที่ไม่มีแหล่งข้อมูลต้องเว้นว่าง</p>
       <div className="catalog-admin-actions"><button type="button" className="catalog-button" disabled={busy} onClick={() => choose(null)}>＋ เพิ่ม{kind === "ingredients" ? "วัตถุดิบ" : "เมนู"}</button><button type="button" className="catalog-button catalog-button-light" disabled={busy} onClick={async () => { if (draft && !window.confirm("โหลดใหม่จะยกเลิกแบบร่าง ยืนยันหรือไม่?")) return; try { setCatalog(await api.catalog()); setDraft(null); setError(""); } catch { setError("โหลดคลังอาหารไม่สำเร็จ"); } }}>โหลดข้อมูลล่าสุด</button></div>
+      {!draft && <div className="catalog-prune-warning"><p className="catalog-muted">ไม่มีพลังงาน: {energyPruneCounts(catalog).ingredients} วัตถุดิบ · {energyPruneCounts(catalog).recipes} เมนู</p><button type="button" className="catalog-button catalog-button-light" disabled={busy || (!energyPruneCounts(catalog).ingredients && !energyPruneCounts(catalog).recipes)} onClick={pruneWithoutEnergy}>ลบรายการที่ไม่มีค่าพลังงาน</button></div>}
       {!draft && <form className="catalog-batch-upload" onSubmit={uploadBatch}>
         <h3>อัปโหลดรูปหลายรายการ</h3>
         <p className="catalog-muted">เลือกภาพได้ครั้งละไม่เกิน 10 ไฟล์ ระบบจะจับคู่ชื่อไฟล์ที่ตรงกับรหัสรายการให้อัตโนมัติ หรือเลือกชื่อรายการเอง รูปต้องเป็น PNG, JPG หรือ WebP ไม่เกิน 1.5 MB ต่อรูป และจะแสดงหลังบันทึกแต่ละรายการสำเร็จ</p>

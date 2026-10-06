@@ -120,7 +120,7 @@ const catalogResponse = document => {
   return {
     ingredients: structuredClone(tables.ingredients), recipes: tables.recipes.map(recipe => calculateRecipe(recipe, tables.ingredients)),
     revision: document?.revision || 0, updatedAt: document?.updatedAt || null,
-    stage: { name: "catalog-seed-ready", ingredientBatch: 100, ingredientsTarget: 100, extraIngredients: Math.max(0, tables.ingredients.length - 100), recipeBatch: 25, recipesTarget: 100, awaitingReview: false }, disclaimer: DISCLAIMER,
+    stage: { name: "catalog-seed-ready", ingredientBatch: Math.min(100, tables.ingredients.length), ingredientsTarget: tables.ingredients.length, extraIngredients: Math.max(0, tables.ingredients.length - 100), recipeBatch: Math.min(25, tables.recipes.length), recipesTarget: tables.recipes.length, awaitingReview: false }, disclaimer: DISCLAIMER,
   };
 };
 const imageCredits = catalog => [...catalog.ingredients.map(item => ({ kind: "ingredient", id: item.id, nameTh: item.nameTh, ...item.image, needsImage: item.needsImage })),

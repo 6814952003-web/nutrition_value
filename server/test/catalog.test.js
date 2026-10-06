@@ -172,8 +172,11 @@ test("a missing catalog returns the validated catalog seed without silently writ
   const storage = fixtureStorage(t, null);
   const response = await request(); assert.equal(response.status, 200);
   const result = await response.json(); const seed = loadSeed();
-  assert.deepEqual(result.ingredients, seed.ingredients); assert.equal(result.recipes.length, 100); assert.equal(result.revision, 0);
-  assert.equal(result.recipes[0].nutrients.energyKcal, null); assert.equal(result.recipes[0].servingGrams, seed.recipes[0].servingGrams);
+  assert.deepEqual(result.ingredients, seed.ingredients); assert.equal(result.recipes.length, 25); assert.equal(result.revision, 0);
+  assert.equal(seed.ingredients.length, 76);
+  assert.equal(seed.ingredients.every(item => Number.isFinite(item.nutrients.energyKcal)), true);
+  assert.equal(result.recipes.every(item => Number.isFinite(item.nutrients.energyKcal)), true);
+  assert.equal(result.recipes[0].servingGrams, seed.recipes[0].servingGrams);
   assert.equal(storage.create.mock.callCount(), 0); assert.equal(storage.update.mock.callCount(), 0);
 });
 
@@ -183,6 +186,37 @@ test("catalog mutations require authentication and the user's current database a
   assert.equal((await request("/ingredients", "POST", body)).status, 401);
   assert.equal((await request("/ingredients", "POST", body, "member")).status, 403);
   assert.equal(storage.create.mock.callCount(), 0); assert.equal(storage.update.mock.callCount(), 0);
+});
+
+test("energy pruning is admin-only, validates the preview counts, and atomically preserves only complete-energy records", async t => {
+  auth(t);
+  const input = tables();
+  const unknownEnergy = ingredient("unknown-energy");
+  unknownEnergy.nutrients.energyKcal = null;
+  unknownEnergy.dataStatus = "partial";
+  input.ingredients.push(unknownEnergy);
+  input.recipes.push({
+    id: "unknown-energy-recipe", nameTh: "เมนูไม่มีพลังงาน", nameEn: "Unknown energy recipe",
+    category: "Test", servingGrams: 20, ingredients: [{ ingredientId: unknownEnergy.id, grams: 20 }],
+    image: { ...PLACEHOLDER }, needsImage: true,
+  });
+  const storage = fixtureStorage(t, { _id: "nutrition-catalog", tables: input, revision: 1 });
+  const body = { revision: 1, expectedIngredients: 1, expectedRecipes: 1 };
+  assert.equal((await request("/prune-without-energy", "POST", body)).status, 401);
+  assert.equal((await request("/prune-without-energy", "POST", body, "member")).status, 403);
+  assert.equal((await request("/prune-without-energy", "POST", { ...body, expectedIngredients: 0 }, "admin")).status, 409);
+  assert.equal(storage.update.mock.callCount(), 0);
+
+  const response = await request("/prune-without-energy", "POST", body, "admin");
+  assert.equal(response.status, 200);
+  const result = await response.json();
+  assert.deepEqual([result.removedIngredients, result.removedRecipes], [1, 1]);
+  assert.equal(result.catalog.revision, 2);
+  assert.equal(result.catalog.ingredients.length, 2);
+  assert.equal(result.catalog.recipes.length, 1);
+  assert.equal(result.catalog.recipes[0].nutrients.energyKcal, 175);
+  assert.equal(storage.update.mock.callCount(), 1);
+  assert.equal((await request("/prune-without-energy", "POST", body, "admin")).status, 409);
 });
 
 test("admin ingredient edits automatically recalculate existing recipes and conflict with stale revisions", async t => {

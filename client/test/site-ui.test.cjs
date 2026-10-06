@@ -46,7 +46,7 @@ const { default: ProfileSettings, savedProfileFields, validateProfileFields } = 
 const { default: CommunityPage, CommunityPost } = loadUiModule(path.join(sourceRoot, "CommunityPage"));
 const { default: AuthorProfileLink, AuthorProfileCard, profileCardPosition } = loadUiModule(path.join(sourceRoot, "AuthorProfileLink"));
 const { CatalogGrid, FoodLogDialog, filterCatalog, ImageCredits } = loadUiModule(path.join(sourceRoot, "Catalog"));
-const { matchBatchImages, validateBatchImages } = loadUiModule(path.join(sourceRoot, "CatalogAdmin"));
+const { matchBatchImages, validateBatchImages, energyPruneCounts } = loadUiModule(path.join(sourceRoot, "CatalogAdmin"));
 const { default: FoodLogHistory } = loadUiModule(path.join(sourceRoot, "FoodLogs"));
 const user = { id: "ui-fixture-user", name: "สมาชิกทดสอบ", role: "admin" };
 const noop = () => {};
@@ -187,6 +187,13 @@ test("batch photo selection matches record IDs and validates ownership, credits,
   assert.match(validateBatchImages([{ ...rows[0] }, { ...rows[1], itemId: rows[0].itemId }], items, "ผู้ถ่าย", true), /หลายภาพกับรายการเดียวกัน/);
   assert.match(validateBatchImages(rows, items.map(item => ({ ...item, needsImage: false })), "ผู้ถ่าย", true), /มีรูปแล้ว/);
   assert.match(validateBatchImages(Array(11).fill(rows[0]), items, "ผู้ถ่าย", true), /1–10/);
+});
+
+test("admin energy-prune preview counts only ingredients and recipes without calculated energy", () => {
+  assert.deepEqual(energyPruneCounts({
+    ingredients: [{ nutrients: { energyKcal: 120 } }, { nutrients: { energyKcal: null } }, { nutrients: {} }],
+    recipes: [{ nutrients: { energyKcal: 350 } }, { nutrients: { energyKcal: null } }],
+  }), { ingredients: 2, recipes: 1 });
 });
 
 test("menu logging requires an explicit action and prompts signed-out visitors to log in", t => {
