@@ -181,6 +181,10 @@ without energy values and recipes whose calculated energy is incomplete. This
 action requires an administrator, confirms the exact counts and catalog
 revision, preserves the remaining catalog edits, and does not delete food-log
 nutrition snapshots.
+Catalog cards, detail views, image credits and food-log history currently use
+food-matched emoji artwork instead of displaying catalog photos. Saved image
+files and attribution metadata are preserved, and administrators can still
+upload replacement photos for later use.
 
 After this deployment, content changes saved through `/admin` appear on reload
 and are checked by open pages every 30 seconds or when a tab regains focus.

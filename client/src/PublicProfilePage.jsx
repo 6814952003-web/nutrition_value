@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "./api";
 import { BrandLogo, useSite } from "./SiteContext";
+import { CatalogEmoji } from "./catalog-emoji";
 
 export default function PublicProfilePage({ username, preview = false, isPrivate = false, onBack }) {
   const [loaded, setLoaded] = useState({ key: null, profile: null, error: "" });
@@ -50,7 +51,7 @@ function safeCount(value) { return Number.isSafeInteger(value) && value >= 0 ? v
 function PublicFoodLogs({ logs }) {
   const labels = { breakfast: "เช้า", lunch: "กลางวัน", dinner: "เย็น", snack: "ของว่าง" };
   const fields = [["energyKcal", "พลังงาน", "kcal"], ["proteinG", "โปรตีน", "g"], ["carbohydrateG", "คาร์โบไฮเดรต", "g"], ["fatG", "ไขมัน", "g"], ["saturatedFatG", "ไขมันอิ่มตัว", "g"], ["sugarG", "น้ำตาล", "g"], ["fiberG", "ใยอาหาร", "g"], ["sodiumMg", "โซเดียม", "mg"], ["cholesterolMg", "คอเลสเตอรอล", "mg"]];
-  return <section className="mt-7" aria-labelledby="public-food-logs-title"><h2 id="public-food-logs-title" className="mb-4 text-xl font-bold">บันทึกการกินที่แชร์</h2><div className="space-y-3">{logs.map(log => <article key={log.id} className="flex flex-wrap items-center gap-4 rounded-[1.2rem] border border-[#d9dfd7] bg-[#fffefa] p-4"><img src={safeImage(log.imageUrl) ? log.imageUrl : "/images/catalog/placeholder.svg"} alt={log.menuName} className="h-16 w-16 rounded-xl bg-[#edf0e5] object-cover"/><div className="min-w-0 flex-1"><h3 className="font-semibold">{log.menuName}</h3><p className="mt-1 text-xs text-[#66746c]">{labels[log.meal] || "มื้ออาหาร"} · {safeCount(log.servings)} เสิร์ฟ · {formatProfileDate(log.eatenAt, true)}</p><p className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-[#66746c]">{fields.map(([key, label, unit]) => <span key={key}>{label}: {formatNutrient(log.nutrients?.[key])}{Number.isFinite(log.nutrients?.[key]) ? ` ${unit}` : ""}</span>)}</p></div></article>)}</div></section>;
+  return <section className="mt-7" aria-labelledby="public-food-logs-title"><h2 id="public-food-logs-title" className="mb-4 text-xl font-bold">บันทึกการกินที่แชร์</h2><div className="space-y-3">{logs.map(log => <article key={log.id} className="flex flex-wrap items-center gap-4 rounded-[1.2rem] border border-[#d9dfd7] bg-[#fffefa] p-4"><CatalogEmoji item={{ id: log.menuId, nameTh: log.menuName }} kind="recipes" label={log.menuName} className="h-16 w-16 shrink-0 rounded-xl text-3xl"/><div className="min-w-0 flex-1"><h3 className="font-semibold">{log.menuName}</h3><p className="mt-1 text-xs text-[#66746c]">{labels[log.meal] || "มื้ออาหาร"} · {safeCount(log.servings)} เสิร์ฟ · {formatProfileDate(log.eatenAt, true)}</p><p className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-[#66746c]">{fields.map(([key, label, unit]) => <span key={key}>{label}: {formatNutrient(log.nutrients?.[key])}{Number.isFinite(log.nutrients?.[key]) ? ` ${unit}` : ""}</span>)}</p></div></article>)}</div></section>;
 }
 function formatNutrient(value) { return Number.isFinite(value) && value >= 0 ? new Intl.NumberFormat("th-TH", { maximumFractionDigits: 1 }).format(value) : "ไม่มีข้อมูล"; }
 function safeImage(value) { return typeof value === "string" && (/^https?:\/\//i.test(value) || /^data:image\/(?:png|jpeg|webp);base64,/i.test(value)); }

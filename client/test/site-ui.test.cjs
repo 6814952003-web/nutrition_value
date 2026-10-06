@@ -45,7 +45,8 @@ const { default: PublicProfilePage, PublicProfileView } = loadUiModule(path.join
 const { default: ProfileSettings, savedProfileFields, validateProfileFields } = loadUiModule(path.join(sourceRoot, "ProfileSettings"));
 const { default: CommunityPage, CommunityPost } = loadUiModule(path.join(sourceRoot, "CommunityPage"));
 const { default: AuthorProfileLink, AuthorProfileCard, profileCardPosition } = loadUiModule(path.join(sourceRoot, "AuthorProfileLink"));
-const { CatalogGrid, FoodLogDialog, filterCatalog, ImageCredits } = loadUiModule(path.join(sourceRoot, "Catalog"));
+const { CatalogDetail, CatalogGrid, FoodLogDialog, filterCatalog, ImageCredits } = loadUiModule(path.join(sourceRoot, "Catalog"));
+const { CatalogEmoji, catalogEmoji, catalogEmojiById } = loadUiModule(path.join(sourceRoot, "catalog-emoji"));
 const { matchBatchImages, validateBatchImages, energyPruneCounts } = loadUiModule(path.join(sourceRoot, "CatalogAdmin"));
 const { default: FoodLogHistory } = loadUiModule(path.join(sourceRoot, "FoodLogs"));
 const user = { id: "ui-fixture-user", name: "สมาชิกทดสอบ", role: "admin" };
@@ -135,10 +136,38 @@ test("catalog cards provide search, category filtering, placeholders, credits, a
   assert.ok(html.includes("กะเพราหมู"));
   assert.ok(html.includes("บันทึกว่ากินแล้ว"));
   assert.ok(html.includes('aria-label="บันทึกว่ากินแล้ว กะเพราหมู"'));
-  assert.ok(html.includes("/images/catalog/placeholder.svg"));
+  assert.ok(html.includes("🐖🍚"));
+  assert.ok(!html.includes("<img"));
   assert.ok(html.includes("ค่าโภชนาการเป็นค่าประมาณ"));
   const credits = render(ImageCredits, siteFixture(), { catalog });
-  assert.equal((credits.match(/รูปสำรอง · ยังไม่มีรูปที่ตรวจสอบแล้ว/g) || []).length, 3);
+  assert.equal((credits.match(/ใช้อิโมจิชั่วคราว · ยังไม่มีเครดิตรูปถ่าย/g) || []).length, 3);
+  assert.ok(credits.includes("แสดงอิโมจิแทนรูปอาหารชั่วคราว"));
+  assert.ok(!credits.includes("<img"));
+});
+
+test("every retained catalog seed item has a specific emoji mapping", () => {
+  const ingredients = [
+    ...loadUiModule(path.resolve(projectRoot, "shared/catalog-ingredients.json")),
+    ...loadUiModule(path.resolve(projectRoot, "shared/catalog-extra-ingredients.json")),
+  ];
+  const recipes = loadUiModule(path.resolve(projectRoot, "shared/catalog-recipes.json"));
+  for (const item of ingredients) {
+    assert.ok(catalogEmojiById[item.id], `ingredient ${item.id} needs a specific emoji`);
+  }
+  for (const [id, nameTh] of recipes) {
+    assert.ok(catalogEmojiById[id], `recipe ${id} needs a specific emoji`);
+    assert.ok(catalogEmoji({ id, nameTh }, "recipes"));
+  }
+  const html = render(CatalogEmoji, siteFixture(), { item: ingredients[0], kind: "ingredients" });
+  assert.ok(html.includes(`aria-label="วัตถุดิบ ${ingredients[0].nameTh}"`));
+  assert.ok(html.includes(catalogEmojiById[ingredients[0].id]));
+});
+
+test("emoji fallback matches older recipe and ingredient food-log names", () => {
+  assert.equal(catalogEmoji({ nameTh: "ต้มยำกุ้งน้ำข้น" }, "recipes"), "🦐🍲");
+  assert.equal(catalogEmoji({ nameTh: "ข้าวต้มปลา" }, "recipes"), "🐟🍲");
+  assert.equal(catalogEmoji({ nameTh: "มะนาว" }, "ingredients"), "🍋");
+  assert.equal(catalogEmoji({ nameTh: "ต้นหอม" }, "ingredients"), "🌿");
 });
 
 test("every recipe card has its own visible and accessible food-log action", () => {
@@ -153,7 +182,7 @@ test("every recipe card has its own visible and accessible food-log action", () 
   assert.equal((html.match(/aria-label="บันทึกว่ากินแล้ว เมนู \d+"/g) || []).length, 100);
 });
 
-test("ingredient cards also expose a food-log action", t => {
+test("ingredient cards and details do not expose a food-log action", t => {
   const originals = { useState: React.useState, useMemo: React.useMemo, useEffect: React.useEffect };
   let stateIndex = 0;
   React.useState = initial => [stateIndex++ === 0 ? "ingredients" : typeof initial === "function" ? initial() : initial, noop];
@@ -162,8 +191,14 @@ test("ingredient cards also expose a food-log action", t => {
   t.after(() => Object.assign(React, originals));
   const ingredient = { id: "rice", nameTh: "ข้าวสวย", nameEn: "Cooked rice", category: "ธัญพืช", state: "cooked", referenceGrams: 100, nutrients: { energyKcal: 130 }, image: { imageUrl: "/images/catalog/placeholder.svg" }, needsImage: true };
   const html = render(CatalogGrid, siteFixture(), { catalog: { ingredients: [ingredient], recipes: [] } });
-  assert.ok(html.includes('aria-label="บันทึกว่ากินแล้ว ข้าวสวย"'));
-  assert.ok(html.includes("บันทึกว่ากินแล้ว"));
+  const detail = render(CatalogDetail, siteFixture(), { item: ingredient, kind: "ingredients", ingredients: [ingredient], onClose: noop, onSaveRecipe: noop });
+  assert.ok(!html.includes('aria-label="บันทึกว่ากินแล้ว ข้าวสวย"'));
+  assert.ok(!html.includes("บันทึกว่ากินแล้ว"));
+  assert.ok(!detail.includes("บันทึกว่ากินแล้ว"));
+  assert.ok(html.includes("🍚"));
+  assert.ok(detail.includes("🍚"));
+  assert.ok(!detail.includes("<img"));
+  assert.ok(detail.includes("ยังไม่มีข้อมูลจากแหล่งอ้างอิง"));
 });
 
 test("batch photo selection matches record IDs and validates ownership, credits, and duplicates", () => {
@@ -210,12 +245,13 @@ test("menu logging requires an explicit action and prompts signed-out visitors t
   assert.ok(history.includes("ไม่แสดงบนโปรไฟล์สาธารณะ"));
 });
 
-test("ingredient food-log dialog defaults to 100 grams and offers meal/date selection", t => {
+test("food-log dialog defaults to one recipe serving and offers meal/date selection", t => {
   withStorage(t, "test-token");
-  const ingredient = { id: "rice", itemType: "ingredient", nameTh: "ข้าวสวย", referenceGrams: 100 };
-  const dialog = render(FoodLogDialog, siteFixture(), { item: ingredient, onClose: noop });
-  assert.ok(dialog.includes("ปริมาณวัตถุดิบ (กรัม)"));
-  assert.ok(dialog.includes('value="100"'));
+  const recipe = { id: "menu", nameTh: "เมนูทดสอบ" };
+  const dialog = render(FoodLogDialog, siteFixture(), { item: recipe, onClose: noop });
+  assert.ok(dialog.includes("จำนวนเสิร์ฟ"));
+  assert.ok(dialog.includes('value="1"'));
+  assert.ok(!dialog.includes("ปริมาณวัตถุดิบ"));
   assert.ok(dialog.includes("มื้ออาหาร"));
   assert.ok(dialog.includes("วันที่และเวลา"));
 });
