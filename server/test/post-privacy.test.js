@@ -15,10 +15,13 @@ const commentId = "b".repeat(24);
 const timestamp = "2026-10-06T10:00:00.000Z";
 let server;
 let endpoint;
-const auth = t => t.mock.method(User, "findById", id => ({ select: async () => ({
+const auth = t => {
+  t.mock.method(User, "find", () => ({ select: () => ({ lean: async () => [] }) }));
+  return t.mock.method(User, "findById", id => ({ select: async () => ({
   _id: new mongoose.Types.ObjectId(id), name: "Fixture member", role: "admin",
   email: "private-account@example.com", passwordHash: "private-password-hash", weight: 77,
 }) }));
+};
 const request = (method, path = "", body) => fetch(`${endpoint}${path}`, {
   method, headers: { "Content-Type": "application/json", Authorization: `Bearer ${signToken({ id: userId })}` },
   ...(body === undefined ? {} : { body: JSON.stringify(body) }),
@@ -41,8 +44,8 @@ const assertSafe = actual => {
   assert.deepEqual(actual, {
     _id: postId, author: userId, authorName: "Fixture member", authorAvatar: "https://example.com/avatar.png",
     category: "food", content: "Community post", mediaData: "", mediaType: "", createdAt: timestamp, updatedAt: timestamp,
-    likes: 2, likedByMe: true,
-    comments: [{ _id: commentId, author: otherUserId, authorName: "Another member", content: "Comment", createdAt: timestamp, updatedAt: timestamp }],
+    likes: 2, likedByMe: true, authorUsername: null,
+    comments: [{ _id: commentId, author: otherUserId, authorName: "Another member", content: "Comment", createdAt: timestamp, updatedAt: timestamp, authorUsername: null }],
   });
   assert.equal(JSON.stringify(actual).includes("private-"), false);
 };

@@ -32,6 +32,7 @@ export const api = {
   updateProfile: (avatarData) => request("/users/me/profile", { method: "PATCH", body: JSON.stringify({ avatarData }) }),
   updateMyProfile: (data) => request("/users/me/profile", { method: "PATCH", body: JSON.stringify(data) }),
   publicProfile: (username, options) => request(`/profiles/${encodeURIComponent(username)}`, { ...options, auth: false }),
+  publicProfileCard: (username, options) => request(`/profiles/${encodeURIComponent(username)}/card`, { ...options, auth: false }),
   publicPreview: (options) => request("/users/me/public-preview", options),
   posts: (options) => request("/posts", options),
   updatePost: (id, data) => request(`/posts/${id}`, { method: "PATCH", body: JSON.stringify(data) }),

@@ -44,6 +44,7 @@ const { default: App, AccountPage, AdminRoute, resolveAppView } = loadUiModule(p
 const { default: PublicProfilePage, PublicProfileView } = loadUiModule(path.join(sourceRoot, "PublicProfilePage"));
 const { default: ProfileSettings, savedProfileFields, validateProfileFields } = loadUiModule(path.join(sourceRoot, "ProfileSettings"));
 const { default: CommunityPage, CommunityPost } = loadUiModule(path.join(sourceRoot, "CommunityPage"));
+const { default: AuthorProfileLink, AuthorProfileCard, profileCardPosition } = loadUiModule(path.join(sourceRoot, "AuthorProfileLink"));
 const user = { id: "ui-fixture-user", name: "สมาชิกทดสอบ", role: "admin" };
 const noop = () => {};
 const siteFixture = () => structuredClone(defaultSite);
@@ -523,4 +524,197 @@ test("profile saving waits for server success, handles failure, and avatar updat
   findElement(page, element => element.type === "button" && element.props.type === "button").props.onClick();
   assert.equal(previews.length, 1);
   assert.equal(saved.length, 1);
+});
+
+test("community avatar and name share a real public profile link and comment names use their own current username", () => {
+  const post = { _id: "linked-post", author: "member", authorName: "ชื่อที่ไม่ใช่ username", authorAvatar: "https://assets.example.com/avatar.jpg", authorUsername: "current_author", category: "food", content: "โพสต์", createdAt: "2026-10-06T11:00:00Z", comments: [{ _id: "comment", authorName: "ผู้แสดงความคิดเห็น", authorUsername: "comment_author", content: "ความคิดเห็น" }] };
+  const html = render(CommunityPost, siteFixture(), { post, user });
+  assert.match(html, /<a[^>]*href="\/u\/current_author"[^>]*><span class="nouri-author-avatar"><img[^>]*avatar\.jpg/);
+  assert.match(html, /href="\/u\/comment_author"/);
+  assert.equal((html.match(/href="\/u\//g) || []).length, 2);
+  assert.ok(!html.includes("/u/ชื่อ"));
+  post.authorUsername = null; post.comments[0].authorUsername = null;
+  const privateHtml = render(CommunityPost, siteFixture(), { post, user });
+  assert.ok(!privateHtml.includes('href="/u/'));
+  assert.ok(privateHtml.includes("ชื่อที่ไม่ใช่ username"));
+  assert.ok(!privateHtml.includes("nouri-profile-card"));
+});
+
+test("mini profile renders only public summary fields and escapes biography contents", () => {
+  const profile = { ...publicProfile(), email: "private-email@example.com", health: "private-health", username: "private-slug", role: "admin", onlineSeconds: 123, weight: 88 };
+  const html = render(AuthorProfileCard, siteFixture(), { profile, href: "/u/public_author" });
+  for (const visible of ["เพื่อนชุมชน", "บรรทัดแรก", "4 วันต่อเนื่อง", "เข้าร่วมเมื่อ", "ดูโปรไฟล์เต็ม"]) assert.ok(html.includes(visible));
+  for (const hidden of ["private-email@example.com", "private-health", "private-slug", "โพสต์ในชุมชน", "ข้อความสาธารณะ", "88"]) assert.ok(!html.includes(hidden));
+  assert.ok(html.includes("&lt;script&gt;unsafe&lt;/script&gt;"));
+  assert.ok(!html.includes("<script>"));
+  const unavailable = render(AuthorProfileCard, siteFixture(), { profile, error: "unavailable" });
+  assert.ok(unavailable.includes("โปรไฟล์นี้ไม่พร้อมให้ดูสาธารณะ"));
+  assert.ok(!unavailable.includes("เพื่อนชุมชน"));
+  assert.ok(!unavailable.includes("href="));
+});
+
+test("mini profile requests use an encoded anonymous URL and propagate cancellation", async t => {
+  const previousFetch = global.fetch; const previousStorage = global.localStorage;
+  const calls = [];
+  global.localStorage = { getItem: () => "member-token" };
+  global.fetch = async (url, options) => { calls.push({ url, options }); return { ok: true, json: async () => ({}) }; };
+  t.after(() => { global.fetch = previousFetch; if (previousStorage === undefined) delete global.localStorage; else global.localStorage = previousStorage; });
+  const { api } = loadUiModule(path.join(sourceRoot, "api"));
+  const controller = new AbortController();
+  await api.publicProfileCard("name/a", { signal: controller.signal, auth: true });
+  assert.equal(calls[0].url, "/api/profiles/name%2Fa/card");
+  assert.equal(calls[0].options.headers.Authorization, undefined);
+  assert.equal(calls[0].options.cache, "no-store");
+  assert.equal(calls[0].options.signal, controller.signal);
+});
+
+// Exercise the real component event handlers, refs and effect cleanup with a
+// deterministic clock. Browser pointer/navigation behavior is checked separately.
+function authorInteractionFixture(t, initial = {}) {
+  const original = { useState: React.useState, useRef: React.useRef, useEffect: React.useEffect, useId: React.useId };
+  const previousWindow = global.window; const previousDocument = global.document;
+  const states = []; const refs = []; const effects = [];
+  let stateIndex = 0; let refIndex = 0; let effectIndex = 0; let dirty = false; let pending = [];
+  let props = { username: "fixture_author", name: "ชื่อผู้โพสต์", avatar: "", ...initial };
+  const docEvents = new Map(); const windowEvents = new Map();
+  const triggerNode = { getBoundingClientRect: () => ({ left: 470, top: 380, bottom: 420 }), contains: target => target?.area === "trigger", focus: () => { global.document.activeElement = { area: "trigger" }; fixture.trigger().props.onFocus(); } };
+  const cardNode = { getBoundingClientRect: () => ({ height: 280 }), contains: target => target?.area === "card" };
+  global.document = { body: { nodeType: 1 }, activeElement: null, visibilityState: "visible", addEventListener: (name, callback) => docEvents.set(name, callback), removeEventListener: name => docEvents.delete(name) };
+  global.window = { innerWidth: 500, innerHeight: 500, addEventListener: (name, callback) => windowEvents.set(name, callback), removeEventListener: name => windowEvents.delete(name) };
+  React.useState = initialState => { const key = stateIndex++; if (!Object.hasOwn(states, key)) states[key] = typeof initialState === "function" ? initialState() : initialState; return [states[key], next => { const value = typeof next === "function" ? next(states[key]) : next; if (!Object.is(value, states[key])) { states[key] = value; dirty = true; } }]; };
+  React.useRef = initialRef => { const key = refIndex++; return refs[key] ||= { current: initialRef }; };
+  React.useId = () => "author-card-fixture";
+  React.useEffect = (run, deps) => {
+    const key = effectIndex++; const previous = effects[key];
+    if (!previous || deps.some((value, index) => !Object.is(value, previous.deps[index]))) pending.push({ key, run, deps });
+  };
+  let tree;
+  const renderComponent = () => {
+    stateIndex = 0; refIndex = 0; effectIndex = 0; pending = []; dirty = false;
+    tree = AuthorProfileLink(props);
+    const triggerElement = findAuthorElement(tree, element => element.props.className?.startsWith("nouri-author-trigger"));
+    triggerElement.ref.current = triggerNode;
+    const dialog = findAuthorElement(tree, element => element.props.role === "dialog");
+    if (dialog) dialog.ref.current = cardNode;
+  };
+  const fixture = {
+    page: next => {
+      props = { ...props, ...next }; renderComponent();
+      for (let cycle = 0; cycle < 8; cycle++) {
+        const current = pending; pending = [];
+        current.forEach(({ key, run, deps }) => { effects[key]?.cleanup?.(); effects[key] = { deps, cleanup: run() }; });
+        if (!dirty) break;
+        renderComponent();
+      }
+      return tree;
+    },
+    trigger: () => findAuthorElement(tree, element => element.props.className?.startsWith("nouri-author-trigger")),
+    card: () => findAuthorElement(tree, element => element.props.role === "dialog"),
+    summary: () => findAuthorElement(tree, element => element.type === AuthorProfileCard),
+    documentEvent: (name, event = {}) => docEvents.get(name)?.(event),
+    windowEvent: (name, event = {}) => windowEvents.get(name)?.(event),
+    cleanup: () => { effects.forEach(effect => effect.cleanup?.()); effects.length = 0; },
+  };
+  t.mock.timers.enable({ apis: ["setTimeout", "Date"] });
+  t.after(() => { fixture.cleanup(); Object.assign(React, original); if (previousWindow === undefined) delete global.window; else global.window = previousWindow; if (previousDocument === undefined) delete global.document; else global.document = previousDocument; });
+  fixture.page();
+  return fixture;
+}
+
+function findAuthorElement(element, predicate) {
+  if (element?.$$typeof === Symbol.for("react.portal")) return findAuthorElement(element.children, predicate);
+  if (!React.isValidElement(element)) return null;
+  if (predicate(element)) return element;
+  for (const child of React.Children.toArray(element.props.children)) {
+    const found = findAuthorElement(child, predicate);
+    if (found) return found;
+  }
+  return null;
+}
+
+function mockCardRequests(t) {
+  const { api } = loadUiModule(path.join(sourceRoot, "api"));
+  const original = api.publicProfileCard; const calls = [];
+  api.publicProfileCard = (username, options) => new Promise((resolve, reject) => calls.push({ username, options, resolve, reject }));
+  t.after(() => { api.publicProfileCard = original; });
+  return calls;
+}
+
+test("hover and focus delay loading, crossing into the card preserves it, and Escape cannot reopen it", t => {
+  const calls = mockCardRequests(t); const fixture = authorInteractionFixture(t);
+  assert.equal(calls.length, 0);
+  fixture.trigger().props.onMouseEnter(); t.mock.timers.tick(249); fixture.page();
+  assert.equal(fixture.card(), null); assert.equal(calls.length, 0);
+  t.mock.timers.tick(1); fixture.page();
+  assert.ok(fixture.card()); assert.equal(calls.length, 1);
+  fixture.trigger().props.onMouseLeave(); t.mock.timers.tick(80); fixture.card().props.onMouseEnter(); t.mock.timers.tick(200); fixture.page();
+  assert.ok(fixture.card()); assert.equal(calls[0].options.signal.aborted, false);
+  global.document.activeElement = { area: "card" };
+  fixture.documentEvent("keydown", { key: "Escape" }); fixture.page();
+  assert.equal(fixture.card(), null); assert.equal(calls[0].options.signal.aborted, true);
+  t.mock.timers.tick(300); fixture.page();
+  assert.equal(fixture.card(), null); assert.equal(calls.length, 1);
+  fixture.trigger().props.onFocus(); t.mock.timers.tick(250); fixture.page();
+  assert.ok(fixture.card()); assert.equal(calls.length, 2);
+  fixture.documentEvent("pointerdown", { target: { area: "outside" } }); fixture.page();
+  assert.equal(fixture.card(), null); assert.equal(calls[1].options.signal.aborted, true);
+});
+
+test("touch taps and native modified clicks navigate, while completed long press only suppresses its following click", t => {
+  const calls = mockCardRequests(t); const fixture = authorInteractionFixture(t);
+  let prevented = 0; const click = extra => ({ preventDefault: () => prevented++, ...extra });
+  const down = { pointerType: "touch", pointerId: 1, clientX: 20, clientY: 30 };
+  fixture.trigger().props.onPointerDown(down); fixture.trigger().props.onFocus(); t.mock.timers.tick(100); fixture.trigger().props.onPointerUp(); fixture.trigger().props.onClick(click()); fixture.page();
+  assert.equal(prevented, 0); assert.equal(calls.length, 0); assert.equal(fixture.trigger().props.href, "/u/fixture_author");
+  fixture.trigger().props.onClick(click({ ctrlKey: true })); fixture.trigger().props.onKeyDown({ key: "Enter" }); fixture.trigger().props.onClick(click({ detail: 0 }));
+  assert.equal(prevented, 0);
+  fixture.trigger().props.onPointerDown(down); t.mock.timers.tick(499); fixture.page(); assert.equal(fixture.card(), null);
+  t.mock.timers.tick(1); fixture.page(); assert.ok(fixture.card()); assert.equal(calls.length, 1);
+  fixture.trigger().props.onContextMenu(click()); assert.equal(prevented, 1);
+  fixture.trigger().props.onPointerUp(); fixture.trigger().props.onClick(click()); fixture.page();
+  assert.equal(prevented, 2); assert.ok(fixture.card());
+  fixture.trigger().props.onKeyDown({ key: "Enter" }); fixture.trigger().props.onClick(click({ detail: 0 })); fixture.page();
+  assert.equal(prevented, 2); assert.equal(fixture.card(), null);
+  fixture.trigger().props.onContextMenu(click()); assert.equal(prevented, 2);
+});
+
+test("touch scrolling and cancellation stop a pending hold without requesting a profile", t => {
+  const calls = mockCardRequests(t); const fixture = authorInteractionFixture(t);
+  const down = { pointerType: "touch", pointerId: 3, clientX: 20, clientY: 30 };
+  fixture.trigger().props.onPointerDown(down); t.mock.timers.tick(200); fixture.trigger().props.onPointerMove({ ...down, clientY: 45 }); t.mock.timers.tick(500); fixture.page();
+  assert.equal(calls.length, 0); assert.equal(fixture.card(), null);
+  fixture.trigger().props.onPointerDown(down); fixture.trigger().props.onPointerCancel(); t.mock.timers.tick(600); fixture.page();
+  assert.equal(calls.length, 0); assert.equal(fixture.card(), null);
+});
+
+test("every open refreshes public data and identity changes or hidden pages abort and discard loaded summaries", async t => {
+  const calls = mockCardRequests(t); const fixture = authorInteractionFixture(t);
+  fixture.trigger().props.onMouseEnter(); t.mock.timers.tick(250); fixture.page();
+  calls[0].resolve(publicProfile()); await Promise.resolve(); fixture.page();
+  assert.equal(fixture.summary().props.profile.displayName, "เพื่อนชุมชน");
+  global.document.visibilityState = "hidden"; fixture.documentEvent("visibilitychange"); fixture.page();
+  assert.equal(calls[0].options.signal.aborted, true); assert.equal(fixture.card(), null);
+  global.document.visibilityState = "visible";
+  fixture.trigger().props.onMouseEnter(); t.mock.timers.tick(250); fixture.page();
+  assert.equal(calls.length, 2); assert.equal(fixture.summary().props.profile, null);
+  fixture.page({ username: null });
+  assert.equal(calls[1].options.signal.aborted, true); assert.equal(fixture.card(), null);
+  assert.equal(fixture.trigger().type, "button"); assert.equal(fixture.trigger().props.href, undefined);
+  calls[1].resolve(publicProfile()); await Promise.resolve(); fixture.page();
+  fixture.trigger().props.onClick({ preventDefault: noop }); fixture.page();
+  assert.equal(calls.length, 2); assert.equal(fixture.summary().props.profile, null); assert.equal(fixture.summary().props.error, "unavailable");
+  fixture.page({ username: "another_author" });
+  assert.equal(fixture.card(), null);
+  fixture.trigger().props.onMouseEnter(); t.mock.timers.tick(250); fixture.page();
+  assert.equal(calls.at(-1).username, "another_author");
+  fixture.cleanup(); assert.equal(calls.at(-1).options.signal.aborted, true);
+});
+
+test("mini profile stays inside narrow screens and moves above authors near the viewport bottom", () => {
+  const desktop = profileCardPosition({ left: 990, top: 740, bottom: 780 }, 1024, 800, 300);
+  assert.ok(desktop.left >= 12); assert.ok(desktop.left + desktop.width <= 1012);
+  assert.ok(desktop.top >= 12); assert.ok(desktop.top + 300 <= 788);
+  assert.ok(desktop.top < 740);
+  const mobile = profileCardPosition({ left: 280, top: 500, bottom: 540 }, 320, 568, 900);
+  assert.equal(mobile.width, 296); assert.equal(mobile.left, 12); assert.equal(mobile.top, 12); assert.equal(mobile.maxHeight, 544);
 });

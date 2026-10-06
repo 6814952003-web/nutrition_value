@@ -27,6 +27,15 @@ unavailable to visitors. Making a profile private hides that profile without
 removing its posts from the signed-in community. Already shared public Blob
 media URLs remain accessible to people who hold the URL.
 
+Community author photos and names link to the author's public profile when that
+member has opted in. Hovering or focusing the link, or holding it on a touch
+screen, opens a compact profile card; a quick tap opens the full profile.
+Cards fetch the current public profile each time they open, without caching
+email, health data or community posts. Private profiles have no public link or
+profile details; their author identity opens only an unavailable notice without
+requesting a profile. The public card endpoint returns the same unavailable
+response for private and missing accounts.
+
 ## Local development
 
 Use Node.js 24. Install packages from the repository root:

@@ -86,6 +86,77 @@ test("public profile works without authentication and strictly allowlists profil
   assertVisitor(await res.json());
 });
 
+test("anonymous mini profile cards contain exactly the five public profile fields and never load posts", async t => {
+  t.mock.method(User, "findOne", query => ({ select: fields => {
+    assert.deepEqual(query, { username: "fixture-owner", profileVisibility: "public" });
+    assert.equal(fields, PROFILE_FIELDS);
+    return { lean: async () => ({ ...privateUser, profileVisibility: "public", posts: [storedPost] }) };
+  } }));
+  const activity = t.mock.method(Activity, "aggregate", async pipeline => {
+    assert.equal(String(pipeline[0].$match.user), ownerId);
+    return [{ streak: 7 }];
+  });
+  const posts = t.mock.method(Post, "aggregate", () => assert.fail("mini cards never load community posts"));
+  const res = await fetch(`${endpoint}/api/profiles/fixture-owner/card`);
+  assert.equal(res.status, 200);
+  assert.equal(res.headers.get("cache-control"), "no-store");
+  const card = await res.json();
+  assert.deepEqual(card, {
+    avatarUrl: privateUser.avatarData, displayName: privateUser.displayName, bio: privateUser.bio,
+    joinedAt: privateUser.createdAt.toISOString(), streak: 7,
+  });
+  for (const secret of [ownerId, otherId, privateUser.email, privateUser.passwordHash, privateUser.passwordSalt, privateUser.goal,
+    "health", "weight", "activity", "durationSeconds", "posts", "comments", "role", "username"]) {
+    assert.equal(JSON.stringify(card).includes(secret), false, secret);
+  }
+  assert.equal(activity.mock.callCount(), 1);
+  assert.equal(posts.mock.callCount(), 0);
+});
+
+test("mini profile cards hide private and missing users identically even with an owner bearer token", async t => {
+  const query = t.mock.method(User, "findOne", () => ({ select: () => ({ lean: async () => privateUser }) }));
+  t.mock.method(Activity, "aggregate", () => assert.fail("unavailable cards never load activity"));
+  t.mock.method(Post, "aggregate", () => assert.fail("unavailable cards never load posts"));
+  const hidden = await fetch(`${endpoint}/api/profiles/fixture-owner/card`, { headers: authHeader(ownerId) });
+  query.mock.mockImplementation(() => ({ select: () => ({ lean: async () => null }) }));
+  const missing = await fetch(`${endpoint}/api/profiles/not-registered/card`);
+  assert.equal(hidden.status, 404);
+  assert.equal(missing.status, 404);
+  assert.equal(hidden.headers.get("cache-control"), "no-store");
+  assert.equal(missing.headers.get("cache-control"), "no-store");
+  assert.deepEqual(await hidden.json(), await missing.json());
+  assert.equal(query.mock.calls[0].arguments[0].profileVisibility, "public");
+});
+
+test("mini profile cards reject malformed usernames before querying and keep service failures generic", async t => {
+  const query = t.mock.method(User, "findOne", () => assert.fail("invalid address must not query"));
+  for (const username of ["ab", "x".repeat(31), "OWNER", "$ne", "name@example.test", "thai%20name"]) {
+    const res = await fetch(`${endpoint}/api/profiles/${username}/card`);
+    assert.equal(res.status, 404);
+    assert.equal(res.headers.get("cache-control"), "no-store");
+  }
+  query.mock.mockImplementation(() => ({ select: () => ({ lean: async () => { throw new Error(`database ${privateUser.email} health weight 77`); } }) }));
+  const failed = await fetch(`${endpoint}/api/profiles/fixture-owner/card`);
+  assert.equal(failed.status, 503);
+  assert.equal(failed.headers.get("cache-control"), "no-store");
+  assert.deepEqual(await failed.json(), { message: "Profile is temporarily unavailable. Please try again." });
+  query.mock.mockImplementation(() => ({ select: () => ({ lean: async () => ({ ...privateUser, profileVisibility: "public" }) }) }));
+  t.mock.method(Activity, "aggregate", async () => { throw new Error(`activity ${privateUser.email} duration 55`); });
+  const activityFailed = await fetch(`${endpoint}/api/profiles/fixture-owner/card`);
+  assert.equal(activityFailed.status, 503);
+  assert.equal(activityFailed.headers.get("cache-control"), "no-store");
+  assert.deepEqual(await activityFailed.json(), { message: "Profile is temporarily unavailable. Please try again." });
+});
+
+test("mini profile cards use public name and safe zero streak defaults without exposing legacy account fields", async t => {
+  t.mock.method(User, "findOne", () => ({ select: () => ({ lean: async () => ({ ...privateUser, profileVisibility: "public", displayName: "", avatarData: "", bio: "" }) }) }));
+  t.mock.method(Activity, "aggregate", async () => [{ streak: -50 }]);
+  const res = await fetch(`${endpoint}/api/profiles/fixture-owner/card`);
+  assert.equal(res.status, 200);
+  const card = await res.json();
+  assert.deepEqual(card, { avatarUrl: "", displayName: privateUser.name, bio: "", joinedAt: privateUser.createdAt.toISOString(), streak: 0 });
+});
+
 test("private and nonexistent profiles return identical no-store 404 even with the owner's token", async t => {
   const query = t.mock.method(User, "findOne", () => ({ select: () => ({ lean: async () => null }) }));
   t.mock.method(Activity, "aggregate", () => assert.fail("unavailable profile must not load activity"));

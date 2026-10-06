@@ -1,6 +1,7 @@
 const { validateBlob } = require("../config/blob");
 const mongoose = require("mongoose");
 const Post = require("../models/post.model");
+const { attachAuthorProfiles } = require("../config/community-author");
 // Community data is shared between accounts. Never spread database documents:
 // legacy email snapshots, populated users, and future private fields stay out.
 const responseId = value => {
@@ -32,12 +33,16 @@ const postResponse = (document, userId) => {
     .filter(value => mongoose.isObjectIdOrHexString(value)).map(value => String(value).toLowerCase()));
   return { ...publicPost, likes: identities.size, likedByMe: identities.has(String(userId).toLowerCase()) };
 };
+const postResponseWithAuthors = async (post, userId) => (await attachAuthorProfiles([postResponse(post, userId)]))[0];
 const getPosts = async (req, res, next) => {
   res.set("Cache-Control", "no-store");
-  try { res.json((await Post.find().sort({ createdAt: -1, _id: -1 }).limit(50).lean()).map(post => postResponse(post, req.user._id))); }
+  try {
+    const posts = await Post.find().sort({ createdAt: -1, _id: -1 }).limit(50).lean();
+    res.json(await attachAuthorProfiles(posts.map(post => postResponse(post, req.user._id))));
+  }
   catch (error) { next(error); }
 };
-const createPost = async (req, res, next) => { try { const { category, content, mediaData = "", mediaType = "" } = req.body; if (!content?.trim()) return res.status(400).json({ message: "Post content is required." }); if (!["food", "workout", "knowledge", "recipe"].includes(category)) return res.status(400).json({ message: "Invalid post category." }); if (mediaData && !["image", "video"].includes(mediaType)) return res.status(400).json({ message: "Invalid media type." }); if (typeof mediaData !== "string" || (mediaData && !await validateBlob(mediaData, req.user._id, "post", mediaType))) return res.status(400).json({ message: "Upload valid media no larger than 100 MB to Blob first." }); const post = await Post.create({ author: req.user._id, authorName: req.user.name, authorAvatar: req.user.avatarData || "", category, content: content.trim(), mediaData, mediaType }); res.status(201).json(postResponse(post, req.user._id)); } catch (error) { next(error); } };
+const createPost = async (req, res, next) => { try { const { category, content, mediaData = "", mediaType = "" } = req.body; if (!content?.trim()) return res.status(400).json({ message: "Post content is required." }); if (!["food", "workout", "knowledge", "recipe"].includes(category)) return res.status(400).json({ message: "Invalid post category." }); if (mediaData && !["image", "video"].includes(mediaType)) return res.status(400).json({ message: "Invalid media type." }); if (typeof mediaData !== "string" || (mediaData && !await validateBlob(mediaData, req.user._id, "post", mediaType))) return res.status(400).json({ message: "Upload valid media no larger than 100 MB to Blob first." }); const post = await Post.create({ author: req.user._id, authorName: req.user.name, authorAvatar: req.user.avatarData || "", category, content: content.trim(), mediaData, mediaType }); res.status(201).json(await postResponseWithAuthors(post, req.user._id)); } catch (error) { next(error); } };
 const likePost = async (req, res, next) => {
   try {
     // Pipeline updates are atomic and are not cast by Mongoose. Supply the
@@ -48,10 +53,10 @@ const likePost = async (req, res, next) => {
       { $set: { likes: { $size: "$likedBy" } } },
     ], { new: true, updatePipeline: true });
     if (!post) return res.status(404).json({ message: "Post not found." });
-    res.json(postResponse(post, req.user._id));
+    res.json(await postResponseWithAuthors(post, req.user._id));
   } catch (error) { next(error); }
 };
-const commentPost = async (req, res, next) => { try { const content = req.body.content?.trim(); if (!content || content.length > 500) return res.status(400).json({ message: "Comment must be between 1 and 500 characters." }); const post = await Post.findByIdAndUpdate(req.params.id, { $push: { comments: { author: req.user._id, authorName: req.user.name, content } } }, { new: true }); if (!post) return res.status(404).json({ message: "Post not found." }); res.json(postResponse(post, req.user._id)); } catch (error) { next(error); } };
+const commentPost = async (req, res, next) => { try { const content = req.body.content?.trim(); if (!content || content.length > 500) return res.status(400).json({ message: "Comment must be between 1 and 500 characters." }); const post = await Post.findByIdAndUpdate(req.params.id, { $push: { comments: { author: req.user._id, authorName: req.user.name, content } } }, { new: true }); if (!post) return res.status(404).json({ message: "Post not found." }); res.json(await postResponseWithAuthors(post, req.user._id)); } catch (error) { next(error); } };
 const updatePost = async (req, res, next) => {
   try {
     const updates = req.body;
@@ -65,7 +70,7 @@ const updatePost = async (req, res, next) => {
     if (Object.hasOwn(values, "content")) values.content = values.content.trim();
     const post = await Post.findByIdAndUpdate(req.params.id, { $set: values }, { new: true, runValidators: true });
     if (!post) return res.status(404).json({ message: "ไม่พบโพสต์นี้" });
-    res.json(postResponse(post, req.user._id));
+    res.json(await postResponseWithAuthors(post, req.user._id));
   } catch (error) { next(error); }
 };
 const deletePost = async (req, res, next) => {
@@ -81,7 +86,7 @@ const deleteComment = async (req, res, next) => {
     const post = await Post.findOneAndUpdate({ _id: req.params.id, comments: { $elemMatch: commentFilter } },
       { $pull: { comments: commentFilter } }, { new: true, runValidators: true });
     if (!post) return res.status(404).json({ message: "ไม่พบโพสต์หรือความคิดเห็นนี้" });
-    res.json(postResponse(post, req.user._id));
+    res.json(await postResponseWithAuthors(post, req.user._id));
   } catch (error) { next(error); }
 };
 module.exports = { getPosts, createPost, likePost, commentPost, updatePost, deletePost, deleteComment };

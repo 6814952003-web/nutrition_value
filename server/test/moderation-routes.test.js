@@ -108,7 +108,7 @@ test("comment deletion requires the comment id and author to match the same arra
   assert.deepEqual(remove.mock.calls[0].arguments[1], { $pull: { comments: { _id: commentId, author: "outsider" } } });
   const response = await request("DELETE", `/comments/${commentId}`, undefined, "owner");
   assert.equal(response.status, 200);
-  assert.deepEqual((await response.json()).comments, [{ _id: otherCommentId, author: "outsider", content: "Outsider's comment" }]);
+  assert.deepEqual((await response.json()).comments, [{ _id: otherCommentId, author: "outsider", content: "Outsider's comment", authorUsername: null }]);
   assert.deepEqual(remove.mock.calls[1].arguments, [
     { _id: postId, comments: { $elemMatch: { _id: commentId, author: "owner" } } },
     { $pull: { comments: { _id: commentId, author: "owner" } } },
@@ -133,11 +133,11 @@ test("feed polling returns fresh JSON with stable descending ordering and requir
   const first = await get("owner");
   assert.equal(first.status, 200);
   assert.equal(first.headers.get("cache-control"), "no-store");
-  assert.deepEqual(await first.json(), posts.map(post => ({ ...post, likes: 0, likedByMe: false })));
+  assert.deepEqual(await first.json(), posts.map(post => ({ ...post, likes: 0, likedByMe: false, authorUsername: null })));
   posts = [{ _id: "d".repeat(24), content: "New post" }, ...posts];
   const second = await get("owner");
   assert.equal(second.headers.get("cache-control"), "no-store");
-  assert.deepEqual(await second.json(), posts.map(post => ({ ...post, likes: 0, likedByMe: false })));
+  assert.deepEqual(await second.json(), posts.map(post => ({ ...post, likes: 0, likedByMe: false, authorUsername: null })));
   assert.deepEqual(sorts, [{ createdAt: -1, _id: -1 }, { createdAt: -1, _id: -1 }]);
   assert.deepEqual(limits, [50, 50]);
 });

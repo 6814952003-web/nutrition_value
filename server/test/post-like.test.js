@@ -15,9 +15,12 @@ const adminUser = "3".repeat(24);
 const commentId = "b".repeat(24);
 let server;
 let endpoint;
-const auth = t => t.mock.method(User, "findById", id => ({ select: async () => ({
+const auth = t => {
+  t.mock.method(User, "find", () => ({ select: () => ({ lean: async () => [] }) }));
+  return t.mock.method(User, "findById", id => ({ select: async () => ({
   _id: new mongoose.Types.ObjectId(id), name: "Fixture member", email: "fixture@example.com", role: id === adminUser ? "admin" : "user",
 }) }));
+};
 const request = (method, path, body, userId = firstUser) => fetch(`${endpoint}${path}`, {
   method,
   headers: { "Content-Type": "application/json", ...(userId ? { Authorization: `Bearer ${signToken({ id: userId })}` } : {}) },

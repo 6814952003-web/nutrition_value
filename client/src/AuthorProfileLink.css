@@ -1,0 +1,31 @@
+.nouri-author-identity { display: block; min-width: 0; }
+.nouri-author-identity--compact { display: inline; }
+.nouri-author-trigger { display: inline-flex; align-items: flex-start; gap: 12px; max-width: 100%; border: 0; border-radius: 7px; padding: 0; background: transparent; text-align: left; color: inherit; cursor: pointer; text-decoration: none; touch-action: pan-y; }
+.nouri-author-trigger:hover .nouri-author-text > b { color: var(--forest, #204c3d); text-decoration: underline; text-underline-offset: 4px; }
+.nouri-author-trigger:focus-visible { outline: 2px solid var(--forest, #204c3d); outline-offset: 5px; }
+.nouri-author-trigger--compact { display: inline; vertical-align: baseline; border-radius: 3px; }
+.nouri-author-text { display: block; min-width: 0; }
+.nouri-author-text > b { display: block; overflow-wrap: anywhere; font-size: .875rem; line-height: 1.5; }
+.nouri-author-trigger--compact .nouri-author-text, .nouri-author-trigger--compact .nouri-author-text > b { display: inline; }
+.nouri-author-meta { display: block; margin-top: 2px; font-size: .75rem; line-height: 1.25rem; color: #64748b; }
+.nouri-author-avatar { display: grid; place-items: center; flex-shrink: 0; width: 40px; height: 40px; overflow: hidden; border: 1px solid #ccd3c0; border-radius: 50%; background: var(--sage, #d8ed9c); color: var(--forest, #204c3d); font-weight: 600; }
+.nouri-author-avatar > img { width: 100%; height: 100%; object-fit: cover; }
+.nouri-profile-card { position: fixed; z-index: 1000; box-sizing: border-box; padding: 24px; overflow-y: auto; overscroll-behavior: contain; border: 1px solid #c8cebb; border-radius: 12px; background: #fffdf5; color: #243d32; box-shadow: 0 12px 35px #243d3228, 0 2px 6px #243d3210; animation: nouri-profile-appear .16s ease-out; }
+.nouri-profile-card::before { content: ""; display: block; height: 3px; margin: -24px -24px 20px; background: #244d3e; }
+.nouri-profile-card-close { position: absolute; top: 8px; right: 9px; display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 50%; background: transparent; color: #657266; font-size: 22px; line-height: 1; }
+.nouri-profile-card-close:hover { background: #e9eddf; }
+.nouri-profile-card-close:focus-visible, .nouri-profile-card-link:focus-visible { outline: 2px solid #244d3e; outline-offset: 3px; }
+.nouri-profile-card-eyebrow { margin: 0 24px 15px 0; color: #788268; font-size: 10px; font-weight: 700; letter-spacing: .15em; }
+.nouri-profile-card-heading { display: flex; align-items: center; gap: 12px; }
+.nouri-profile-card-heading .nouri-author-avatar { width: 56px; height: 56px; border-color: #bcc8a6; font-size: 22px; }
+.nouri-profile-card-title { margin: 0; overflow-wrap: anywhere; color: #244d3e; font-family: Georgia, "Times New Roman", serif; font-size: 22px; font-weight: 700; line-height: 1.4; }
+.nouri-profile-card-bio { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; margin: 15px 0 0; white-space: pre-wrap; overflow-wrap: anywhere; color: #596355; font-size: 13px; line-height: 1.7; }
+.nouri-profile-card-facts { display: flex; flex-wrap: wrap; gap: 18px; margin: 18px 0 0; padding-top: 15px; border-top: 1px solid #e0e3d4; font-size: 12px; }
+.nouri-profile-card-facts dt { color: #788268; }
+.nouri-profile-card-facts dd { margin: 3px 0 0; color: #314c3e; font-weight: 600; }
+.nouri-profile-card-link { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; border: 1px solid #cbd4b9; border-radius: 6px; padding: 9px 12px; background: #f0f3e4; color: #244d3e; font-size: 13px; font-weight: 600; text-decoration: none; }
+.nouri-profile-card-link:hover { background: #e7edd5; }
+.nouri-profile-card-notice { margin: 9px 0; padding-right: 8px; color: #697263; font-size: 13px; line-height: 1.7; }
+.nouri-profile-card-notice > p + p { margin-top: 10px; }
+@keyframes nouri-profile-appear { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .nouri-profile-card { animation: none; } }
