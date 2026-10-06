@@ -113,10 +113,23 @@ test("catalog cards provide search, category filtering, placeholders, credits, a
   assert.ok(html.includes("<option value=\"ตามสั่ง\">ตามสั่ง</option>"));
   assert.ok(html.includes("กะเพราหมู"));
   assert.ok(html.includes("บันทึกว่ากินแล้ว"));
+  assert.ok(html.includes('aria-label="บันทึกว่ากินแล้ว กะเพราหมู"'));
   assert.ok(html.includes("/images/catalog/placeholder.svg"));
   assert.ok(html.includes("ค่าโภชนาการเป็นค่าประมาณ"));
   const credits = render(ImageCredits, siteFixture(), { catalog });
   assert.equal((credits.match(/รูปสำรอง · ยังไม่มีรูปที่ตรวจสอบแล้ว/g) || []).length, 3);
+});
+
+test("every recipe card has its own visible and accessible food-log action", () => {
+  const ingredients = [{ id: "rice", nameTh: "ข้าวสวย", nameEn: "Cooked rice", category: "ธัญพืช", state: "cooked", nutrients: {}, referenceGrams: 100, image: { imageUrl: "/images/catalog/placeholder.svg" }, needsImage: true }];
+  const recipes = Array.from({ length: 100 }, (_, index) => ({
+    id: `menu-${index}`, nameTh: `เมนู ${index + 1}`, nameEn: `Menu ${index + 1}`, category: "อาหาร",
+    servingGrams: 300, nutrients: { energyKcal: null }, ingredients: [{ ingredientId: "rice", grams: 100 }],
+    image: { imageUrl: "/images/catalog/placeholder.svg" }, needsImage: true,
+  }));
+  const html = render(CatalogGrid, siteFixture(), { catalog: { ingredients, recipes } });
+  assert.equal((html.match(/class="catalog-button catalog-card-log-button"/g) || []).length, 100);
+  assert.equal((html.match(/aria-label="บันทึกว่ากินแล้ว เมนู \d+"/g) || []).length, 100);
 });
 
 test("menu logging requires an explicit action and prompts signed-out visitors to log in", t => {
