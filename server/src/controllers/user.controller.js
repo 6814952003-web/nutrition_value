@@ -4,10 +4,10 @@ const { promisify } = require("util");
 const User = require("../models/user.model");
 const { signToken } = require("../config/auth");
 const { createActivity } = require("./activity.controller");
+const { configuredAdminEmail: bootstrapAdminEmail, validName, validEmail, validConfiguredLocalEmail, validLoginEmail, validPassword, validLoginPassword } = require("../config/user-validation");
 
 const userResponse = user => ({ id: user._id, name: user.name, email: user.email, role: user.role, avatarData: user.avatarData || "", createdAt: user.createdAt });
 const authResponse = user => ({ user: userResponse(user), token: signToken({ id: user._id, role: user.role }) });
-const bootstrapAdminEmail = () => process.env.ADMIN_EMAIL?.trim().toLowerCase();
 const promoteAdminIfNeeded = async user => {
   const configuredAdminEmail = bootstrapAdminEmail();
   if (configuredAdminEmail && user.email === configuredAdminEmail && user.role !== "admin") {
@@ -19,9 +19,6 @@ const promoteAdminIfNeeded = async user => {
 
 const scrypt = promisify(crypto.scrypt);
 const bodyFields = req => req.body && typeof req.body === "object" && !Array.isArray(req.body) ? req.body : {};
-const validName = value => typeof value === "string" && value.trim().length >= 1 && value.trim().length <= 80;
-const validEmail = value => typeof value === "string" && value.trim().length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
-const validPassword = value => typeof value === "string" && value.length >= 6 && value.length <= 128;
 const duplicateResponse = res => res.status(409).json({ message: "This name or email is already registered." });
 
 const registerUser = async (req, res, next) => {
@@ -52,9 +49,9 @@ const registerUser = async (req, res, next) => {
 const loginUser = async (req, res, next) => {
   try {
     const { name, email, password } = bodyFields(req);
-    if ((name !== undefined && !validName(name)) || (email !== undefined && !validEmail(email))
-      || !validPassword(password)) {
-      return res.status(400).json({ message: "Provide a valid username (up to 80 characters) or email and a password between 6 and 128 characters." });
+    if ((name !== undefined && !validName(name)) || (email !== undefined && !validLoginEmail(email))
+      || !validLoginPassword(password)) {
+      return res.status(400).json({ message: "Provide a valid username (up to 80 characters) or email and a password between 1 and 128 characters." });
     }
     const normalizedName = typeof name === "string" ? name.trim() : "";
     const normalizedEmail = typeof email === "string" ? email.trim().toLowerCase() : "";
@@ -99,7 +96,7 @@ const updateUser = async (req, res, next) => {
       updates.name = body.name.trim();
     }
     if (Object.hasOwn(body, "email")) {
-      if (!validEmail(body.email)) return res.status(400).json({ message: "A valid email address of up to 254 characters is required." });
+      if (!validLoginEmail(body.email)) return res.status(400).json({ message: "A valid email address of up to 254 characters is required." });
       updates.email = body.email.trim().toLowerCase();
     }
     if (Object.hasOwn(body, "role")) {
@@ -119,6 +116,14 @@ const updateUser = async (req, res, next) => {
       }
       if (updates.role === "user" && (existing.email === configuredAdminEmail || updates.email === configuredAdminEmail)) {
         return res.status(409).json({ message: "The configured administrator cannot be demoted while ADMIN_EMAIL is set to this email." });
+      }
+      if (updates.email !== undefined && validConfiguredLocalEmail(updates.email)) {
+        if (existing.email !== configuredAdminEmail || existing.role !== "admin") {
+          return res.status(400).json({ message: "This local email is reserved for the existing configured administrator." });
+        }
+        // Query validators cannot read the existing document's role. Preserve
+        // the verified administrator role when its local email is re-submitted.
+        updates.role = "admin";
       }
     }
     const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true }).select("_id name email role avatarData createdAt");

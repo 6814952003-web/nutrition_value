@@ -40,7 +40,7 @@ const { SiteContext, defaultSite } = loadUiModule(path.join(sourceRoot, "SiteCon
 const { default: AuthPage } = loadUiModule(path.join(sourceRoot, "AuthPage"));
 const { default: Dashboard } = loadUiModule(path.join(sourceRoot, "Dashboard"));
 const { default: AdminPage } = loadUiModule(path.join(sourceRoot, "AdminPage"));
-const { AccountPage } = loadUiModule(path.join(sourceRoot, "App"));
+const { default: App, AccountPage, AdminRoute } = loadUiModule(path.join(sourceRoot, "App"));
 const { default: CommunityPage, CommunityPost } = loadUiModule(path.join(sourceRoot, "CommunityPage"));
 const user = { id: "ui-fixture-user", name: "สมาชิกทดสอบ", role: "admin" };
 const noop = () => {};
@@ -205,4 +205,92 @@ test("the heart remembers the account's vote and prevents another click after re
   assert.ok(afterButton.includes("♥"));
   assert.ok(afterButton.includes("text-red-600"));
   assert.ok(afterButton.includes("ถูกใจแล้ว"));
+});
+
+test("the admin route explains a member's missing permission instead of rendering the dashboard", () => {
+  const site = siteFixture();
+  const member = { id: "member-fixture", name: "guy", email: "member@example.com", role: "user" };
+  const html = render(AdminRoute, site, { user: member, site, setUser: noop, onSaved: noop, goBack: noop, onSwitchAccount: noop });
+  for (const text of ["บัญชีนี้ยังไม่มีสิทธิ์ผู้ดูแล", "เฉพาะบัญชีผู้ดูแลระบบ", "guy", "member@example.com", "ออกจากระบบและเข้าสู่ระบบด้วยบัญชีผู้ดูแล", "กลับหน้าหลัก"]) assert.ok(html.includes(text));
+  assert.ok(html.includes('aria-labelledby="admin-access-title"'));
+  assert.ok(!html.includes(site.copy.dashboard.heroTitle));
+  assert.ok(!html.includes("บันทึกทั้งหมด"));
+});
+
+test("the same admin route still opens the full admin page for an administrator", () => {
+  const site = siteFixture();
+  const html = render(AdminRoute, site, { user, site, setUser: noop, onSaved: noop, goBack: noop, onSwitchAccount: noop });
+  assert.ok(html.includes("บันทึกทั้งหมด"));
+  assert.ok(html.includes("เมนูอาหาร"));
+  assert.ok(!html.includes("บัญชีนี้ยังไม่มีสิทธิ์ผู้ดูแล"));
+});
+
+function appStateFixture(t, view) {
+  // Exercise the callbacks created by the real App, without mounting effects
+  // that would contact an API. Restore all hooks and globals after this test.
+  const states = [{ id: "member-fixture", name: "guy", email: "member@example.com", role: "user" }, "register", "old-message", view, siteFixture()];
+  const originalHooks = { useState: React.useState, useEffect: React.useEffect, useRef: React.useRef };
+  const originalGlobals = Object.fromEntries(["localStorage", "history"].map(key => [key, Object.getOwnPropertyDescriptor(global, key)]));
+  const { api } = loadUiModule(path.join(sourceRoot, "api"));
+  const originalRecord = api.recordSession;
+  let stateIndex = 0; let token = "member-token";
+  const routes = []; const durations = [];
+  React.useState = () => { const index = stateIndex++; return [states[index], next => { states[index] = typeof next === "function" ? next(states[index]) : next; }]; };
+  React.useEffect = noop;
+  React.useRef = () => ({ current: Date.now() - 65000 });
+  global.localStorage = { getItem: () => token, removeItem: () => { token = null; }, setItem: (key, value) => { token = value; } };
+  global.history = { pushState: (state, title, pathname) => routes.push({ state, pathname }) };
+  api.recordSession = async seconds => { durations.push(seconds); };
+  t.after(() => {
+    Object.assign(React, originalHooks); api.recordSession = originalRecord;
+    for (const [key, descriptor] of Object.entries(originalGlobals)) {
+      if (descriptor) Object.defineProperty(global, key, descriptor);
+      else delete global[key];
+    }
+  });
+  return { states, routes, durations, token: () => token, page: () => { stateIndex = 0; return App().props.children; } };
+}
+
+test("switching the member out of /admin saves the session and keeps the admin login intent", async t => {
+  const fixture = appStateFixture(t, "admin");
+  const gateRoute = fixture.page();
+  assert.equal(gateRoute.type, AdminRoute);
+  await gateRoute.props.onSwitchAccount();
+  assert.equal(fixture.token(), null);
+  assert.equal(fixture.durations.length, 1);
+  assert.ok(fixture.durations[0] >= 65);
+  assert.deepEqual(fixture.routes, [{ state: { view: "admin" }, pathname: "/admin" }]);
+  const login = fixture.page();
+  assert.equal(login.type, AuthPage);
+  assert.equal(login.props.adminRequested, true);
+  assert.equal(login.props.mode, "login");
+  assert.equal(login.props.message, "");
+});
+
+test("ordinary member routes and logout retain their existing dashboard behavior", async t => {
+  const fixture = appStateFixture(t, "dashboard");
+  const home = fixture.page();
+  assert.equal(home.type, Dashboard);
+  await home.props.logout();
+  assert.equal(fixture.token(), null);
+  assert.equal(fixture.durations.length, 1);
+  assert.deepEqual(fixture.routes, [{ state: { view: "dashboard" }, pathname: "/" }]);
+  const login = fixture.page();
+  assert.equal(login.type, AuthPage);
+  assert.equal(login.props.adminRequested, false);
+});
+
+test("login accepts an existing five-character password while new registration still requires six", () => {
+  const site = siteFixture();
+  const props = { setMode: noop, setUser: noop, message: "", setMessage: noop };
+  const login = render(AuthPage, site, { ...props, mode: "login", adminRequested: true });
+  const registration = render(AuthPage, site, { ...props, mode: "register" });
+  const loginPassword = login.match(/<input[^>]*name="password"[^>]*>/)?.[0];
+  const registerPassword = registration.match(/<input[^>]*name="password"[^>]*>/)?.[0];
+  const confirmation = registration.match(/<input[^>]*name="confirmPassword"[^>]*>/)?.[0];
+  assert.ok(loginPassword && registerPassword && confirmation);
+  assert.ok(!/minlength=/i.test(loginPassword), "the login input must not reject an existing short password before the server verifies it");
+  assert.match(registerPassword, /minlength="6"/i);
+  assert.match(confirmation, /minlength="6"/i);
+  assert.ok(login.includes("เข้าสู่ระบบด้วยบัญชีผู้ดูแลเพื่อจัดการเว็บไซต์"));
 });

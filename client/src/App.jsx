@@ -71,18 +71,47 @@ export default function App() {
     return () => clearInterval(checkpoint);
   }, [user?.id]);
   const navigate = next => { history.pushState({ view: next }, "", next === "admin" ? "/admin" : "/"); setView(next); };
-  const logout = async () => {
+  const endSession = async destination => {
     const seconds = Math.floor((Date.now() - sessionStartedAt.current) / 1000);
     if (seconds > 0) await api.recordSession(seconds).catch(() => {});
-    localStorage.removeItem("nouri-token"); navigate("dashboard"); setUser(null);
+    localStorage.removeItem("nouri-token"); navigate(destination); setUser(null);
   };
+  const logout = () => endSession("dashboard");
+  const switchAdminAccount = () => { setMode("login"); setMessage(""); return endSession("admin"); };
   let page;
-  if (!user) page = <AuthPage {...{ mode, setMode, setUser, message, setMessage }} />;
-  else if (view === "admin" && user.role === "admin") page = <AdminPage user={user} site={site} setUser={setUser} onSaved={setSite} goBack={() => navigate("dashboard")} />;
+  if (!user) page = <AuthPage {...{ mode, setMode, setUser, message, setMessage }} adminRequested={view === "admin"} />;
+  else if (view === "admin") page = <AdminRoute user={user} site={site} setUser={setUser} onSaved={setSite} goBack={() => navigate("dashboard")} onSwitchAccount={switchAdminAccount} />;
   else if (view === "community") page = <CommunityPage user={user} setUser={setUser} goBack={() => navigate("dashboard")} />;
   else if (view === "account") page = <AccountPage user={user} setUser={setUser} goAdmin={() => navigate("admin")} goBack={() => navigate("dashboard")} logout={logout} sessionStartedAt={sessionStartedAt.current} />;
   else page = <Dashboard user={user} logout={logout} openAccount={() => navigate("account")} openAdmin={() => navigate("admin")} community={<CommunityPage key={user.id} user={user} setUser={setUser} embedded />} />;
   return <SiteContext.Provider value={site}>{page}</SiteContext.Provider>;
+}
+export function AdminRoute({ user, site, setUser, onSaved, goBack, onSwitchAccount }) {
+  return user.role === "admin"
+    ? <AdminPage user={user} site={site} setUser={setUser} onSaved={onSaved} goBack={goBack}/>
+    : <AdminAccessGate user={user} goBack={goBack} onSwitchAccount={onSwitchAccount}/>;
+}
+export function AdminAccessGate({ user, goBack, onSwitchAccount }) {
+  const [switching, setSwitching] = useState(false);
+  const [error, setError] = useState("");
+  const switchAccount = async () => {
+    if (switching) return;
+    setSwitching(true); setError("");
+    try { await onSwitchAccount(); }
+    catch { setError("ออกจากระบบไม่สำเร็จ กรุณาลองอีกครั้ง"); }
+    finally { setSwitching(false); }
+  };
+  return <main className="account-shell grid min-h-screen place-items-center px-5 py-10 text-[var(--ink)]" aria-labelledby="admin-access-title">
+    <section className="w-full max-w-xl overflow-hidden rounded-[2rem] border border-[#d9dfd7] bg-[#fffefa] shadow-[0_20px_60px_rgba(24,56,46,.12)]" aria-busy={switching}>
+      <header className="bg-[#214d3f] px-7 py-8 text-white sm:px-9"><BrandLogo/><p className="mt-7 text-xs font-bold tracking-[.16em] text-[#d8ed9f]">พื้นที่ผู้ดูแลเว็บไซต์</p><h1 id="admin-access-title" className="mt-3 text-3xl font-bold leading-snug">บัญชีนี้ยังไม่มีสิทธิ์ผู้ดูแล</h1><p className="mt-3 text-sm leading-7 text-emerald-100">หน้าแอดมินเปิดให้เฉพาะบัญชีผู้ดูแลระบบ กรุณาเข้าสู่ระบบด้วยบัญชีผู้ดูแลเพื่อจัดการเว็บไซต์</p></header>
+      <div className="px-7 py-7 sm:px-9"><p className="text-xs font-semibold text-[#66746c]">บัญชีที่เข้าสู่ระบบอยู่</p><dl className="mt-3 space-y-3 rounded-2xl border border-[#e0e7d9] bg-[#f4f7ed] p-4 text-sm"><ProfileRow label="ชื่อ" value={user.name || "สมาชิก"}/><ProfileRow label="อีเมล" value={user.email || "ไม่ได้ระบุอีเมล"}/><div className="flex justify-between gap-6"><dt className="text-slate-500">ประเภทบัญชี</dt><dd className="font-semibold">สมาชิก</dd></div></dl>
+        {error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+        <button type="button" disabled={switching} onClick={switchAccount} className="mt-6 w-full rounded-xl bg-[#214d3f] px-5 py-3 text-sm font-bold leading-6 text-white transition hover:bg-[#18382e] disabled:cursor-wait disabled:opacity-60">{switching ? "กำลังออกจากระบบ…" : "ออกจากระบบและเข้าสู่ระบบด้วยบัญชีผู้ดูแล"}</button>
+        <button type="button" disabled={switching} onClick={goBack} className="mt-3 w-full rounded-xl border border-[#ccd8c5] px-5 py-3 text-sm font-semibold text-[#214d3f] transition hover:bg-[#f4f7ed] disabled:opacity-60">กลับหน้าหลัก</button>
+        {switching && <p role="status" className="mt-3 text-center text-xs text-[#66746c]">กำลังบันทึกเวลาใช้งานและเปลี่ยนบัญชี</p>}
+      </div>
+    </section>
+  </main>;
 }
 export function AccountPage({ user, setUser, goBack, goAdmin, logout, sessionStartedAt }) {
   const { brand, copy: { account: c } } = useSite();

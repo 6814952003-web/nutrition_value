@@ -244,3 +244,63 @@ test("the user model enforces name/email constraints for other write paths", asy
     await assert.rejects(user.validate(), { name: "ValidationError" });
   }
 });
+
+test("the provisioned local-domain administrator signs in with a short stored password, never an environment bypass", async t => {
+  configureAdmin(t, "operator@localhost");
+  const previousPassword = process.env.ADMIN_PASSWORD;
+  process.env.ADMIN_PASSWORD = "environment-only-fixture";
+  t.after(() => { if (previousPassword === undefined) delete process.env.ADMIN_PASSWORD; else process.env.ADMIN_PASSWORD = previousPassword; });
+  const password = "q8!Zv";
+  const salt = "operator-login-fixture-salt";
+  const user = { _id: "fixture-operator", name: "Operator fixture", email: "operator@localhost", role: "admin", passwordSalt: salt, passwordHash: crypto.scryptSync(password, salt, 64).toString("hex") };
+  const lookup = t.mock.method(User, "findOne", async () => user);
+  const activity = t.mock.method(Activity, "create", async () => ({}));
+  for (const body of [{ email: " OPERATOR@LOCALHOST ", password }, { name: user.name, password }]) {
+    const res = response();
+    await loginUser({ body }, res, unexpected);
+    assert.equal(res.statusCode, 200);
+    assert.equal(res.body.user.role, "admin");
+    assert.equal(res.body.user.email, user.email);
+    assert.equal(res.body.user.passwordHash, undefined);
+    assert.equal(verifyToken(res.body.token).id, user._id);
+  }
+  assert.deepEqual(lookup.mock.calls[0].arguments[0], { email: user.email });
+  const wrong = response();
+  await loginUser({ body: { email: user.email, password: process.env.ADMIN_PASSWORD } }, wrong, unexpected);
+  assert.equal(wrong.statusCode, 401);
+  assert.equal(activity.mock.callCount(), 2);
+});
+
+test("public registration still rejects local-domain emails and passwords below six characters", async t => {
+  configureAdmin(t, "operator@localhost");
+  t.mock.method(User, "findOne", () => assert.fail("invalid public registration must not query users"));
+  t.mock.method(User, "create", () => assert.fail("invalid public registration must not create users"));
+  for (const body of [{ ...validRegistration, email: "operator@localhost" }, { ...validRegistration, password: "q8!Zv" }]) {
+    const res = response();
+    await registerUser({ body }, res, unexpected);
+    assert.equal(res.statusCode, 400);
+  }
+});
+
+test("only the configured administrator may retain a local-domain address while being renamed", async t => {
+  configureAdmin(t, "operator@localhost");
+  const existing = { _id: "configured-operator", name: "Operator fixture", email: "operator@localhost", role: "admin" };
+  t.mock.method(User, "findById", () => ({ select: async () => existing }));
+  const update = t.mock.method(User, "findByIdAndUpdate", (id, fields) => ({ select: async () => ({ ...existing, ...fields }) }));
+  const res = response();
+  await updateUser({ params: { id: existing._id }, user: { _id: existing._id }, body: { name: "Renamed operator", email: existing.email } }, res, unexpected);
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.name, "Renamed operator");
+  assert.equal(res.body.email, existing.email);
+  assert.equal(res.body.role, "admin");
+  assert.deepEqual(update.mock.calls[0].arguments[1], { name: "Renamed operator", email: existing.email, role: "admin" });
+});
+
+test("the user model accepts only an admin's exact configured local-domain address", async t => {
+  configureAdmin(t, "operator@localhost");
+  const fields = { name: "Operator fixture", passwordHash: "fixture-hash", passwordSalt: "fixture-salt" };
+  await new User({ ...fields, email: "operator@localhost", role: "admin" }).validate();
+  for (const account of [{ email: "operator@localhost", role: "user" }, { email: "other@localhost", role: "admin" }]) {
+    await assert.rejects(new User({ ...fields, ...account }).validate(), { name: "ValidationError" });
+  }
+});

@@ -49,6 +49,8 @@ Set these server-only variables in Vercel, then redeploy:
 | `BLOB_READ_WRITE_TOKEN` | Token supplied by the connected Blob store |
 | `BLOB_PUBLIC_ORIGIN` | `https://YOUR-STORE.public.blob.vercel-storage.com` (origin only) |
 | `ADMIN_EMAIL` | Optional email of the initial administrator |
+| `ADMIN_NAME` | Name used by the manual administrator provisioning command |
+| `ADMIN_PASSWORD` | Operator-only password used by the provisioning command; never exposed to the browser |
 
 Find the public origin in your Blob store's details or an object's URL. Never use
 a `VITE_` prefix for secrets. `.env` files are ignored by Git. Generate a secret with:
@@ -104,6 +106,30 @@ The website now includes `/admin` for accounts with the `admin` role. Deploy the
 frontend, API, and `shared/site-defaults.json` together. No new environment
 variables are required. `ADMIN_EMAIL` still selects the initial administrator;
 an existing account with that email receives its admin role on its next login.
+
+To create a missing administrator, deliberately run the following from the
+repository root with the intended Atlas `MONGO_URI`, `ADMIN_NAME`, `ADMIN_EMAIL`
+and `ADMIN_PASSWORD` in the operator's environment:
+
+```powershell
+node server/scripts/provision-admin.cjs
+```
+
+The command loads `server/.env` quietly without overriding existing environment
+variables. If that file enables local MongoDB, explicitly set
+`USE_LOCAL_MONGO=false` for an Atlas operation. Verify the target database first.
+The command hashes the supplied password using the normal scrypt account format,
+creates only a missing administrator, and refuses identity/role/password
+conflicts instead of resetting existing accounts. Re-running matching credentials
+is safe. Importing the script or visiting the public API never runs provisioning.
+
+An explicitly provisioned administrator may use a well-formed local-domain email
+such as `admin@localhost`; production `ADMIN_EMAIL` must match that account.
+Public registration still requires an ordinary dotted-domain email and a password
+of at least six characters. Login always verifies the stored password hash and
+does not authenticate against `ADMIN_PASSWORD`; changing that environment
+variable does not change a stored password. `ADMIN_NAME` and `ADMIN_PASSWORD`
+are needed for the operator command, not for normal runtime authentication.
 
 The admin page manages branding, colors, page text, images/icons, nutrition
 goals, meals, guides, users, and community moderation. Site settings use
