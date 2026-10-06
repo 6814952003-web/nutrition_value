@@ -2,20 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { BrandLogo, SiteSymbol, useSite } from "./SiteContext";
 import Catalog from "./Catalog";
 import { api } from "./api";
+import { summarizeFoodLogs } from "./food-log-summary";
+
+export { summarizeFoodLogs };
 
 const todayKey = () => {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 };
-export const summarizeFoodLogs = logs => Object.fromEntries([
-  ["calories", "energyKcal"], ["protein", "proteinG"], ["carbs", "carbohydrateG"], ["fat", "fatG"],
-].map(([target, nutrient]) => [
-  target,
-  logs.length && logs.some(log => !Number.isFinite(log.nutrients?.[nutrient]))
-    ? null
-    : logs.reduce((total, log) => total + (log.nutrients?.[nutrient] || 0), 0),
-]));
-
 export default function Dashboard({ user, logout, openAccount, openAdmin, community }) {
   const { brand, guides, goals, icons, copy: { dashboard: c } } = useSite();
   const [logs, setLogs] = useState([]);
@@ -35,7 +29,9 @@ export default function Dashboard({ user, logout, openAccount, openAdmin, commun
       .finally(() => { if (active) setLogsLoading(false); });
     return () => { active = false; controller.abort(); };
   }, [date, refreshLogs]);
-  const total = useMemo(() => summarizeFoodLogs(logs), [logs]);
+  const summary = useMemo(() => summarizeFoodLogs(logs), [logs]);
+  const total = summary.totals;
+  const hasIncompleteNutrition = Object.values(summary.incomplete).some(Boolean);
   const percentage = key => Number.isFinite(total[key]) && Number.isFinite(goals[key]) && goals[key] > 0
     ? Math.min(100, Math.round(total[key] / goals[key] * 100))
     : 0;
@@ -56,7 +52,7 @@ export default function Dashboard({ user, logout, openAccount, openAdmin, commun
       </div></section>
       <section id="tracker" className="mx-auto grid max-w-7xl gap-8 px-6 py-16 lg:grid-cols-[.8fr_1.2fr]">
         <div><p className="text-xs font-bold tracking-[.2em] text-[var(--forest)]">{c.trackerEyebrow}</p><h2 className="mt-3 text-4xl font-bold leading-tight">{c.trackerTitle}<br/><i className="font-serif text-[var(--forest)]">{c.trackerHighlight}</i></h2><p className="mt-5 max-w-sm whitespace-pre-line leading-7 text-slate-600">{c.trackerDescription}</p><button onClick={openAccount} className="mt-6 rounded-full border border-[var(--forest)] bg-white/70 px-5 py-2 text-sm font-semibold text-[var(--forest)]">ดูบันทึกการกิน</button></div>
-        <div className="rounded-[2rem] bg-white/85 p-7 shadow-lg ring-1 ring-[#dfe7dd]" aria-busy={logsLoading}><div className="flex items-center justify-between gap-4"><div><p className="text-slate-500">{c.proteinToday}</p><p className="mt-1 text-5xl font-bold">{displayNumber(total.protein)}g</p><small className="text-slate-500">{c.goalLabel} {goals.protein}g</small></div><div className="grid h-28 w-28 shrink-0 place-items-center rounded-full" style={{ background: `conic-gradient(var(--forest) ${pct * 3.6}deg,var(--sage) 0)` }}><div className="grid h-20 w-20 place-items-center rounded-full bg-white font-bold text-[var(--forest)]">{pct}%</div></div></div><div className="mt-8 grid gap-5 sm:grid-cols-3"><Metric label={c.caloriesLabel} value={`${displayNumber(total.calories)} kcal`} percent={percentage("calories")}/><Metric label={c.carbsLabel} value={`${displayNumber(total.carbs)}g`} percent={percentage("carbs")}/><Metric label={c.fatLabel} value={`${displayNumber(total.fat)}g`} percent={percentage("fat")}/></div>{logsLoading && <p role="status" className="mt-4 text-xs text-slate-500">กำลังโหลดบันทึกการกินวันนี้…</p>}{logsError && <p role="alert" className="mt-4 text-xs text-red-700">{logsError} <button type="button" className="underline" onClick={() => setRefreshLogs(value => value + 1)}>ลองอีกครั้ง</button></p>}</div>
+        <div className="rounded-[2rem] bg-white/85 p-7 shadow-lg ring-1 ring-[#dfe7dd]" aria-busy={logsLoading}><div className="flex items-center justify-between gap-4"><div><p className="text-slate-500">{c.proteinToday}</p><p className="mt-1 text-5xl font-bold">{displayNumber(total.protein)}g</p><small className="text-slate-500">{c.goalLabel} {goals.protein}g</small></div><div className="grid h-28 w-28 shrink-0 place-items-center rounded-full" style={{ background: `conic-gradient(var(--forest) ${pct * 3.6}deg,var(--sage) 0)` }}><div className="grid h-20 w-20 place-items-center rounded-full bg-white font-bold text-[var(--forest)]">{pct}%</div></div></div><div className="mt-8 grid gap-5 sm:grid-cols-3"><Metric label={c.caloriesLabel} value={`${displayNumber(total.calories)} kcal`} percent={percentage("calories")}/><Metric label={c.carbsLabel} value={`${displayNumber(total.carbs)}g`} percent={percentage("carbs")}/><Metric label={c.fatLabel} value={`${displayNumber(total.fat)}g`} percent={percentage("fat")}/></div>{hasIncompleteNutrition && <p className="mt-4 text-xs text-amber-800" role="note">ตัวเลขเป็นผลรวมจากค่าที่มี ไม่รวมรายการที่ไม่มีข้อมูลโภชนาการ</p>}{logsLoading && <p role="status" className="mt-4 text-xs text-slate-500">กำลังโหลดบันทึกการกินวันนี้…</p>}{logsError && <p role="alert" className="mt-4 text-xs text-red-700">{logsError} <button type="button" className="underline" onClick={() => setRefreshLogs(value => value + 1)}>ลองอีกครั้ง</button></p>}</div>
       </section>
       <section id="menu" className="bg-white/70 px-6 py-16"><div className="mx-auto max-w-7xl"><div className="flex flex-wrap items-end justify-between gap-5"><div><p className="text-xs font-bold tracking-[.2em] text-[var(--forest)]">{c.menuEyebrow}</p><h2 className="mt-3 text-4xl font-bold">{c.menuTitle} <i className="font-serif text-[var(--forest)]">{c.menuHighlight}</i></h2></div><p className="max-w-sm whitespace-pre-line leading-6 text-slate-500">{c.menuDescription}</p></div>
         <Catalog onFoodLogSaved={() => setRefreshLogs(value => value + 1)}/>

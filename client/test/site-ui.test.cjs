@@ -104,11 +104,20 @@ test("dashboard tracker totals use saved food-log snapshots and preserve unknown
   assert.deepEqual(summarizeFoodLogs([
     { nutrients: { energyKcal: 350, proteinG: 20, carbohydrateG: 45, fatG: 8 } },
     { nutrients: { energyKcal: 150, proteinG: 10, carbohydrateG: 25, fatG: 4 } },
-  ]), { calories: 500, protein: 30, carbs: 70, fat: 12 });
+  ]), {
+    totals: { calories: 500, protein: 30, carbs: 70, fat: 12 },
+    incomplete: { calories: false, protein: false, carbs: false, fat: false },
+  });
   assert.deepEqual(summarizeFoodLogs([
     { nutrients: { energyKcal: null, proteinG: 10, carbohydrateG: 2, fatG: 1 } },
-  ]), { calories: null, protein: 10, carbs: 2, fat: 1 });
-  assert.deepEqual(summarizeFoodLogs([]), { calories: 0, protein: 0, carbs: 0, fat: 0 });
+  ]), {
+    totals: { calories: 0, protein: 10, carbs: 2, fat: 1 },
+    incomplete: { calories: true, protein: false, carbs: false, fat: false },
+  });
+  assert.deepEqual(summarizeFoodLogs([]), {
+    totals: { calories: 0, protein: 0, carbs: 0, fat: 0 },
+    incomplete: { calories: false, protein: false, carbs: false, fat: false },
+  });
 });
 
 test("catalog cards provide search, category filtering, placeholders, credits, and the nutrition disclaimer", () => {

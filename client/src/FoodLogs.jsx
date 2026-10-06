@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { api } from "./api";
+import { summarizeFoodLogs } from "./food-log-summary";
 
 const mealOrder = ["breakfast", "lunch", "dinner", "snack"];
 const mealLabels = { breakfast: "เช้า", lunch: "กลางวัน", dinner: "เย็น", snack: "ของว่าง" };
@@ -50,12 +51,14 @@ export default function FoodLogHistory({ goals }) {
     return () => { active = false; controller.abort(); };
   }, [date]);
 
-  const totals = useMemo(() => Object.fromEntries(nutrientFields.map(([key]) => [
-    key,
-    logs.length && logs.some(log => !Number.isFinite(log.nutrients?.[key]))
-      ? null
-      : logs.reduce((sum, log) => sum + (log.nutrients?.[key] || 0), 0),
-  ])), [logs]);
+  const summary = useMemo(() => summarizeFoodLogs(logs), [logs]);
+  const totals = {
+    energyKcal: summary.totals.calories,
+    proteinG: summary.totals.protein,
+    carbohydrateG: summary.totals.carbs,
+    fatG: summary.totals.fat,
+  };
+  const hasIncompleteNutrition = Object.values(summary.incomplete).some(Boolean);
 
   const updateLog = async log => {
     const enteredQuantity = Number(drafts[log._id] ?? displayQuantity(log));
@@ -97,6 +100,7 @@ export default function FoodLogHistory({ goals }) {
     {loading ? <p role="status" className="mt-6 text-center text-sm text-[#66746c]">กำลังโหลดบันทึก…</p>
       : !logs.length ? <p className="mt-6 rounded-xl bg-[#f4f7ed] p-5 text-center text-sm text-[#66746c]">ยังไม่มีบันทึกการกินในวันนี้</p>
         : <>
+          {hasIncompleteNutrition && <p className="mt-4 text-xs text-amber-800" role="note">ยอดรวมเป็นตัวเลขจากค่าที่มี ไม่รวมรายการที่ไม่มีข้อมูลโภชนาการ</p>}
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             {nutrientFields.map(([key, label, unit, goalKey]) => {
               const goal = goals?.[goalKey];
