@@ -6,6 +6,6 @@ router.route("/").get(authenticate, getPosts).post(authenticate, createPost);
 router.post("/:id/like", authenticate, likePost);
 router.post("/:id/comments", authenticate, commentPost);
 router.patch("/:id", authenticate, authorize("admin"), updatePost);
-router.delete("/:id", authenticate, authorize("admin"), deletePost);
-router.delete("/:id/comments/:commentId", authenticate, authorize("admin"), deleteComment);
+router.delete("/:id", authenticate, deletePost);
+router.delete("/:id/comments/:commentId", authenticate, deleteComment);
 module.exports = router;

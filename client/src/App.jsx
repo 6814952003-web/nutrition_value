@@ -1,9 +1,11 @@
-import { uploadFile, validateUploadFile } from "./upload";
+import { uploadFile } from "./upload";
 import { useEffect, useRef, useState } from "react";
 import { api } from "./api";
 import AdminPage from "./AdminPage";
 import AuthPage from "./AuthPage";
 import Dashboard from "./Dashboard";
+import CommunityPage from "./CommunityPage";
+export { default as CommunityPage } from "./CommunityPage";
 import { BrandLogo, SiteContext, SiteSymbol, defaultSite, useSite } from "./SiteContext";
 
 export default function App() {
@@ -77,73 +79,12 @@ export default function App() {
   let page;
   if (!user) page = <AuthPage {...{ mode, setMode, setUser, message, setMessage }} />;
   else if (view === "admin" && user.role === "admin") page = <AdminPage user={user} site={site} setUser={setUser} onSaved={setSite} goBack={() => navigate("dashboard")} />;
-  else if (view === "community") page = <CommunityPage user={user} setUser={setUser} goBack={() => navigate("account")} />;
-  else if (view === "account") page = <AccountPage user={user} setUser={setUser} goCommunity={() => navigate("community")} goAdmin={() => navigate("admin")} goBack={() => navigate("dashboard")} logout={logout} sessionStartedAt={sessionStartedAt.current} />;
-  else page = <Dashboard user={user} logout={logout} openAccount={() => navigate("account")} openAdmin={() => navigate("admin")} />;
+  else if (view === "community") page = <CommunityPage user={user} setUser={setUser} goBack={() => navigate("dashboard")} />;
+  else if (view === "account") page = <AccountPage user={user} setUser={setUser} goAdmin={() => navigate("admin")} goBack={() => navigate("dashboard")} logout={logout} sessionStartedAt={sessionStartedAt.current} />;
+  else page = <Dashboard user={user} logout={logout} openAccount={() => navigate("account")} openAdmin={() => navigate("admin")} community={<CommunityPage key={user.id} user={user} setUser={setUser} embedded />} />;
   return <SiteContext.Provider value={site}>{page}</SiteContext.Provider>;
 }
-export function CommunityPage({ user, setUser, goBack }) {
-  const { copy: { community: c } } = useSite();
-  const [posts, setPosts] = useState([]); const [message, setMessage] = useState(""); const [media, setMedia] = useState(null); const [category, setCategory] = useState("food"); const [error, setError] = useState("");
-  const load = () => api.posts().then(setPosts).catch(e => setError(e.message));
-  useEffect(() => { load(); }, []);
-  const [uploading, setUploading] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState("");
-  const uploadedMedia = useRef(null);
-  const selectMedia = e => {
-    const file = e.currentTarget.files?.[0];
-    if (!file) return;
-    setError("");
-    try {
-      validateUploadFile(file, "post");
-      setMedia(file);
-      uploadedMedia.current = null;
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      // Keep the selected File in state, allowing the same file to be selected again.
-      e.currentTarget.value = "";
-    }
-  };
-  const uploadProgress = ({ percentage }) => setUploadStatus(`Uploading ${Math.round(percentage)}%`);
-  const publish = async e => {
-    e.preventDefault();
-    if (uploading) return;
-    if (!message.trim()) { setError(c.contentRequired); return; }
-    const form = e.currentTarget;
-    setUploading(true); setError("");
-    try {
-      if (media && uploadedMedia.current?.file !== media) {
-        setUploadStatus("Uploading 0%");
-        const url = await uploadFile(media, user.id, "post", uploadProgress);
-        // Reuse the uploaded file if the API save fails and the user retries.
-        uploadedMedia.current = { file: media, url };
-      }
-      setUploadStatus("Saving post…");
-      const mediaData = media ? uploadedMedia.current.url : "";
-      await api.createPost({ category, content: message.trim(), mediaData, mediaType: media ? (media.type.startsWith("video/") ? "video" : "image") : "" });
-      setMessage(""); setMedia(null); uploadedMedia.current = null; form.reset(); load();
-    } catch (error) { setError(error.message); }
-    finally { setUploading(false); setUploadStatus(""); }
-  };
-  const changeAvatar = async e => {
-    const input = e.currentTarget;
-    const file = input.files?.[0];
-    if (!file || uploading) return;
-    setUploading(true); setError(""); setUploadStatus("Uploading 0%");
-    try {
-      const avatarUrl = await uploadFile(file, user.id, "avatar", uploadProgress);
-      setUploadStatus("Saving profile photo…");
-      setUser(await api.updateProfile(avatarUrl));
-    }
-    catch (error) { setError(error.message); }
-    finally { setUploading(false); setUploadStatus(""); input.value = ""; }
-  };
-  const comment = async (id, form) => { const content = new FormData(form).get("comment"); if (!content?.trim()) return; try { await api.commentPost(id, content); form.reset(); load(); } catch (e) { setError(e.message); } };
-  return <main className="account-shell min-h-screen px-5 py-8 text-[var(--ink)] sm:px-8"><div className="mx-auto max-w-3xl"><header className="mb-8 flex items-center justify-between"><button disabled={uploading} onClick={goBack} className="flex items-center gap-2 rounded-full border border-[#bfcbbd] bg-white/80 px-4 py-2 text-sm font-semibold shadow-sm"><Icon name="arrow"/> {c.backButton}</button><label className="flex cursor-pointer items-center gap-2 rounded-full bg-[var(--forest)] px-4 py-2 text-sm font-semibold text-white"><span>{c.changePhoto}</span><input className="hidden" type="file" accept="image/png,image/jpeg,image/webp" disabled={uploading} onChange={changeAvatar}/></label></header><section className="account-hero rounded-[2rem] p-7 text-white"><p className="text-xs font-bold uppercase tracking-[.2em] text-[var(--sage)]">{c.eyebrow}</p><h1 className="mt-2 text-4xl font-bold">{c.title}</h1><p className="mt-2 text-emerald-100">{c.description}</p></section>{error && <p className="mt-5 rounded-xl bg-red-50 p-4 text-sm text-red-700">{error}</p>}<form onSubmit={publish} className="mt-6 rounded-[1.7rem] border border-[#d9dfd7] bg-white/90 p-6 shadow-sm"><div className="flex gap-3"><div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full bg-[var(--sage)] text-[var(--forest)]">{user.avatarData ? <img className="h-full w-full object-cover" src={user.avatarData} alt=""/> : <Icon name="user"/>}</div><textarea disabled={uploading} required maxLength="800" value={message} onChange={e => setMessage(e.target.value)} placeholder={c.placeholder} className="min-h-24 flex-1 rounded-xl border border-[#d9dfd7] bg-stone-50 p-3 outline-none focus:border-[var(--forest)]"/></div><div className="mt-4 flex flex-wrap items-center gap-3"><select disabled={uploading} value={category} onChange={e => setCategory(e.target.value)} className="rounded-lg border border-[#d9dfd7] bg-white px-3 py-2 text-sm"><option value="food">{c.foodCategory}</option><option value="recipe">{c.recipeCategory}</option><option value="knowledge">{c.knowledgeCategory}</option><option value="workout">{c.workoutCategory}</option></select><label className="cursor-pointer rounded-lg border border-[#cfd8cf] px-3 py-2 text-sm font-medium">{c.mediaButton}<input className="hidden" type="file" disabled={uploading} accept="image/png,image/jpeg,image/webp,image/gif,video/mp4,video/webm,video/quicktime" onChange={selectMedia}/></label>{media && <span className="max-w-40 truncate text-sm text-slate-500">{media.name}</span>}{media && <button type="button" disabled={uploading} onClick={() => { setMedia(null); uploadedMedia.current = null; }} className="text-sm text-slate-500">{c.removeButton}</button>}<button disabled={uploading} className="disabled:opacity-50 ml-auto rounded-lg bg-[var(--forest)] px-5 py-2 text-sm font-bold text-white">{uploading ? c.waitButton : c.postButton}</button></div><p className="mt-3 text-xs text-slate-500">{c.uploadHint}</p>{uploading && <p role="status" aria-live="polite" className="mt-3 text-sm font-semibold text-[var(--forest)]">{uploadStatus}</p>}</form><section className="mt-6 space-y-5">{posts.map(post => <article key={post._id} className="rounded-[1.7rem] border border-[#d9dfd7] bg-white/90 p-6 shadow-sm"><div className="flex items-center gap-3"><div className="grid h-10 w-10 place-items-center overflow-hidden rounded-full bg-[var(--sage)] text-[var(--forest)]">{post.authorAvatar ? <img className="h-full w-full object-cover" src={post.authorAvatar} alt=""/> : <Icon name="user"/>}</div><div><b>{post.authorName}</b><p className="text-xs text-slate-500">{new Date(post.createdAt).toLocaleString()} · {({ food: c.foodCategory, recipe: c.recipeCategory, knowledge: c.knowledgeCategory, workout: c.workoutCategory })[post.category] || post.category}</p></div></div><p className="mt-4 whitespace-pre-wrap leading-7">{post.content}</p>{post.mediaData && (post.mediaType === "video" ? <video className="mt-4 max-h-96 w-full rounded-xl bg-black" controls src={post.mediaData}/> : <img className="mt-4 max-h-96 w-full rounded-xl object-cover" src={post.mediaData} alt="Post attachment"/>)}<div className="mt-4 flex items-center gap-4"><button onClick={async () => { await api.likePost(post._id); load(); }} className="text-sm font-semibold text-[var(--forest)]">♥ {post.likes || 0}</button><span className="text-sm text-slate-500">{post.comments?.length || 0} {c.commentLabel}</span></div><div className="mt-4 space-y-2">{post.comments?.map(comment => <p key={comment._id} className="rounded-lg bg-stone-50 px-3 py-2 text-sm"><b>{comment.authorName}</b> <span className="text-slate-600">{comment.content}</span></p>)}</div><form onSubmit={e => { e.preventDefault(); comment(post._id, e.currentTarget); }} className="mt-4 flex gap-2"><input name="comment" maxLength="500" placeholder={c.commentPlaceholder} className="min-w-0 flex-1 rounded-lg border border-[#d9dfd7] px-3 py-2 text-sm"/><button className="rounded-lg bg-[#eef5de] px-3 text-sm font-semibold text-[var(--forest)]">{c.sendButton}</button></form></article>)}{!posts.length && !error && <p className="rounded-2xl bg-white/80 p-8 text-center text-slate-500">{c.emptyPosts}</p>}</section></div></main>;
-}
-
-export function AccountPage({ user, setUser, goBack, goCommunity, goAdmin, logout, sessionStartedAt }) {
+export function AccountPage({ user, setUser, goBack, goAdmin, logout, sessionStartedAt }) {
   const { brand, copy: { account: c } } = useSite();
   const [data, setData] = useState({ activities: [], onlineSeconds: 0 });
   const [error, setError] = useState("");
@@ -172,7 +113,6 @@ export function AccountPage({ user, setUser, goBack, goCommunity, goAdmin, logou
   const rows = [
     { id: "history", title: c.historyTitle, detail: `${data.activities.length} ${c.historyDetail}`, icon: "clock" },
     { id: "security", title: c.securityTitle, detail: user.email, icon: "user" },
-    { id: "community", title: c.communityTitle, detail: c.communityDetail, icon: "spark", action: goCommunity },
     { id: "time", title: c.timeTitle, detail: `${c.timeDetail} ${formatDuration(totalSeconds)}`, icon: "clock" },
   ];
   if (user.role === "admin") rows.push({ id: "admin", title: "จัดการเว็บไซต์", detail: "เนื้อหา รูปภาพ เมนูอาหาร ผู้ใช้ และชุมชน", icon: "spark", action: goAdmin });

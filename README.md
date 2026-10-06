@@ -8,6 +8,11 @@ goals, meals and guides at `/admin`, and manage users and community posts.
 Saved content lives in Atlas and updates the website without rebuilding it.
 See [ADMIN_GUIDE.md](ADMIN_GUIDE.md) for the Thai administration guide.
 
+The dashboard includes the community feed, which refreshes automatically every
+two seconds while visible and on focus/reconnection. Members can delete their
+own posts and comments; administrators can moderate all content. Existing
+Atlas/Blob configuration supports these features without new services.
+
 ## Local development
 
 Use Node.js 24. Install packages from the repository root:

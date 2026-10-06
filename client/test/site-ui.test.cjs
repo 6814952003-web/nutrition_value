@@ -11,7 +11,7 @@ const { renderToStaticMarkup } = require("react-dom/server");
 const sourceRoot = path.resolve(__dirname, "../src");
 const compiled = esbuild.buildSync({
   stdin: {
-    contents: 'export { SiteContext, defaultSite } from "./SiteContext"; export { default as AuthPage } from "./AuthPage"; export { default as Dashboard } from "./Dashboard"; export { default as AdminPage } from "./AdminPage"; export { AccountPage, CommunityPage } from "./App";',
+    contents: 'export { SiteContext, defaultSite } from "./SiteContext"; export { default as AuthPage } from "./AuthPage"; export { default as Dashboard } from "./Dashboard"; export { default as AdminPage } from "./AdminPage"; export { AccountPage, CommunityPage } from "./App"; export { CommunityPost } from "./CommunityPage";',
     resolveDir: sourceRoot,
     sourcefile: "site-ui-test-entry.jsx",
     loader: "jsx",
@@ -30,7 +30,7 @@ const loaded = new Module(bundleFilename, module);
 loaded.filename = bundleFilename;
 loaded.paths = Module._nodeModulePaths(sourceRoot);
 loaded._compile(compiled.outputFiles[0].text, bundleFilename);
-const { SiteContext, defaultSite, AuthPage, Dashboard, AdminPage, AccountPage, CommunityPage } = loaded.exports;
+const { SiteContext, defaultSite, AuthPage, Dashboard, AdminPage, AccountPage, CommunityPage, CommunityPost } = loaded.exports;
 const user = { id: "ui-fixture-user", name: "สมาชิกทดสอบ", role: "admin" };
 const noop = () => {};
 const siteFixture = () => structuredClone(defaultSite);
@@ -118,6 +118,7 @@ test("account and community pages use saved text, categories and shared custom i
   site.icons.user = "https://assets.example.com/edited-user.png";
   site.copy.account.historyTitle = "ประวัติจากผู้ดูแล";
   site.copy.account.communityTitle = "เข้าสู่ชุมชนที่ปรับใหม่";
+  site.copy.dashboard.communityNav = "เข้าสู่ชุมชนที่ปรับใหม่";
   Object.assign(site.copy.community, {
     title: "พื้นที่สนทนาใหม่",
     description: "เรื่องราวจากครัวของทุกคน",
@@ -131,10 +132,47 @@ test("account and community pages use saved text, categories and shared custom i
   const account = render(AccountPage, site, {
     user: member, setUser: noop, goBack: noop, goCommunity: noop, goAdmin: noop, logout: noop, sessionStartedAt: Date.now(),
   });
-  for (const text of ["ครัวชุมชนที่ปรับใหม่", "ประวัติจากผู้ดูแล", "เข้าสู่ชุมชนที่ปรับใหม่"]) assert.ok(account.includes(text));
+  for (const text of ["ครัวชุมชนที่ปรับใหม่", "ประวัติจากผู้ดูแล"]) assert.ok(account.includes(text));
+  assert.ok(!account.includes("เข้าสู่ชุมชนที่ปรับใหม่"));
   assert.ok(account.includes('src="https://assets.example.com/edited-clock.png"'));
   const community = render(CommunityPage, site, { user: member, setUser: noop, goBack: noop });
   for (const text of ["พื้นที่สนทนาใหม่", "เรื่องราวจากครัวของทุกคน", "อาหารปรุงใหม่", "สูตรของชุมชน", "ความรู้จากครัว", "กิจกรรมใหม่"]) assert.ok(community.includes(text));
   assert.ok(community.includes('placeholder="เขียนเรื่องราวที่นี่"'));
   assert.ok(community.includes('src="https://assets.example.com/edited-user.png"'));
+});
+
+test("the main menu links directly to the community feed on the dashboard", t => {
+  withStorage(t, "[]");
+  const site = siteFixture();
+  site.copy.dashboard.communityNav = "ชุมชนของเรา";
+  site.copy.community.title = "ข้อความจากชุมชนบนหน้าหลัก";
+  const html = render(Dashboard, site, {
+    user, logout: noop, openAccount: noop, openAdmin: noop,
+    community: React.createElement(CommunityPage, { user, setUser: noop, embedded: true }),
+  });
+  assert.match(html, /<a[^>]*href="#community"[^>]*>ชุมชนของเรา<\/a>/);
+  assert.match(html, /<section[^>]*id="community"/);
+  assert.ok(html.includes("ข้อความจากชุมชนบนหน้าหลัก"));
+  assert.ok(html.includes(site.copy.community.placeholder));
+});
+
+test("community posts show deletion controls only for the message owner or an administrator", () => {
+  const site = siteFixture();
+  const post = {
+    _id: "post-ui-fixture", author: "post-owner", authorName: "เจ้าของโพสต์", category: "food",
+    createdAt: "2026-10-06T11:00:00.000Z", content: "ข้อความของชุมชน", likes: 3,
+    comments: [
+      { _id: "comment-1", author: "post-owner", authorName: "เจ้าของโพสต์", content: "ความคิดเห็นแรก" },
+      { _id: "comment-2", author: "comment-owner", authorName: "ผู้แสดงความคิดเห็น", content: "ความคิดเห็นที่สอง" },
+    ],
+  };
+  for (const [id, role, postDeletes, commentDeletes] of [
+    ["post-owner", "user", 1, 1], ["comment-owner", "user", 0, 1],
+    ["another-member", "user", 0, 0], ["admin-member", "admin", 1, 2],
+  ]) {
+    const html = render(CommunityPost, site, { post, user: { id, role }, commentDraft: "ความคิดเห็นที่กำลังพิมพ์" });
+    assert.equal((html.match(/>ลบโพสต์<\/button>/g) || []).length, postDeletes);
+    assert.equal((html.match(/>ลบความคิดเห็น<\/button>/g) || []).length, commentDeletes);
+    assert.ok(html.includes('value="ความคิดเห็นที่กำลังพิมพ์"'));
+  }
 });

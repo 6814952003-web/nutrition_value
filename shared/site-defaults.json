@@ -77,7 +77,8 @@
                                    "guideEyebrow":  "โภชนาการเข้าใจง่าย",
                                    "guideTitle":  "ร่างกายคุณ",
                                    "guideHighlight":  "น่าทึ่ง.",
-                                   "footer":  "© 2026 Nouri Kitchen · วันที่ดีขึ้น เริ่มจากมื้อที่ดี"
+                                   "footer":  "© 2026 Nouri Kitchen · วันที่ดีขึ้น เริ่มจากมื้อที่ดี",
+                                   "communityNav":  "ชุมชน Nouri"
                                },
                  "account":  {
                                  "backButton":  "กลับหน้าหลัก",
@@ -104,7 +105,7 @@
                                  "sessionActivity":  "สิ้นสุดช่วงการใช้งาน"
                              },
                  "community":  {
-                                   "backButton":  "บัญชีของฉัน",
+                                   "backButton":  "กลับหน้าหลัก",
                                    "changePhoto":  "เปลี่ยนรูปโปรไฟล์",
                                    "eyebrow":  "ชุมชน Nouri",
                                    "title":  "แบ่งปันเรื่องราวอาหาร",
@@ -123,7 +124,12 @@
                                    "commentPlaceholder":  "เขียนความคิดเห็น…",
                                    "sendButton":  "ส่ง",
                                    "emptyPosts":  "มาเป็นคนแรกที่แบ่งปันกับชุมชน",
-                                   "contentRequired":  "กรุณาเขียนข้อความก่อนโพสต์"
+                                   "contentRequired":  "กรุณาเขียนข้อความก่อนโพสต์",
+                                   "deletePostButton":  "ลบโพสต์",
+                                   "deleteCommentButton":  "ลบความคิดเห็น",
+                                   "liveStatus":  "อัปเดตอัตโนมัติ",
+                                   "offlineStatus":  "ขาดการเชื่อมต่อ กำลังลองใหม่",
+                                   "loadingPosts":  "กำลังโหลดข้อความ…"
                                }
              },
     "meals":  [
