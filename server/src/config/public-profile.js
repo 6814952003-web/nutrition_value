@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const PROFILE_FIELDS = "_id name avatarData username displayName bio profileVisibility createdAt";
+const PROFILE_FIELDS = "_id name avatarData username displayName bio profileVisibility shareFoodLogs createdAt";
 const USERNAME_PATTERN = /^[a-z0-9_-]{3,30}$/;
 const BANGKOK_OFFSET_MS = 7 * 60 * 60 * 1000;
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -48,11 +48,23 @@ const publicPostResponse = post => ({
   commentCount: Number.isSafeInteger(post.commentCount) && post.commentCount >= 0 ? post.commentCount : 0,
 });
 
-const publicProfileResponse = (user, streak, posts) => ({
+const publicFoodLogResponse = log => ({
+  id: String(log._id),
+  menuName: log.menuName,
+  imageUrl: log.imageUrl || "/images/catalog/placeholder.svg",
+  meal: log.meal,
+  servings: log.servings,
+  eatenAt: log.eatenAt,
+  nutrients: Object.fromEntries(["energyKcal", "proteinG", "carbohydrateG", "fatG", "saturatedFatG", "sugarG", "fiberG", "sodiumMg", "cholesterolMg"]
+    .map(key => [key, Number.isFinite(log.nutrients?.[key]) ? log.nutrients[key] : null])),
+});
+
+const publicProfileResponse = (user, streak, posts, foodLogs = []) => ({
   avatarUrl: user.avatarData || "", displayName: user.displayName || user.name,
   bio: user.bio || "", joinedAt: user.createdAt,
   streak: Number.isSafeInteger(streak) && streak >= 0 ? streak : 0,
   posts: posts.map(publicPostResponse),
+  foodLogs: user.shareFoodLogs === true ? foodLogs.map(publicFoodLogResponse) : [],
 });
 
-module.exports = { PROFILE_FIELDS, USERNAME_PATTERN, bangkokDayStart, streakPipeline, publicPostPipeline, publicProfileResponse };
+module.exports = { PROFILE_FIELDS, USERNAME_PATTERN, bangkokDayStart, streakPipeline, publicPostPipeline, publicFoodLogResponse, publicProfileResponse };

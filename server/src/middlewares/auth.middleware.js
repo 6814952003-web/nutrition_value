@@ -14,7 +14,7 @@ const authenticate = async (req, res, next) => {
     return next(error);
   }
   try {
-    const user = await User.findById(payload.id).select("_id name email role avatarData createdAt username displayName bio profileVisibility");
+    const user = await User.findById(payload.id).select("_id name email role avatarData createdAt username displayName bio profileVisibility shareFoodLogs");
     if (!user) return res.status(401).json({ message: "User no longer exists." });
     req.user = user;
     return next();

@@ -45,7 +45,8 @@ const { default: PublicProfilePage, PublicProfileView } = loadUiModule(path.join
 const { default: ProfileSettings, savedProfileFields, validateProfileFields } = loadUiModule(path.join(sourceRoot, "ProfileSettings"));
 const { default: CommunityPage, CommunityPost } = loadUiModule(path.join(sourceRoot, "CommunityPage"));
 const { default: AuthorProfileLink, AuthorProfileCard, profileCardPosition } = loadUiModule(path.join(sourceRoot, "AuthorProfileLink"));
-const { CatalogGrid, filterCatalog, ImageCredits } = loadUiModule(path.join(sourceRoot, "Catalog"));
+const { CatalogGrid, FoodLogDialog, filterCatalog, ImageCredits } = loadUiModule(path.join(sourceRoot, "Catalog"));
+const { default: FoodLogHistory } = loadUiModule(path.join(sourceRoot, "FoodLogs"));
 const user = { id: "ui-fixture-user", name: "สมาชิกทดสอบ", role: "admin" };
 const noop = () => {};
 const siteFixture = () => structuredClone(defaultSite);
@@ -111,10 +112,25 @@ test("catalog cards provide search, category filtering, placeholders, credits, a
   assert.ok(html.includes('type="search"'));
   assert.ok(html.includes("<option value=\"ตามสั่ง\">ตามสั่ง</option>"));
   assert.ok(html.includes("กะเพราหมู"));
+  assert.ok(html.includes("บันทึกว่ากินแล้ว"));
   assert.ok(html.includes("/images/catalog/placeholder.svg"));
   assert.ok(html.includes("ค่าโภชนาการเป็นค่าประมาณ"));
   const credits = render(ImageCredits, siteFixture(), { catalog });
   assert.equal((credits.match(/รูปสำรอง · ยังไม่มีรูปที่ตรวจสอบแล้ว/g) || []).length, 3);
+});
+
+test("menu logging requires an explicit action and prompts signed-out visitors to log in", t => {
+  const previous = global.localStorage;
+  global.localStorage = { getItem: () => null };
+  t.after(() => { if (previous === undefined) delete global.localStorage; else global.localStorage = previous; });
+  const recipe = { id: "kaprao", nameTh: "กะเพราหมู", nameEn: "Pork basil stir-fry", category: "ตามสั่ง", servingGrams: 350, nutrients: { energyKcal: null }, ingredients: [], image: { imageUrl: "/images/catalog/placeholder.svg" }, needsImage: true };
+  const dialog = render(FoodLogDialog, siteFixture(), { item: recipe, onClose: noop });
+  assert.ok(dialog.includes("กรุณาเข้าสู่ระบบก่อนบันทึกการกิน"));
+  assert.ok(dialog.includes('href="/">เข้าสู่ระบบ</a>'));
+  const history = render(FoodLogHistory, siteFixture(), { goals: defaultSite.goals });
+  assert.ok(history.includes("บันทึกการกิน"));
+  assert.ok(history.includes("เป็นส่วนตัว"));
+  assert.ok(history.includes("ไม่แสดงบนโปรไฟล์สาธารณะ"));
 });
 
 test("saved copy is escaped and damaged local nutrition history does not break rendering", t => {
@@ -325,6 +341,7 @@ const publicProfile = () => ({
   avatarUrl: "https://assets.example.com/profile.png", displayName: "เพื่อนชุมชน", bio: "บรรทัดแรก\n<script>unsafe</script>",
   joinedAt: "2026-10-01T00:00:00.000Z", streak: 4,
   posts: [{ _id: "public-post", content: "ข้อความสาธารณะ", category: "food", mediaData: "https://assets.example.com/portrait.jpg", mediaType: "image", createdAt: "2026-10-06T11:00:00.000Z", likes: 2, commentCount: 3 }],
+  foodLogs: [],
 });
 
 test("public URL parsing takes precedence over stale member/admin history and safely rejects malformed paths", () => {
@@ -338,6 +355,10 @@ test("public URL parsing takes precedence over stale member/admin history and sa
   assert.equal(resolveAppView("/", { view: "account" }), "account");
   assert.equal(resolveAppView("/", { view: "profile-preview" }), "profile-preview");
   assert.equal(resolveAppView("/", { view: "public:stale" }), "dashboard");
+  const shared = render(PublicProfileView, siteFixture(), { profile: { ...publicProfile(), foodLogs: [{ id: "log-1", menuName: "ข้าวผัดหมู", imageUrl: "/images/catalog/placeholder.svg", meal: "lunch", servings: 1, eatenAt: "2026-10-06T11:00:00.000Z", nutrients: { energyKcal: 450, proteinG: 20, carbohydrateG: 50, fatG: 15, sodiumMg: 700 } }] } });
+  assert.ok(shared.includes("บันทึกการกินที่แชร์"));
+  assert.ok(shared.includes("ข้าวผัดหมู"));
+  assert.ok(shared.includes("450 kcal"));
 });
 
 test("public profiles bypass the authentication page for visitors and signed-in users", t => {
@@ -449,15 +470,19 @@ test("private and missing profiles use the same unavailable visitor state and pr
   const published = render(PublicProfileView, siteFixture(), { profile: publicProfile(), preview: true, isPrivate: false });
   assert.ok(published.includes("ข้อความสาธารณะ"));
   assert.ok(published.includes("ข้อมูลที่บันทึกแล้ว"));
+  assert.ok(!published.includes("บันทึกการกินที่แชร์"));
 });
 
 test("existing accounts default private and settings explain saved visibility with blank usernames allowed only privately", () => {
   const member = { id: "new-settings", name: "ชื่อปัจจุบัน", email: "private@example.com" };
   assert.equal(savedProfileFields(member).profileVisibility, "private");
+  assert.equal(savedProfileFields(member).shareFoodLogs, false);
   const html = render(ProfileSettings, siteFixture(), { user: member, setUser: noop, onPreview: noop });
   assert.match(html, /type="radio"[^>]*name="profileVisibility"[^>]*checked=""[^>]*value="private"/);
   assert.ok(html.includes("ชื่อปัจจุบัน"));
   assert.ok(html.includes("โพสต์ในชุมชนยังแสดงในชุมชนตามเดิม"));
+  assert.ok(html.includes("แชร์บันทึกการกินบนโปรไฟล์สาธารณะ"));
+  assert.ok(html.includes("ทุกวันที่คุณเคยบันทึก"));
   assert.ok(html.includes("พรีวิวแสดงข้อมูลที่บันทึกแล้วเท่านั้น"));
   assert.equal(validateProfileFields({ ...savedProfileFields(member), username: "" }), "");
   assert.ok(validateProfileFields({ ...savedProfileFields(member), profileVisibility: "public" }));

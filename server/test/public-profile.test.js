@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const User = require("../src/models/user.model");
 const Post = require("../src/models/post.model");
 const Activity = require("../src/models/activity.model");
+const FoodLog = require("../src/models/food-log.model");
 const { signToken } = require("../src/config/auth");
 const { PROFILE_FIELDS, bangkokDayStart, streakPipeline, publicPostPipeline } = require("../src/config/public-profile");
 const { updateMyProfile, getMe } = require("../src/controllers/user.controller");
@@ -62,9 +63,10 @@ const aggregates = t => {
   return { activity, posts };
 };
 const assertVisitor = profile => {
-  assert.deepEqual(Object.keys(profile).sort(), ["avatarUrl", "bio", "displayName", "joinedAt", "posts", "streak"].sort());
+  assert.deepEqual(Object.keys(profile).sort(), ["avatarUrl", "bio", "displayName", "joinedAt", "posts", "streak", "foodLogs"].sort());
   assert.equal(profile.displayName, privateUser.displayName);
   assert.equal(profile.streak, 7);
+  assert.deepEqual(profile.foodLogs, []);
   assert.deepEqual(Object.keys(profile.posts[0]).sort(), ["_id", "content", "category", "mediaData", "mediaType", "createdAt", "likes", "commentCount"].sort());
   const serialized = JSON.stringify(profile);
   for (const secret of [privateUser.email, privateUser.passwordHash, privateUser.passwordSalt, privateUser.goal, ownerId, otherId, "calories", "nutrition", "Comment private identity"]) {
@@ -84,6 +86,37 @@ test("public profile works without authentication and strictly allowlists profil
   assert.equal(res.status, 200);
   assert.equal(res.headers.get("cache-control"), "no-store");
   assertVisitor(await res.json());
+});
+
+test("public food logs are exposed only after the owner enables sharing and contain an explicit safe allowlist", async t => {
+  t.mock.method(User, "findOne", query => ({ select: fields => {
+    assert.deepEqual(query, { username: "fixture-owner", profileVisibility: "public" });
+    assert.ok(fields.includes("shareFoodLogs"));
+    return { lean: async () => ({ ...privateUser, profileVisibility: "public", shareFoodLogs: true }) };
+  } }));
+  aggregates(t);
+  const sourceLog = {
+    _id: new mongoose.Types.ObjectId(), userId: privateUser._id, menuId: "kaprao-pork",
+    menuName: "กะเพราหมู", imageUrl: "/images/catalog/placeholder.svg", meal: "lunch",
+    servings: 1.5, eatenAt: new Date("2026-10-07T05:00:00.000Z"), createdAt: new Date(),
+    nutrients: { energyKcal: 400, proteinG: 20, carbohydrateG: null, fatG: 12, saturatedFatG: 3, sugarG: null, fiberG: 2, sodiumMg: 500, cholesterolMg: 50 },
+    nutrientsPerServing: { secret: true }, passwordHash: "must-not-leak",
+  };
+  const find = t.mock.method(FoodLog, "find", query => {
+    assert.equal(String(query.userId), String(privateUser._id));
+    return { sort: () => ({ lean: async () => [sourceLog] }) };
+  });
+  const res = await fetch(`${endpoint}/api/profiles/fixture-owner`);
+  assert.equal(res.status, 200);
+  const profile = await res.json();
+  assert.equal(profile.foodLogs.length, 1);
+  assert.deepEqual(Object.keys(profile.foodLogs[0]).sort(), ["id", "menuName", "imageUrl", "meal", "servings", "eatenAt", "nutrients"].sort());
+  assert.equal(profile.foodLogs[0].menuName, "กะเพราหมู");
+  assert.equal(profile.foodLogs[0].nutrients.carbohydrateG, null);
+  for (const secret of ["userId", "menuId", "passwordHash", "nutrientsPerServing", "must-not-leak", ownerId]) {
+    assert.equal(JSON.stringify(profile.foodLogs).includes(secret), false, secret);
+  }
+  assert.equal(find.mock.callCount(), 1);
 });
 
 test("anonymous mini profile cards contain exactly the five public profile fields and never load posts", async t => {
@@ -213,6 +246,7 @@ test("profile GET and preview hide service errors without returning partial priv
 test("new and legacy owner DTOs default private and expose owner settings separately from public DTOs", () => {
   const user = new User({ name: "Member", email: "member@example.test", passwordHash: "hash", passwordSalt: "salt" });
   assert.equal(user.profileVisibility, "private");
+  assert.equal(user.shareFoodLogs, false);
   assert.equal(user.username, undefined);
   const res = response();
   getMe({ user: { _id: ownerId, name: "Legacy member", email: "own@example.test" } }, res);
@@ -220,7 +254,21 @@ test("new and legacy owner DTOs default private and expose owner settings separa
   assert.equal(res.body.displayName, "Legacy member");
   assert.equal(res.body.bio, "");
   assert.equal(res.body.profileVisibility, "private");
+  assert.equal(res.body.shareFoodLogs, false);
   assert.equal(res.body.email, "own@example.test", "owner may still access their own email");
+});
+
+test("owners can opt into food-log sharing while non-boolean values are rejected", async t => {
+  const update = t.mock.method(User, "findByIdAndUpdate", async (_id, changes) => ({ ...privateUser, ...changes, shareFoodLogs: changes.shareFoodLogs }));
+  const enabled = response();
+  await updateMyProfile({ user: privateUser, body: { shareFoodLogs: true } }, enabled, unexpected);
+  assert.equal(enabled.statusCode, 200);
+  assert.equal(enabled.body.shareFoodLogs, true);
+  assert.deepEqual(update.mock.calls[0].arguments[1], { shareFoodLogs: true });
+  const invalid = response();
+  await updateMyProfile({ user: privateUser, body: { shareFoodLogs: "true" } }, invalid, unexpected);
+  assert.equal(invalid.statusCode, 400);
+  assert.equal(update.mock.callCount(), 1);
 });
 
 test("self profile updates reject foreign identities, privileges and health fields before writing", async t => {

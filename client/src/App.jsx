@@ -7,6 +7,7 @@ import Dashboard from "./Dashboard";
 import CommunityPage from "./CommunityPage";
 import PublicProfilePage from "./PublicProfilePage";
 import ProfileSettings from "./ProfileSettings";
+import FoodLogHistory from "./FoodLogs";
 import Catalog from "./Catalog";
 export { default as CommunityPage } from "./CommunityPage";
 import { BrandLogo, SiteContext, SiteSymbol, defaultSite, useSite } from "./SiteContext";
@@ -155,7 +156,7 @@ export function AdminAccessGate({ user, goBack, onSwitchAccount }) {
   </main>;
 }
 export function AccountPage({ user, setUser, goBack, goAdmin, logout, sessionStartedAt, initialDraft, onDraftChange, onPreview }) {
-  const { brand, copy: { account: c } } = useSite();
+  const { brand, goals, copy: { account: c } } = useSite();
   const [data, setData] = useState({ activities: [], onlineSeconds: 0 });
   const [error, setError] = useState("");
   const [now, setNow] = useState(Date.now());
@@ -192,6 +193,7 @@ export function AccountPage({ user, setUser, goBack, goAdmin, logout, sessionSta
     <section className="account-hero rounded-[1.8rem] p-6 text-white shadow-[0_20px_50px_rgba(24,56,46,.18)] sm:p-8"><div className="flex flex-wrap items-center gap-5"><label className="group relative grid h-24 w-24 shrink-0 cursor-pointer place-items-center overflow-hidden rounded-full border-4 border-[var(--sage)] bg-[var(--sage)] text-[var(--forest)] shadow-lg" title={c.changePhoto}><input className="sr-only" type="file" accept="image/png,image/jpeg,image/webp" disabled={uploading || profileSaving} onChange={changeAvatar}/>{user.avatarData ? <img className="h-full w-full object-cover" src={user.avatarData} alt="รูปโปรไฟล์"/> : <span className="text-4xl font-semibold">{(user.name || "N").trim().charAt(0).toUpperCase()}</span>}<span className="absolute inset-x-0 bottom-0 bg-[var(--forest)] py-1 text-center text-[10px] font-semibold text-white">{c.changePhoto}</span></label><div className="min-w-0 flex-1"><p className="text-xs font-bold uppercase tracking-[.2em] text-[var(--sage)]">{c.eyebrow}</p><h1 className="mt-1 break-words text-3xl font-bold sm:text-4xl">{user.name}</h1><p className="mt-2 text-emerald-100">{user.email}</p></div><span className="rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-xs font-semibold text-[#e7f4d0]">● {c.onlineLabel}</span></div>{uploadStatus && <p role="status" className="mt-4 text-sm text-[var(--sage)]">{uploadStatus}</p>}</section>
     {error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-4 text-sm text-red-700">{error}</p>}
     <ProfileSettings user={user} setUser={setUser} initialDraft={initialDraft} onDraftChange={onDraftChange} onPreview={onPreview} onSavingChange={setProfileSaving} busy={uploading}/>
+    <FoodLogHistory goals={goals}/>
     <section className="mt-6 overflow-hidden rounded-[1.6rem] border border-[#d9dfd7] bg-[#fffefa]/90 shadow-[0_14px_35px_rgba(29,43,33,.08)]" aria-label="เมนูบัญชี">
       {rows.map((row, index) => <article key={row.id} className={index ? "border-t border-[#e3e8df]" : ""}><button onClick={() => row.action ? row.action() : toggleSection(row.id)} aria-expanded={row.action ? undefined : openSection === row.id} className="group flex w-full items-center gap-4 px-5 py-5 text-left transition hover:bg-[#f1f5e9] sm:px-7"><span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#eaf0dd] text-[var(--forest)]"><Icon name={row.icon}/></span><span className="min-w-0 flex-1"><span className="block font-semibold">{row.title}</span><span className="mt-0.5 block truncate text-sm text-[#66746c]">{row.detail}</span></span><span className="text-lg text-[#56705d] transition group-hover:translate-x-1">{row.action ? "↗" : openSection === row.id ? "−" : "+"}</span></button>
       {openSection === row.id && row.id === "history" && <div className="border-t border-[#e3e8df] bg-[#f7f8f2] px-5 py-4 sm:px-7">{error ? <p className="text-sm text-red-700">{error}</p> : data.activities.length ? <div className="divide-y divide-[#e3e8df]">{data.activities.map(activity => <div key={activity.id} className="flex items-center gap-3 py-3"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white text-[var(--forest)]"><Icon name={activity.type === "session" ? "clock" : activity.type === "login" ? "arrow" : "spark"}/></span><div className="min-w-0 flex-1"><p className="text-sm font-semibold">{activityLabel[activity.type]}</p><p className="text-xs text-slate-500">{new Date(activity.createdAt).toLocaleString()}</p></div>{activity.type === "session" && <b className="text-xs text-[var(--forest)]">{formatDuration(activity.durationSeconds)}</b>}</div>)}</div> : <p className="text-sm text-slate-500">{c.emptyHistory}</p>}</div>}

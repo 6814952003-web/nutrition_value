@@ -108,6 +108,15 @@ accounts remain private until their owner configures a public profile. Verify a
 private profile is unavailable anonymously, a public profile contains exactly
 the visitor DTO, and an owner can save settings and preview the resulting view.
 
+Food logs are stored in the `foodlogs` collection and every `/api/food-logs`
+endpoint requires a valid session. Queries and mutations are scoped to the
+authenticated account; the API never accepts a caller-supplied `userId`.
+Nutrition and menu names are snapshotted by the server when a log is created.
+Logs are private by default. Only a profile owner who explicitly enables
+“Share food logs” can expose all logged menu names, servings, timestamps and
+nutrition snapshots on a public profile; disabling the switch hides them again.
+The public DTO omits account identifiers and internal per-serving snapshots.
+
 ## Local development
 
 From this project directory:

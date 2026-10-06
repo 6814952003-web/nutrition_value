@@ -23,6 +23,10 @@ export const api = {
   site: () => request("/site", { auth: false }),
   catalog: (options) => request("/catalog", { ...options, auth: false }),
   catalogCredits: (options) => request("/catalog/credits", { ...options, auth: false }),
+  foodLogs: (date, timezoneOffsetMinutes, options = {}) => request(`/food-logs?date=${encodeURIComponent(date)}&timezoneOffsetMinutes=${encodeURIComponent(timezoneOffsetMinutes)}`, options),
+  createFoodLog: data => request("/food-logs", { method: "POST", body: JSON.stringify(data) }),
+  updateFoodLog: (id, data) => request(`/food-logs/${encodeURIComponent(id)}`, { method: "PATCH", body: JSON.stringify(data) }),
+  deleteFoodLog: id => request(`/food-logs/${encodeURIComponent(id)}`, { method: "DELETE" }),
   saveCatalogItem: (kind, id, revision, item, create = false) => request(`/catalog/${kind}${create ? "" : `/${encodeURIComponent(id)}`}`, {
     method: create ? "POST" : "PATCH", body: JSON.stringify({ revision, [kind === "ingredients" ? "ingredient" : "recipe"]: item }),
   }),

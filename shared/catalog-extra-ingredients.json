@@ -5,14 +5,14 @@
     "nameEn": "Chicken broth, prepared",
     "category": "วัตถุดิบเพิ่มเติม",
     "state": "cooked",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการที่ยืนยันสูตรน้ำซุปนี้ตรงกัน",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; USDA chicken broth พร้อมใช้",
     "referenceGrams": 100,
-    "nutrients": { "energyKcal": null, "proteinG": null, "carbohydrateG": null, "fatG": null, "saturatedFatG": null, "sugarG": null, "fiberG": null, "sodiumMg": null, "cholesterolMg": null },
-    "source": null,
+    "nutrients": { "energyKcal": 6, "proteinG": 0.64, "carbohydrateG": 0.44, "fatG": 0.21, "saturatedFatG": 0.013, "sugarG": 0.43, "fiberG": 0, "sodiumMg": 371, "cholesterolMg": 2 },
+    "source": { "provider": "USDA FoodData Central", "title": "USDA SR Legacy (April 2018)", "url": "https://fdc.nal.usda.gov/food-details/174536/nutrients", "foodId": "174536", "matchedDescription": "Soup, chicken broth, ready-to-serve", "retrievedAt": "2026-10-07" },
     "image": { "imageUrl": "/images/catalog/placeholder.svg", "photographer": "", "sourceUrl": "", "source": "Placeholder", "license": "Original placeholder" },
     "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีสูตรและแหล่งข้อมูลที่ยืนยันน้ำซุปไก่ที่ใช้ในแต่ละร้าน; เว้นค่าสารอาหารเป็น null"
+    "dataStatus": "verified",
+    "notes": "อ้างอิงน้ำซุปไก่พร้อมใช้ตาม USDA; สูตรน้ำซุปไทยและปริมาณโซเดียมอาจต่างกัน"
   },
   {
     "id": "pork-broth",
@@ -80,14 +80,14 @@
     "nameEn": "Curry powder",
     "category": "วัตถุดิบเพิ่มเติม",
     "state": "processed",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีผลิตภัณฑ์อ้างอิงที่ยืนยันสูตรตรงกัน",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม ตามรายการ USDA",
     "referenceGrams": 100,
-    "nutrients": { "energyKcal": null, "proteinG": null, "carbohydrateG": null, "fatG": null, "saturatedFatG": null, "sugarG": null, "fiberG": null, "sodiumMg": null, "cholesterolMg": null },
-    "source": null,
+    "nutrients": { "energyKcal": 325, "proteinG": 14.3, "carbohydrateG": 55.8, "fatG": 14, "saturatedFatG": 1.65, "sugarG": 2.76, "fiberG": 53.2, "sodiumMg": 52, "cholesterolMg": 0 },
+    "source": { "provider": "USDA FoodData Central", "title": "USDA SR Legacy (April 2018)", "url": "https://fdc.nal.usda.gov/food-details/170924/nutrients", "foodId": "170924", "matchedDescription": "Spices, curry powder", "retrievedAt": "2026-10-07" },
     "image": { "imageUrl": "/images/catalog/placeholder.svg", "photographer": "", "sourceUrl": "", "source": "Placeholder", "license": "Original placeholder" },
     "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ผงกะหรี่เป็นส่วนผสมหลายชนิดและสูตรผลิตภัณฑ์ต่างกัน; เว้นค่าสารอาหารเป็น null"
+    "dataStatus": "verified",
+    "notes": "อ้างอิงผงกะหรี่ตามรายการ USDA; สัดส่วนเครื่องเทศและเกลือของแต่ละยี่ห้ออาจต่างกัน"
   },
   {
     "id": "tamarind-paste",
@@ -167,32 +167,32 @@
   {
     "id": "rice-flour",
     "nameTh": "แป้งข้าวเจ้า",
-    "nameEn": "Rice flour",
+    "nameEn": "Rice flour, white, unenriched",
     "category": "วัตถุดิบเพิ่มเติม",
     "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแป้งข้าวเจ้าที่ตรงและตรวจสอบได้จากชุดที่คัด",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม ตามรายการ USDA",
     "referenceGrams": 100,
-    "nutrients": { "energyKcal": null, "proteinG": null, "carbohydrateG": null, "fatG": null, "saturatedFatG": null, "sugarG": null, "fiberG": null, "sodiumMg": null, "cholesterolMg": null },
-    "source": null,
+    "nutrients": { "energyKcal": 366, "proteinG": 5.95, "carbohydrateG": 80.1, "fatG": 1.42, "saturatedFatG": 0.386, "sugarG": 0.12, "fiberG": 2.4, "sodiumMg": 0, "cholesterolMg": 0 },
+    "source": { "provider": "USDA FoodData Central", "title": "USDA SR Legacy (April 2018)", "url": "https://fdc.nal.usda.gov/food-details/169714/nutrients", "foodId": "169714", "matchedDescription": "Rice flour, white, unenriched", "retrievedAt": "2026-10-07" },
     "image": { "imageUrl": "/images/catalog/placeholder.svg", "photographer": "", "sourceUrl": "", "source": "Placeholder", "license": "Original placeholder" },
     "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันแป้งข้าวเจ้าตรงชนิด; เว้นค่าสารอาหารเป็น null"
+    "dataStatus": "verified",
+    "notes": "อ้างอิงแป้งข้าวเจ้าขาวไม่เสริมสารอาหารตามรายการ USDA; แป้งเสริมสารอาหารอาจมีค่าแตกต่างกัน"
   },
   {
     "id": "wheat-flour",
     "nameTh": "แป้งสาลี",
-    "nameEn": "Wheat flour, all-purpose",
+    "nameEn": "Wheat flour, white, all-purpose, enriched, bleached",
     "category": "วัตถุดิบเพิ่มเติม",
     "state": "raw",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแป้งสาลีที่ตรงและตรวจสอบได้จากชุดที่คัด",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม ตามรายการ USDA",
     "referenceGrams": 100,
-    "nutrients": { "energyKcal": null, "proteinG": null, "carbohydrateG": null, "fatG": null, "saturatedFatG": null, "sugarG": null, "fiberG": null, "sodiumMg": null, "cholesterolMg": null },
-    "source": null,
+    "nutrients": { "energyKcal": 364, "proteinG": 10.3, "carbohydrateG": 76.3, "fatG": 0.98, "saturatedFatG": 0.155, "sugarG": 0.27, "fiberG": 2.7, "sodiumMg": 2, "cholesterolMg": 0 },
+    "source": { "provider": "USDA FoodData Central", "title": "USDA SR Legacy (April 2018)", "url": "https://fdc.nal.usda.gov/food-details/168894/nutrients", "foodId": "168894", "matchedDescription": "Wheat flour, white, all-purpose, enriched, bleached", "retrievedAt": "2026-10-07" },
     "image": { "imageUrl": "/images/catalog/placeholder.svg", "photographer": "", "sourceUrl": "", "source": "Placeholder", "license": "Original placeholder" },
     "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "สูตรแป้งสาลีและการเสริมสารอาหารต่างกัน; ยังไม่มีรายการที่ระบุชนิดตรงกัน"
+    "dataStatus": "verified",
+    "notes": "อ้างอิงแป้งสาลีขาวอเนกประสงค์ชนิดฟอกขาวและเสริมสารอาหารตาม USDA; สูตรแป้งอื่นอาจมีค่าแตกต่างกัน"
   },
   {
     "id": "thai-tea-mix",
@@ -257,17 +257,17 @@
   {
     "id": "ketchup",
     "nameTh": "ซอสมะเขือเทศ",
-    "nameEn": "Ketchup",
+    "nameEn": "Tomato ketchup (catsup)",
     "category": "วัตถุดิบเพิ่มเติม",
     "state": "processed",
-    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; สูตรผลิตภัณฑ์ไม่มีรายการอ้างอิงที่ยืนยันตรงกัน",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม ตามรายการ USDA",
     "referenceGrams": 100,
-    "nutrients": { "energyKcal": null, "proteinG": null, "carbohydrateG": null, "fatG": null, "saturatedFatG": null, "sugarG": null, "fiberG": null, "sodiumMg": null, "cholesterolMg": null },
-    "source": null,
+    "nutrients": { "energyKcal": 101, "proteinG": 1.04, "carbohydrateG": 27.4, "fatG": 0.1, "saturatedFatG": 0.014, "sugarG": 21.3, "fiberG": 0.3, "sodiumMg": 907, "cholesterolMg": 0 },
+    "source": { "provider": "USDA FoodData Central", "title": "USDA SR Legacy (April 2018)", "url": "https://fdc.nal.usda.gov/food-details/168556/nutrients", "foodId": "168556", "matchedDescription": "Catsup", "retrievedAt": "2026-10-07" },
     "image": { "imageUrl": "/images/catalog/placeholder.svg", "photographer": "", "sourceUrl": "", "source": "Placeholder", "license": "Original placeholder" },
     "needsImage": true,
-    "dataStatus": "unmatched",
-    "notes": "น้ำตาลและโซเดียมต่างกันตามยี่ห้อ; ยังไม่มีผลิตภัณฑ์อ้างอิงที่ระบุ"
+    "dataStatus": "verified",
+    "notes": "อ้างอิง catsup ตาม USDA; ปริมาณน้ำตาลและโซเดียมของแต่ละยี่ห้ออาจแตกต่างกัน"
   },
   {
     "id": "table-salt",

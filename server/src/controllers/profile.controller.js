@@ -1,14 +1,18 @@
 const User = require("../models/user.model");
 const Activity = require("../models/activity.model");
 const Post = require("../models/post.model");
+const FoodLog = require("../models/food-log.model");
 const { PROFILE_FIELDS, USERNAME_PATTERN, streakPipeline, publicPostPipeline, publicProfileResponse } = require("../config/public-profile");
 
 const loadPublicView = async user => {
-  const [activity, posts] = await Promise.all([
+  const [activity, posts, foodLogs] = await Promise.all([
     Activity.aggregate(streakPipeline(user._id)),
     Post.aggregate(publicPostPipeline(user._id)),
+    user.shareFoodLogs === true
+      ? FoodLog.find({ userId: user._id }).sort({ eatenAt: -1, createdAt: -1 }).lean()
+      : Promise.resolve([]),
   ]);
-  return publicProfileResponse(user, activity[0]?.streak || 0, posts);
+  return publicProfileResponse(user, activity[0]?.streak || 0, posts, foodLogs);
 };
 
 const unavailable = res => res.status(404).json({ message: "Profile not found." });
@@ -37,7 +41,7 @@ const getPublicProfileCard = async (req, res, next) => {
     const activity = await Activity.aggregate(streakPipeline(user._id));
     // Reuse the public profile allowlist, excluding community content entirely
     // from the small hover response. Bearer tokens grant no privacy exception.
-    const { posts, ...card } = publicProfileResponse(user, activity[0]?.streak || 0, []);
+    const { posts, foodLogs, ...card } = publicProfileResponse(user, activity[0]?.streak || 0, []);
     res.json(card);
   } catch (error) { temporarilyUnavailable(res); }
 };

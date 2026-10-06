@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
   displayName: { type: String, trim: true, minlength: 1, maxlength: 80 },
   bio: { type: String, trim: true, maxlength: 300, default: "" },
   profileVisibility: { type: String, enum: ["private", "public"], default: "private" },
+  shareFoodLogs: { type: Boolean, default: false },
 }, { timestamps: true });
 
 userSchema.index({ username: 1 }, { unique: true, sparse: true });

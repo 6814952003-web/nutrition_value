@@ -10,6 +10,7 @@ const userResponse = user => ({
   id: user._id, name: user.name, email: user.email, role: user.role, avatarData: user.avatarData || "", createdAt: user.createdAt,
   username: user.username || "", displayName: user.displayName || user.name, bio: user.bio || "",
   profileVisibility: user.profileVisibility === "public" ? "public" : "private",
+  shareFoodLogs: user.shareFoodLogs === true,
 });
 const authResponse = user => ({ user: userResponse(user), token: signToken({ id: user._id, role: user.role }) });
 const promoteAdminIfNeeded = async user => {
@@ -87,7 +88,7 @@ const loginUser = async (req, res, next) => {
 const getMe = (req, res) => res.json(userResponse(req.user));
 
 const listUsers = async (req, res, next) => {
-  try { res.json((await User.find().select("_id name email role avatarData createdAt username displayName bio profileVisibility").sort({ createdAt: -1 })).map(userResponse)); }
+  try { res.json((await User.find().select("_id name email role avatarData createdAt username displayName bio profileVisibility shareFoodLogs").sort({ createdAt: -1 })).map(userResponse)); }
   catch (error) { next(error); }
 };
 
@@ -130,7 +131,7 @@ const updateUser = async (req, res, next) => {
         updates.role = "admin";
       }
     }
-    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true }).select("_id name email role avatarData createdAt username displayName bio profileVisibility");
+    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true }).select("_id name email role avatarData createdAt username displayName bio profileVisibility shareFoodLogs");
     if (!user) return res.status(404).json({ message: "User not found." });
     res.json(userResponse(user));
   } catch (error) {
@@ -142,9 +143,9 @@ const updateUser = async (req, res, next) => {
 const updateMyProfile = async (req, res, next) => {
   try {
     const body = bodyFields(req);
-    const allowed = ["avatarData", "username", "displayName", "bio", "profileVisibility"];
+    const allowed = ["avatarData", "username", "displayName", "bio", "profileVisibility", "shareFoodLogs"];
     if (!Object.keys(body).length || Object.keys(body).some(key => !allowed.includes(key))) {
-      return res.status(400).json({ message: "Only avatar, username, display name, bio and profile visibility may be updated." });
+      return res.status(400).json({ message: "Only avatar, username, display name, bio, profile visibility and food-log sharing may be updated." });
     }
     const updates = {};
     let clearUsername = false;
@@ -172,6 +173,10 @@ const updateMyProfile = async (req, res, next) => {
     if (Object.hasOwn(body, "profileVisibility")) {
       if (!["private", "public"].includes(body.profileVisibility)) return res.status(400).json({ message: "Profile visibility must be private or public." });
       updates.profileVisibility = body.profileVisibility;
+    }
+    if (Object.hasOwn(body, "shareFoodLogs")) {
+      if (typeof body.shareFoodLogs !== "boolean") return res.status(400).json({ message: "Food-log sharing must be true or false." });
+      updates.shareFoodLogs = body.shareFoodLogs;
     }
     const visibility = updates.profileVisibility || req.user.profileVisibility || "private";
     const username = clearUsername ? "" : updates.username || req.user.username;
