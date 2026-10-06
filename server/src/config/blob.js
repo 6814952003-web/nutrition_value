@@ -35,6 +35,18 @@ const uploadPolicy = (pathname, userId) => {
 const validateBlob = async (value, userId, purpose, mediaType) => {
   try {
     if (typeof value !== "string" || !Object.hasOwn(PURPOSES, purpose)) return false;
+
+    const localDataUrl = /^data:(image|video)\/([a-zA-Z0-9.+-]+);base64,([A-Za-z0-9+/=\s]+)$/i.exec(value);
+    if (localDataUrl && !blobPublicOrigin()) {
+      const [, kind, extension, encoded] = localDataUrl;
+      const mimeType = `${kind}/${extension.toLowerCase()}`;
+      const dataLength = Buffer.from(encoded.replace(/\s+/g, ""), "base64").length;
+      const policy = PURPOSES[purpose];
+      return policy.types.includes(mimeType)
+        && dataLength > 0 && dataLength <= policy.maximumSizeInBytes
+        && (!mediaType || kind === mediaType);
+    }
+
     const url = new URL(value);
     const pathname = url.pathname.slice(1);
     const match = parseUploadPath(pathname);

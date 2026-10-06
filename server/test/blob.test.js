@@ -73,6 +73,24 @@ test("media references reject missing blobs and invalid server metadata", async 
   assert.equal(await validateBlob(avatarUrl, "user1", "avatar"), false);
 });
 
+test("local data URLs are accepted when Blob storage is not configured", async t => {
+  const previousPublicOrigin = process.env.BLOB_PUBLIC_ORIGIN;
+  const previousToken = process.env.BLOB_READ_WRITE_TOKEN;
+  t.after(() => {
+    if (previousPublicOrigin === undefined) delete process.env.BLOB_PUBLIC_ORIGIN; else process.env.BLOB_PUBLIC_ORIGIN = previousPublicOrigin;
+    if (previousToken === undefined) delete process.env.BLOB_READ_WRITE_TOKEN; else process.env.BLOB_READ_WRITE_TOKEN = previousToken;
+  });
+
+  delete process.env.BLOB_PUBLIC_ORIGIN;
+  delete process.env.BLOB_READ_WRITE_TOKEN;
+
+  const avatarData = "data:image/png;base64,AAAA";
+  const videoData = "data:video/mp4;base64,AAAA";
+  assert.equal(await validateBlob(avatarData, "user1", "avatar"), true);
+  assert.equal(await validateBlob(videoData, "user1", "post", "video"), true);
+  assert.equal(await validateBlob(videoData, "user1", "post", "image"), false);
+});
+
 test("storage configuration requires a public Vercel Blob origin", t => {
   t.after(() => { process.env.BLOB_PUBLIC_ORIGIN = origin; });
   assert.equal(blobPublicOrigin(), origin);

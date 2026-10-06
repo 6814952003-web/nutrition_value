@@ -14,18 +14,36 @@ export function validateUploadFile(file, purpose) {
   if (file.size > policy.maxSize) throw new Error(`File must be ${policy.maxSize / 1_000_000} MB or smaller.`);
 }
 
+const readFileAsDataUrl = file => new Promise((resolve, reject) => {
+  const reader = new FileReader();
+  reader.onload = () => resolve(String(reader.result));
+  reader.onerror = () => reject(new Error("Failed to read the selected file."));
+  reader.readAsDataURL(file);
+});
+
 export async function uploadFile(file, userId, purpose, onUploadProgress) {
   validateUploadFile(file, purpose);
   const token = localStorage.getItem("nouri-token");
-  if (!token || !userId) throw new Error("Please sign in before uploading.");
-  const filename = file.name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(-100) || "file";
-  // Only token negotiation uses our API. The SDK sends file bytes directly to Blob.
-  const blob = await upload(`uploads/${userId}/${purpose}/${crypto.randomUUID()}-${filename}`, file, {
-    access: "public",
-    handleUploadUrl: "/api/uploads",
-    headers: { Authorization: `Bearer ${token}` },
-    contentType: file.type,
-    onUploadProgress,
-  });
-  return blob.url;
+  if (!token || !userId) {
+    return readFileAsDataUrl(file);
+  }
+
+  try {
+    const filename = file.name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(-100) || "file";
+    // Only token negotiation uses our API. The SDK sends file bytes directly to Blob.
+    const blob = await upload(`uploads/${userId}/${purpose}/${crypto.randomUUID()}-${filename}`, file, {
+      access: "public",
+      handleUploadUrl: "/api/uploads",
+      headers: { Authorization: `Bearer ${token}` },
+      contentType: file.type,
+      onUploadProgress,
+    });
+    return blob.url;
+  } catch (error) {
+    const message = error?.message || "";
+    if (message.includes("Failed to retrieve the client token") || message.includes("File storage is not configured") || message.includes("Unable to authorize this upload")) {
+      return readFileAsDataUrl(file);
+    }
+    throw error;
+  }
 }

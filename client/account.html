@@ -1,14 +1,8 @@
 <!doctype html>
 <html lang="th">
-  <head>
-    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="theme-color" content="#f6f8f1" />
-    <title>บัญชีของฉัน — Nouri</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+Thai:wght@400;500;600;700&family=Playfair+Display:ital,wght@600;700&display=swap" rel="stylesheet" /><link rel="stylesheet" href="account.css" />
-  </head>
-  <body>
-    <header><a class="brand" href="index.html"><span>n</span>NOURI</a><a class="back" href="index.html">← กลับสู่เมนู</a></header>
-    <main><p class="eyebrow">พื้นที่ส่วนตัวของคุณ</p><h1>บัญชี<br /><em>ของฉัน.</em></h1><section class="profile-card"><div class="avatar" id="avatar">N</div><div><p>เข้าสู่ระบบในชื่อ</p><h2 id="user-name">กำลังโหลด…</h2><span id="user-email"></span></div><span class="active-status">● ใช้งานอยู่</span></section><section class="summary"><article><span>มื้อที่บันทึกวันนี้</span><b id="meal-total">0</b><small>มื้ออาหาร</small></article><article><span>โปรตีนวันนี้</span><b id="protein-total">0g</b><small>จากรายการที่บันทึก</small></article><article><span>พลังงานวันนี้</span><b id="calorie-total">0</b><small>กิโลแคลอรี</small></article></section><section class="actions"><a href="index.html#menu">เลือกมื้ออาหาร <span>→</span></a><button id="logout">ออกจากระบบ</button></section></main>
-    <script src="account.js"></script>
-  </body>
-</html>
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="theme-color" content="#f4efe8" /><title>บัญชีของฉัน — Nouri</title><link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin /><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+Thai:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" /><link rel="stylesheet" href="account.css" /></head>
+<body><header class="site-header"><a class="brand" href="index.html"><span class="brand-mark">n</span>NOURI</a><a class="back" href="index.html">← กลับหน้าหลัก</a></header>
+<main><p class="eyebrow">พื้นที่ส่วนตัวของคุณ</p><h1>บัญชี<br /><em>ของฉัน.</em></h1><section class="profile-card"><label class="avatar-picker" title="เปลี่ยนรูปโปรไฟล์"><input id="avatar-input" type="file" accept="image/png,image/jpeg,image/webp" /><img id="avatar-image" alt="รูปโปรไฟล์" hidden /><span id="avatar-initial">N</span><small>เปลี่ยนรูป</small></label><div class="profile-copy"><p>ยินดีต้อนรับ</p><h2 id="user-name">กำลังโหลด…</h2><span id="user-email"></span></div><span class="active-status">● ออนไลน์</span></section>
+<section class="account-menu" aria-label="เมนูบัญชี"><article class="menu-item"><button class="menu-trigger" aria-expanded="false" data-panel="history"><span class="menu-icon">◷</span><span class="menu-copy"><b>ประวัติการใช้งาน</b><small>รายการอาหารและกิจกรรมล่าสุด</small></span><span class="chevron">＋</span></button><div class="menu-panel" id="history" hidden></div></article>
+<article class="menu-item"><button class="menu-trigger" aria-expanded="false" data-panel="security"><span class="menu-icon">◇</span><span class="menu-copy"><b>ความปลอดภัยและการตั้งค่าบัญชี</b><small>จัดการข้อมูลส่วนตัวของคุณ</small></span><span class="chevron">＋</span></button><div class="menu-panel" id="security" hidden></div></article>
+<a class="menu-link" href="index.html#menu"><span class="menu-icon">✳</span><span class="menu-copy"><b>เลือกมื้ออาหาร</b><small>ค้นหาเมนูที่เหมาะกับคุณ</small></span><span class="chevron">↗</span></a><button class="menu-trigger" id="logout"><span class="menu-icon logout-icon">↪</span><span class="menu-copy"><b>ออกจากระบบ</b><small>กลับไปยังหน้าเข้าสู่ระบบ</small></span><span class="chevron">→</span></button></section><p class="footer-note">NOURI · ดูแลโภชนาการในแบบของคุณ</p></main><script src="account.js"></script></body></html>
