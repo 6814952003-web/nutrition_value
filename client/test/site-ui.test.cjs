@@ -46,6 +46,7 @@ const { default: ProfileSettings, savedProfileFields, validateProfileFields } = 
 const { default: CommunityPage, CommunityPost } = loadUiModule(path.join(sourceRoot, "CommunityPage"));
 const { default: AuthorProfileLink, AuthorProfileCard, profileCardPosition } = loadUiModule(path.join(sourceRoot, "AuthorProfileLink"));
 const { CatalogGrid, FoodLogDialog, filterCatalog, ImageCredits } = loadUiModule(path.join(sourceRoot, "Catalog"));
+const { matchBatchImages, validateBatchImages } = loadUiModule(path.join(sourceRoot, "CatalogAdmin"));
 const { default: FoodLogHistory } = loadUiModule(path.join(sourceRoot, "FoodLogs"));
 const user = { id: "ui-fixture-user", name: "สมาชิกทดสอบ", role: "admin" };
 const noop = () => {};
@@ -130,6 +131,29 @@ test("every recipe card has its own visible and accessible food-log action", () 
   const html = render(CatalogGrid, siteFixture(), { catalog: { ingredients, recipes } });
   assert.equal((html.match(/class="catalog-button catalog-card-log-button"/g) || []).length, 100);
   assert.equal((html.match(/aria-label="บันทึกว่ากินแล้ว เมนู \d+"/g) || []).length, 100);
+});
+
+test("batch photo selection matches record IDs and validates ownership, credits, and duplicates", () => {
+  const items = [
+    { id: "kaprao-pork", needsImage: true },
+    { id: "tom-yum", needsImage: true },
+    { id: "pork", needsImage: false },
+  ];
+  const files = [
+    { name: "kaprao-pork.jpg", lastModified: 1, size: 100 },
+    { name: "photo-2.webp", lastModified: 2, size: 200 },
+  ];
+  const rows = matchBatchImages(files, items);
+  assert.equal(rows[0].itemId, "kaprao-pork");
+  assert.equal(rows[1].itemId, "");
+  assert.equal(validateBatchImages(rows, items, "ผู้ถ่าย", true), "กรุณาเลือกรายการเมนูหรือวัตถุดิบให้ครบทุกภาพ");
+  rows[1].itemId = "tom-yum";
+  assert.equal(validateBatchImages(rows, items, "ผู้ถ่าย", true), "");
+  assert.match(validateBatchImages(rows, items, "", true), /ชื่อผู้ถ่าย/);
+  assert.match(validateBatchImages(rows, items, "ผู้ถ่าย", false), /ยืนยันว่ามีสิทธิ์/);
+  assert.match(validateBatchImages([{ ...rows[0] }, { ...rows[1], itemId: rows[0].itemId }], items, "ผู้ถ่าย", true), /หลายภาพกับรายการเดียวกัน/);
+  assert.match(validateBatchImages(rows, items.map(item => ({ ...item, needsImage: false })), "ผู้ถ่าย", true), /มีรูปแล้ว/);
+  assert.match(validateBatchImages(Array(11).fill(rows[0]), items, "ผู้ถ่าย", true), /1–10/);
 });
 
 test("menu logging requires an explicit action and prompts signed-out visitors to log in", t => {

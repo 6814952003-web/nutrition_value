@@ -24,6 +24,29 @@ export function previewRecipe(item, ingredients) {
   }));
 }
 
+export function matchBatchImages(files, items) {
+  const unused = new Set(items.filter(item => item.needsImage).map(item => item.id));
+  return [...files].map((file, index) => {
+    const name = file.name.replace(/\.[^.]+$/, "").toLowerCase();
+    const itemId = unused.has(name) ? name : "";
+    if (itemId) unused.delete(itemId);
+    return { key: `${file.name}-${file.lastModified}-${file.size}-${index}`, file, itemId };
+  });
+}
+
+export function validateBatchImages(rows, items, photographer, rights) {
+  if (!rows.length || rows.length > 10) return "เลือกภาพครั้งละ 1–10 ภาพ";
+  if (!photographer.trim()) return "กรอกชื่อผู้ถ่ายภาพ";
+  if (!rights) return "กรุณายืนยันว่ามีสิทธิ์ใช้ภาพและอนุญาตให้นำขึ้นเว็บไซต์";
+  if (rows.some(row => !row.itemId)) return "กรุณาเลือกรายการเมนูหรือวัตถุดิบให้ครบทุกภาพ";
+  const ids = rows.map(row => row.itemId);
+  if (new Set(ids).size !== ids.length) return "ห้ามจับคู่หลายภาพกับรายการเดียวกันในชุดเดียว";
+  if (rows.some(row => !items.some(item => item.id === row.itemId && item.needsImage))) {
+    return "รายการที่เลือกไม่มีอยู่แล้วหรือมีรูปแล้ว กรุณาโหลดคลังล่าสุด";
+  }
+  return "";
+}
+
 export default function CatalogAdmin({ user, markDirty, markBusy }) {
   const [catalog, setCatalog] = useState(null);
   const [kind, setKind] = useState("ingredients");
@@ -34,6 +57,9 @@ export default function CatalogAdmin({ user, markDirty, markBusy }) {
   const [error, setError] = useState("");
   const [rights, setRights] = useState(false);
   const [imageMetadata, setImageMetadata] = useState({ source: "Pexels", photographer: "", sourceUrl: "" });
+  const [batchRows, setBatchRows] = useState([]);
+  const [batchPhotographer, setBatchPhotographer] = useState("");
+  const [batchRights, setBatchRights] = useState(false);
   useEffect(() => { const controller = new AbortController(); api.catalog({ signal: controller.signal }).then(setCatalog).catch(failure => { if (failure.name !== "AbortError") setError("โหลดคลังอาหารไม่สำเร็จ"); }); return () => controller.abort(); }, []);
   useEffect(() => { markDirty?.("catalog", !!draft); }, [draft, markDirty]);
   useEffect(() => { markBusy?.("catalog", busy); }, [busy, markBusy]);
@@ -73,6 +99,49 @@ export default function CatalogAdmin({ user, markDirty, markBusy }) {
     } catch (failure) { setError(failure.message); }
     finally { setBusy(false); }
   };
+  const chooseBatchFiles = event => {
+    const files = [...(event.currentTarget.files || [])];
+    event.currentTarget.value = "";
+    if (files.length > 10) {
+      setBatchRows([]);
+      setError("เลือกภาพครั้งละไม่เกิน 10 ภาพ เพื่อให้ตรวจสอบและบันทึกเป็นชุดได้");
+      return;
+    }
+    setBatchRows(matchBatchImages(files, catalog?.[kind] || []));
+    setError("");
+    setMessage("");
+  };
+  const uploadBatch = async event => {
+    event.preventDefault();
+    if (busy || !catalog) return;
+    const validation = validateBatchImages(batchRows, catalog[kind], batchPhotographer, batchRights);
+    if (validation) { setError(validation); return; }
+    setBusy(true); setError(""); setMessage("");
+    let current = catalog;
+    let completed = 0;
+    try {
+      for (const row of batchRows) {
+        const item = current[kind].find(entry => entry.id === row.itemId);
+        if (!item?.needsImage) throw new Error(`รายการ ${row.itemId} มีการเปลี่ยนแปลง กรุณาโหลดคลังล่าสุด`);
+        setMessage(`กำลังอัปโหลด ${completed + 1}/${batchRows.length}: ${item.nameTh}`);
+        const imageUrl = await uploadFile(row.file, user.id, "site");
+        const updatedItem = {
+          ...item,
+          image: { imageUrl, photographer: batchPhotographer.trim(), sourceUrl: "", source: "Admin upload", license: licenses["Admin upload"] },
+          needsImage: false,
+        };
+        current = await api.saveCatalogItem(kind, item.id, current.revision, updatedItem);
+        setCatalog(current);
+        setBatchRows(rows => rows.filter(entry => entry.key !== row.key));
+        completed += 1;
+      }
+      setBatchRights(false);
+      setMessage(`อัปโหลดและบันทึกรูปสำเร็จ ${completed} ภาพ`);
+    } catch (failure) {
+      setCatalog(current);
+      setError(`อัปโหลดหยุดหลังบันทึกสำเร็จ ${completed}/${batchRows.length} ภาพ: ${failure.message}`);
+    } finally { setBusy(false); }
+  };
   const remove = async item => {
     if (busy || !window.confirm(`ลบ ${item.nameTh} ออกจากคลังอาหารหรือไม่?`)) return;
     setBusy(true); setError("");
@@ -85,6 +154,16 @@ export default function CatalogAdmin({ user, markDirty, markBusy }) {
     {!catalog ? <p role="status">กำลังโหลดคลังอาหาร…</p> : <><div className="catalog-tabs"><button type="button" aria-pressed={kind === "ingredients"} disabled={busy} onClick={() => changeKind("ingredients")}>วัตถุดิบ {catalog.ingredients.length}</button><button type="button" aria-pressed={kind === "recipes"} disabled={busy} onClick={() => changeKind("recipes")}>เมนู {catalog.recipes.length}</button></div>
       <p className="catalog-muted">ขาดรูป {catalog[kind].filter(item => item.needsImage).length} รายการ · ค่าที่ไม่มีแหล่งข้อมูลต้องเว้นว่าง</p>
       <div className="catalog-admin-actions"><button type="button" className="catalog-button" disabled={busy} onClick={() => choose(null)}>＋ เพิ่ม{kind === "ingredients" ? "วัตถุดิบ" : "เมนู"}</button><button type="button" className="catalog-button catalog-button-light" disabled={busy} onClick={async () => { if (draft && !window.confirm("โหลดใหม่จะยกเลิกแบบร่าง ยืนยันหรือไม่?")) return; try { setCatalog(await api.catalog()); setDraft(null); setError(""); } catch { setError("โหลดคลังอาหารไม่สำเร็จ"); } }}>โหลดข้อมูลล่าสุด</button></div>
+      {!draft && <form className="catalog-batch-upload" onSubmit={uploadBatch}>
+        <h3>อัปโหลดรูปหลายรายการ</h3>
+        <p className="catalog-muted">เลือกภาพได้ครั้งละไม่เกิน 10 ไฟล์ ระบบจะจับคู่ชื่อไฟล์ที่ตรงกับรหัสรายการให้อัตโนมัติ หรือเลือกชื่อรายการเอง รูปต้องเป็น PNG, JPG หรือ WebP ไม่เกิน 1.5 MB ต่อรูป และจะแสดงหลังบันทึกแต่ละรายการสำเร็จ</p>
+        <label>เลือกรูปภาพ<input type="file" accept="image/png,image/jpeg,image/webp" multiple disabled={busy} onChange={chooseBatchFiles}/></label>
+        {!!batchRows.length && <><div className="catalog-batch-list">{batchRows.map(row => <label className="catalog-batch-row" key={row.key}><span>{row.file.name}</span><select required value={row.itemId} disabled={busy} onChange={event => setBatchRows(rows => rows.map(entry => entry.key === row.key ? { ...entry, itemId: event.target.value } : entry))}><option value="">เลือก{kind === "ingredients" ? "วัตถุดิบ" : "เมนู"}</option>{catalog[kind].filter(item => item.needsImage).map(item => <option key={item.id} value={item.id}>{item.nameTh} · {item.id}</option>)}</select></label>)}</div>
+          <label>ชื่อผู้ถ่ายภาพ (ใช้ร่วมกันทั้งชุด)<input required maxLength={200} value={batchPhotographer} disabled={busy} onChange={event => setBatchPhotographer(event.target.value)} placeholder="ชื่อผู้ถ่าย หรือชื่อของคุณ"/></label>
+          <label className="catalog-rights-confirm"><input type="checkbox" checked={batchRights} disabled={busy} onChange={event => setBatchRights(event.target.checked)}/>ฉันยืนยันว่ามีสิทธิ์ใช้ภาพทุกภาพในชุดนี้ และข้อมูลผู้ถ่ายถูกต้อง</label>
+          <button className="catalog-button" type="submit" disabled={busy}>{busy ? "กำลังอัปโหลดและบันทึก…" : `อัปโหลดและบันทึก ${batchRows.length} ภาพ`}</button>
+        </>}
+      </form>}
       {draft ? <form onSubmit={save}><fieldset disabled={busy}><div className="catalog-admin-grid">
         <label>รหัสรายการ (a–z, ตัวเลข และ -)<input required disabled={editing} value={draft.id} pattern="[a-z0-9]+(-[a-z0-9]+)*" maxLength={80} onChange={event => patch("id", event.target.value.toLowerCase())}/></label>
         <label>ชื่อไทย<input required value={draft.nameTh} maxLength={160} onChange={event => patch("nameTh", event.target.value)}/></label><label>ชื่ออังกฤษ<input required value={draft.nameEn} maxLength={160} onChange={event => patch("nameEn", event.target.value)}/></label><label>หมวด<input required value={draft.category} maxLength={120} onChange={event => patch("category", event.target.value)}/></label>
