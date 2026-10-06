@@ -7,6 +7,7 @@ import Dashboard from "./Dashboard";
 import CommunityPage from "./CommunityPage";
 import PublicProfilePage from "./PublicProfilePage";
 import ProfileSettings from "./ProfileSettings";
+import Catalog from "./Catalog";
 export { default as CommunityPage } from "./CommunityPage";
 import { BrandLogo, SiteContext, SiteSymbol, defaultSite, useSite } from "./SiteContext";
 
@@ -19,6 +20,8 @@ export function resolveAppView(pathname, state) {
       return `public:${/^[a-z0-9_-]{3,30}$/.test(username) ? username : ""}`;
     } catch { return "public:"; }
   }
+  if (pathname === "/catalog") return "catalog";
+  if (pathname === "/image-credits") return "image-credits";
   if (pathname === "/admin") return "admin";
   return ["account", "community", "profile-preview"].includes(state?.view) ? state.view : "dashboard";
 }
@@ -31,7 +34,7 @@ export default function App() {
   const [site, setSite] = useState(defaultSite);
   const sessionStartedAt = useRef(Date.now());
   const accountDraft = useRef(null);
-  const isPublicView = view.startsWith("public:");
+  const isPublicView = view.startsWith("public:") || view === "catalog" || view === "image-credits";
   useEffect(() => {
     let mounted = true;
     let fetching = false;
@@ -114,7 +117,8 @@ export default function App() {
   const logout = () => endSession("dashboard");
   const switchAdminAccount = () => { setMode("login"); setMessage(""); return endSession("admin"); };
   let page;
-  if (isPublicView) page = <PublicProfilePage key={view} username={view.slice(7)} onBack={() => navigate("dashboard")}/>;
+  if (view === "catalog" || view === "image-credits") page = <Catalog standalone credits={view === "image-credits"} onBack={() => navigate("dashboard")}/>;
+  else if (isPublicView) page = <PublicProfilePage key={view} username={view.slice(7)} onBack={() => navigate("dashboard")}/>;
   else if (!user) page = <AuthPage {...{ mode, setMode, setUser, message, setMessage }} adminRequested={view === "admin"} />;
   else if (view === "admin") page = <AdminRoute user={user} site={site} setUser={setUser} onSaved={setSite} goBack={() => navigate("dashboard")} onSwitchAccount={switchAdminAccount} />;
   else if (view === "community") page = <CommunityPage user={user} setUser={setUser} goBack={() => navigate("dashboard")} />;

@@ -1,0 +1,3557 @@
+[
+  {
+    "id": "ground-pork",
+    "nameTh": "หมูสับ",
+    "nameEn": "Ground pork",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 263,
+      "proteinG": 16.9,
+      "carbohydrateG": 0,
+      "fatG": 21.2,
+      "saturatedFatG": 7.87,
+      "sugarG": null,
+      "fiberG": 0,
+      "sodiumMg": 56,
+      "cholesterolMg": 72
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/167902/nutrients",
+      "foodId": "167902",
+      "matchedDescription": "Pork, fresh, ground, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "partial",
+    "notes": "หมูบดดิบตามรายการ USDA ไม่กำหนดเปอร์เซ็นต์ไขมัน; เป็นค่าของรายการอ้างอิง ไม่ใช่ทุกสูตรหมูบด; แหล่งไม่รายงานน้ำตาลรวม จึงเป็น null"
+  },
+  {
+    "id": "pork-belly",
+    "nameTh": "หมูสามชั้น",
+    "nameEn": "Pork belly",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 518,
+      "proteinG": 9.34,
+      "carbohydrateG": 0,
+      "fatG": 53,
+      "saturatedFatG": 19.3,
+      "sugarG": 0,
+      "fiberG": 0,
+      "sodiumMg": 32,
+      "cholesterolMg": 72
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/167812/nutrients",
+      "foodId": "167812",
+      "matchedDescription": "Pork, fresh, belly, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "หมูสามชั้นดิบตามรายการ USDA; แหล่งไม่แยกปริมาณหนัง จึงไม่ยืนยันค่าของหมูสามชั้นติดหนังทุกแบบ"
+  },
+  {
+    "id": "pork-loin",
+    "nameTh": "หมูสันนอก",
+    "nameEn": "Pork top loin",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 155,
+      "proteinG": 21.6,
+      "carbohydrateG": 0,
+      "fatG": 6.94,
+      "saturatedFatG": 2.45,
+      "sugarG": 0,
+      "fiberG": 0,
+      "sodiumMg": 48,
+      "cholesterolMg": 67
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/167839/nutrients",
+      "foodId": "167839",
+      "matchedDescription": "Pork, fresh, loin, top loin (chops), boneless, separable lean and fat, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ใช้สันนอกช่วง top loin ไม่มีกระดูก รวมเนื้อและไขมันที่แยกได้ ดิบ; ไม่ใช่สันใน"
+  },
+  {
+    "id": "pork-hock",
+    "nameTh": "ขาหมู",
+    "nameEn": "Pork hock",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "รอข้อมูลขาหมูดิบส่วนที่กินได้ซึ่งระบุหนังและไขมันชัดเจน; USDA shank half ของ ham ไม่ยืนยันว่าเป็นขาหมูส่วน hock พร้อมหนัง จึงไม่ใช้แทน"
+  },
+  {
+    "id": "pork-liver",
+    "nameTh": "ตับหมู",
+    "nameEn": "Pork liver",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 134,
+      "proteinG": 21.4,
+      "carbohydrateG": 2.47,
+      "fatG": 3.65,
+      "saturatedFatG": 1.17,
+      "sugarG": null,
+      "fiberG": 0,
+      "sodiumMg": 87,
+      "cholesterolMg": 301
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/167862/nutrients",
+      "foodId": "167862",
+      "matchedDescription": "Pork, fresh, variety meats and by-products, liver, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "partial",
+    "notes": "ตับหมูดิบ; USDA รายการนี้ไม่รายงานน้ำตาลรวม จึงเป็น null"
+  },
+  {
+    "id": "chicken-breast",
+    "nameTh": "อกไก่",
+    "nameEn": "Chicken breast",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 120,
+      "proteinG": 22.5,
+      "carbohydrateG": 0,
+      "fatG": 2.62,
+      "saturatedFatG": 0.563,
+      "sugarG": 0,
+      "fiberG": 0,
+      "sodiumMg": 45,
+      "cholesterolMg": 73
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/171077/nutrients",
+      "foodId": "171077",
+      "matchedDescription": "Chicken, broiler or fryers, breast, skinless, boneless, meat only, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "เนื้ออกไก่ดิบ ไม่ติดหนัง ไม่มีกระดูก ไม่มีสารละลายเพิ่มตามคำอธิบายรายการ"
+  },
+  {
+    "id": "chicken-drumstick",
+    "nameTh": "น่องไก่",
+    "nameEn": "Chicken drumstick",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 161,
+      "proteinG": 18.1,
+      "carbohydrateG": 0.11,
+      "fatG": 9.2,
+      "saturatedFatG": 2.46,
+      "sugarG": 0,
+      "fiberG": 0,
+      "sodiumMg": 106,
+      "cholesterolMg": 92
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/172373/nutrients",
+      "foodId": "172373",
+      "matchedDescription": "Chicken, broilers or fryers, drumstick, meat and skin, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ส่วนที่กินได้ของน่องไก่ดิบ รวมเนื้อและหนัง ไม่รวมกระดูก"
+  },
+  {
+    "id": "chicken-wing",
+    "nameTh": "ปีกไก่",
+    "nameEn": "Chicken wing",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 191,
+      "proteinG": 17.5,
+      "carbohydrateG": 0,
+      "fatG": 12.8,
+      "saturatedFatG": 3.54,
+      "sugarG": 0,
+      "fiberG": 0,
+      "sodiumMg": 84,
+      "cholesterolMg": 111
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/172390/nutrients",
+      "foodId": "172390",
+      "matchedDescription": "Chicken, broilers or fryers, wing, meat and skin, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ส่วนที่กินได้ของปีกไก่ดิบ รวมเนื้อและหนัง ไม่รวมกระดูก"
+  },
+  {
+    "id": "beef",
+    "nameTh": "เนื้อวัว",
+    "nameEn": "Beef top sirloin, lean only",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 131,
+      "proteinG": 22.1,
+      "carbohydrateG": 0,
+      "fatG": 4.08,
+      "saturatedFatG": 1.51,
+      "sugarG": 0,
+      "fiberG": 0,
+      "sodiumMg": 56,
+      "cholesterolMg": 60
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/174055/nutrients",
+      "foodId": "174055",
+      "matchedDescription": "Beef, top sirloin, steak, separable lean only, trimmed to 1/8\" fat, all grades, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "กำหนดตัวอย่างอ้างอิงเป็นเนื้อ top sirloin ส่วนเนื้อล้วน ดิบ คละเกรด ตัดแต่งไขมัน 1/8 นิ้ว ตาม USDA; ค่าขึ้นกับส่วนและไขมัน ไม่ใช่ค่าเดียวของเนื้อวัวทุกส่วน"
+  },
+  {
+    "id": "duck",
+    "nameTh": "เป็ด",
+    "nameEn": "Domestic duck, meat and skin",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 404,
+      "proteinG": 11.5,
+      "carbohydrateG": 0,
+      "fatG": 39.3,
+      "saturatedFatG": 13.2,
+      "sugarG": 0,
+      "fiberG": 0,
+      "sodiumMg": 63,
+      "cholesterolMg": 76
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/172408/nutrients",
+      "foodId": "172408",
+      "matchedDescription": "Duck, domesticated, meat and skin, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "เป็ดเลี้ยงดิบ รวมเนื้อและหนัง ไม่รวมกระดูก; ต่างจากเนื้อเป็ดล้วนหรือเป็ดย่าง"
+  },
+  {
+    "id": "vietnamese-pork-sausage",
+    "nameTh": "หมูยอ",
+    "nameEn": "Vietnamese-style pork sausage",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่พบข้อมูลทางการที่ยืนยันหมูยอไทยชนิดและสูตรตรงกัน; ไม่ใช้ไส้กรอกตะวันตกแทน รอข้อมูลอ้างอิงที่ระบุผลิตภัณฑ์และวิธีผลิต"
+  },
+  {
+    "id": "chinese-pork-sausage",
+    "nameTh": "กุนเชียง",
+    "nameEn": "Chinese-style dried pork sausage",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่พบข้อมูลทางการที่ยืนยันกุนเชียงไทยชนิดและสูตรตรงกัน; ไม่ใช้ไส้กรอกตะวันตกแทน รอข้อมูลอ้างอิงที่ระบุผลิตภัณฑ์และวิธีผลิต"
+  },
+  {
+    "id": "whiteleg-shrimp",
+    "nameTh": "กุ้งขาว",
+    "nameEn": "Whiteleg shrimp",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "รอข้อมูลกุ้งขาว Litopenaeus vannamei ดิบที่ระบุชนิดชัดเจน; USDA shrimp แบบไม่ระบุชนิดหรือ mixed species ไม่ยืนยันว่าเป็นกุ้งขาว จึงไม่ใช้แทน"
+  },
+  {
+    "id": "squid",
+    "nameTh": "ปลาหมึก",
+    "nameEn": "Squid, mixed species",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 92,
+      "proteinG": 15.6,
+      "carbohydrateG": 3.08,
+      "fatG": 1.38,
+      "saturatedFatG": 0.358,
+      "sugarG": 0,
+      "fiberG": 0,
+      "sodiumMg": 44,
+      "cholesterolMg": 233
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/174223/nutrients",
+      "foodId": "174223",
+      "matchedDescription": "Mollusks, squid, mixed species, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ปลาหมึกดิบหลายชนิดรวมตาม USDA (Loligoidae และ Ommastrephidae) ส่วนที่กินได้; ไม่ใช่ข้อมูลเฉพาะปลาหมึกหอมหรือหมึกกระดอง"
+  },
+  {
+    "id": "short-mackerel",
+    "nameTh": "ปลาทู",
+    "nameEn": "Short mackerel",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "รอข้อมูลปลาทู Rastrelliger brachysoma ดิบ; USDA Atlantic mackerel เป็นคนละชนิด จึงไม่ใช้แทน และไม่ใช้ปลาทูนึ่งแทนสถานะดิบ"
+  },
+  {
+    "id": "nile-tilapia",
+    "nameTh": "ปลานิล",
+    "nameEn": "Nile tilapia",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "รอข้อมูลปลานิล Oreochromis niloticus ดิบที่ยืนยันชนิด; USDA tilapia และ farm-raised tilapia ที่ตรวจไม่มีชื่อวิทยาศาสตร์ยืนยัน จึงยังไม่ใช้แทน"
+  },
+  {
+    "id": "salmon",
+    "nameTh": "ปลาแซลมอน",
+    "nameEn": "Atlantic salmon, farmed",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 208,
+      "proteinG": 20.4,
+      "carbohydrateG": 0,
+      "fatG": 13.4,
+      "saturatedFatG": 3.05,
+      "sugarG": 0,
+      "fiberG": 0,
+      "sodiumMg": 59,
+      "cholesterolMg": 55
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/175167/nutrients",
+      "foodId": "175167",
+      "matchedDescription": "Fish, salmon, Atlantic, farmed, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "กำหนดตัวอย่างอ้างอิงเป็นแซลมอนแอตแลนติกเลี้ยง ดิบ; ไม่ใช้แทน sockeye, coho หรือปลาแซลมอนสุกโดยเงียบ ๆ"
+  },
+  {
+    "id": "canned-tuna",
+    "nameTh": "ปลาทูน่ากระป๋อง",
+    "nameEn": "Light tuna, canned in water, drained",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "processed",
+    "referenceBasis": "เนื้อทูน่าในน้ำ สะเด็ดน้ำ ส่วนที่กินได้ ไม่รวมน้ำบรรจุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 86,
+      "proteinG": 19.4,
+      "carbohydrateG": 0,
+      "fatG": 0.96,
+      "saturatedFatG": 0.211,
+      "sugarG": 0,
+      "fiberG": 0,
+      "sodiumMg": 247,
+      "cholesterolMg": 36
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/173709/nutrients",
+      "foodId": "173709",
+      "matchedDescription": "Fish, tuna, light, canned in water, drained solids (Includes foods for USDA's Food Distribution Program)",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ทูน่าเนื้ออ่อนบรรจุกระป๋องในน้ำ ใช้เฉพาะเนื้อสะเด็ดน้ำ ตาม USDA; ไม่ใช่ทูน่าในน้ำมันหรือรวมน้ำบรรจุ"
+  },
+  {
+    "id": "green-mussel",
+    "nameTh": "หอยแมลงภู่",
+    "nameEn": "Asian green mussel",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "รอข้อมูลหอยแมลงภู่ Perna viridis ดิบ ส่วนเนื้อ; USDA blue mussel (Mytilus edulis) เป็นคนละชนิด จึงไม่ใช้แทน"
+  },
+  {
+    "id": "short-neck-clam",
+    "nameTh": "หอยลาย",
+    "nameEn": "Short-neck clam",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ ไม่รวมกระดูกหรือเปลือก; รายละเอียดเนื้อ หนัง และชนิดตามหมายเหตุ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "รอข้อมูลหอยลาย Paphia undulata ดิบ ส่วนเนื้อ; USDA clam mixed species ไม่ยืนยันชนิดหอยลาย จึงไม่ใช้แทน"
+  },
+  {
+    "id": "blue-crab",
+    "nameTh": "ปูม้า",
+    "nameEn": "Blue crab, raw",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 87,
+      "proteinG": 18.1,
+      "carbohydrateG": 0.04,
+      "fatG": 1.08,
+      "saturatedFatG": 0.222,
+      "sugarG": null,
+      "fiberG": 0,
+      "sodiumMg": 293,
+      "cholesterolMg": 78
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/174204/nutrients",
+      "foodId": "174204",
+      "matchedDescription": "Crustaceans, crab, blue, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "partial",
+    "notes": "ใช้รายการปู blue crab ดิบตาม USDA; ไม่ใช่ปูม้าชนิด Portunus pelagicus โดยเฉพาะ จึงระบุชนิดของรายการอ้างอิงให้ชัด"
+  },
+  {
+    "id": "fish-ball",
+    "nameTh": "ลูกชิ้นปลา",
+    "nameEn": "Fish ball, Thai style",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันลูกชิ้นปลาไทยและสูตรตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "pork-ball",
+    "nameTh": "ลูกชิ้นหมู",
+    "nameEn": "Pork ball, Thai style",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันลูกชิ้นหมูไทยและสูตรตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "fermented-pork",
+    "nameTh": "แหนม",
+    "nameEn": "Fermented pork, Thai style",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันแหนมไทยและสูตรตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "pork-blood",
+    "nameTh": "เลือดหมู",
+    "nameEn": "Pork blood, raw",
+    "category": "เนื้อสัตว์และอาหารทะเล",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันเลือดหมูสดตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "chicken-egg",
+    "nameTh": "ไข่ไก่",
+    "nameEn": "Chicken egg, whole, raw",
+    "category": "ไข่และนม",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 143,
+      "proteinG": 12.6,
+      "carbohydrateG": 0.72,
+      "fatG": 9.51,
+      "saturatedFatG": 3.13,
+      "sugarG": 0.37,
+      "fiberG": 0,
+      "sodiumMg": 142,
+      "cholesterolMg": 372
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/171287/nutrients",
+      "foodId": "171287",
+      "matchedDescription": "Egg, whole, raw, fresh",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ไข่ไก่ทั้งฟองสดดิบตามรายการ USDA; ค่าต่อ 100 กรัมของส่วนที่กินได้ ไม่รวมเปลือก"
+  },
+  {
+    "id": "duck-egg",
+    "nameTh": "ไข่เป็ด",
+    "nameEn": "Duck egg, whole, raw",
+    "category": "ไข่และนม",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 185,
+      "proteinG": 12.8,
+      "carbohydrateG": 1.45,
+      "fatG": 13.8,
+      "saturatedFatG": 3.68,
+      "sugarG": 0.93,
+      "fiberG": 0,
+      "sodiumMg": 146,
+      "cholesterolMg": 884
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/172189/nutrients",
+      "foodId": "172189",
+      "matchedDescription": "Egg, duck, whole, fresh, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ไข่เป็ดทั้งฟองสดดิบตามรายการ USDA; ค่าต่อ 100 กรัมของส่วนที่กินได้ ไม่รวมเปลือก"
+  },
+  {
+    "id": "salted-egg",
+    "nameTh": "ไข่เค็ม",
+    "nameEn": "Salted egg, cooked",
+    "category": "ไข่และนม",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันไข่เค็มไทยตามวิธีดองและสภาพปรุงสุก; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "whole-milk",
+    "nameTh": "นมวัวจืด",
+    "nameEn": "Cow's milk, whole, 3.25% fat",
+    "category": "ไข่และนม",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 61,
+      "proteinG": 3.15,
+      "carbohydrateG": 4.78,
+      "fatG": 3.27,
+      "saturatedFatG": 1.86,
+      "sugarG": 5.05,
+      "fiberG": 0,
+      "sodiumMg": 43,
+      "cholesterolMg": 10
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/172217/nutrients",
+      "foodId": "172217",
+      "matchedDescription": "Milk, whole, 3.25% milkfat, without added vitamin A and vitamin D",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ใช้นมโคเต็มมันเนยไม่เติมวิตามินตามรายการ USDA; สูตรนมจืดในไทยอาจมีสัดส่วนไขมันต่างกัน"
+  },
+  {
+    "id": "soy-milk",
+    "nameTh": "นมถั่วเหลือง",
+    "nameEn": "Soymilk, original and vanilla, unfortified",
+    "category": "ไข่และนม",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 54,
+      "proteinG": 3.27,
+      "carbohydrateG": 6.28,
+      "fatG": 1.75,
+      "saturatedFatG": 0.205,
+      "sugarG": 3.99,
+      "fiberG": 0.6,
+      "sodiumMg": 51,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/172446/nutrients",
+      "foodId": "172446",
+      "matchedDescription": "Soymilk, original and vanilla, unfortified",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "รายการ USDA เป็นเครื่องดื่มถั่วเหลืองรส original/vanilla ไม่เสริมสารอาหาร; สูตรไทยอาจมีน้ำตาลหรือส่วนผสมต่างกัน"
+  },
+  {
+    "id": "plain-yogurt",
+    "nameTh": "โยเกิร์ตธรรมชาติ",
+    "nameEn": "Plain yogurt, whole milk",
+    "category": "ไข่และนม",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 61,
+      "proteinG": 3.47,
+      "carbohydrateG": 4.66,
+      "fatG": 3.25,
+      "saturatedFatG": 2.1,
+      "sugarG": 4.66,
+      "fiberG": 0,
+      "sodiumMg": 46,
+      "cholesterolMg": 13
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/171284/nutrients",
+      "foodId": "171284",
+      "matchedDescription": "Yogurt, plain, whole milk",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "โยเกิร์ตรสธรรมชาติจากนมเต็มมันเนยตามรายการ USDA; ไม่ได้แทนสูตรพร่องมันเนย"
+  },
+  {
+    "id": "cheddar-cheese",
+    "nameTh": "ชีสเชดดาร์",
+    "nameEn": "Cheddar cheese, sharp, sliced",
+    "category": "ไข่และนม",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 410,
+      "proteinG": 24.2,
+      "carbohydrateG": 2.13,
+      "fatG": 33.8,
+      "saturatedFatG": 19.4,
+      "sugarG": 0.27,
+      "fiberG": 0,
+      "sodiumMg": 644,
+      "cholesterolMg": 99
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/170899/nutrients",
+      "foodId": "170899",
+      "matchedDescription": "Cheese, cheddar, sharp, sliced",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ใช้เชดดาร์ชีสชนิด sharp แบบแผ่นตามรายการ USDA; ยี่ห้อและความชื้นมีผลต่อค่า"
+  },
+  {
+    "id": "steamed-white-rice",
+    "nameTh": "ข้าวสวย",
+    "nameEn": "White long-grain rice, cooked",
+    "category": "ธัญพืชและแป้ง",
+    "state": "cooked",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 130,
+      "proteinG": 2.69,
+      "carbohydrateG": 28.2,
+      "fatG": 0.28,
+      "saturatedFatG": 0.077,
+      "sugarG": 0.05,
+      "fiberG": 0.4,
+      "sodiumMg": 1,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169757/nutrients",
+      "foodId": "169757",
+      "matchedDescription": "Rice, white, long-grain, regular, unenriched, cooked without salt",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ข้าวขาวเมล็ดยาวหุงสุกไม่เติมเกลือตาม USDA; เป็นค่าอ้างอิง ไม่จำเพาะพันธุ์ข้าวไทย"
+  },
+  {
+    "id": "steamed-sticky-rice",
+    "nameTh": "ข้าวเหนียวนึ่ง",
+    "nameEn": "Glutinous white rice, cooked",
+    "category": "ธัญพืชและแป้ง",
+    "state": "cooked",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 97,
+      "proteinG": 2.02,
+      "carbohydrateG": 21.1,
+      "fatG": 0.19,
+      "saturatedFatG": 0.039,
+      "sugarG": 0.05,
+      "fiberG": 1,
+      "sodiumMg": 5,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169711/nutrients",
+      "foodId": "169711",
+      "matchedDescription": "Rice, white, glutinous, unenriched, cooked",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ข้าวขาวเหนียวสุกตาม USDA; สภาพสุกระบุชัดและไม่เติมเกลือ"
+  },
+  {
+    "id": "cooked-brown-rice",
+    "nameTh": "ข้าวกล้องหุงสุก",
+    "nameEn": "Brown long-grain rice, cooked",
+    "category": "ธัญพืชและแป้ง",
+    "state": "cooked",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 123,
+      "proteinG": 2.74,
+      "carbohydrateG": 25.6,
+      "fatG": 0.97,
+      "saturatedFatG": 0.26,
+      "sugarG": 0.24,
+      "fiberG": 1.6,
+      "sodiumMg": 4,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169704/nutrients",
+      "foodId": "169704",
+      "matchedDescription": "Rice, brown, long-grain, cooked (Includes foods for USDA's Food Distribution Program)",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ข้าวกล้องเมล็ดยาวหุงสุกตาม USDA; ไม่จำเพาะพันธุ์ข้าวกล้องไทย"
+  },
+  {
+    "id": "sen-lek-rice-noodles",
+    "nameTh": "เส้นเล็ก",
+    "nameEn": "Thai rice noodles, cooked",
+    "category": "ธัญพืชและแป้ง",
+    "state": "cooked",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการทางการที่ยืนยันเส้นเล็กไทยและสภาพปรุงสุกตรงกัน; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "sen-yai-rice-noodles",
+    "nameTh": "เส้นใหญ่",
+    "nameEn": "Wide Thai rice noodles, cooked",
+    "category": "ธัญพืชและแป้ง",
+    "state": "cooked",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการทางการที่ยืนยันเส้นใหญ่ไทยสดและสภาพปรุงสุกตรงกัน; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "rice-vermicelli",
+    "nameTh": "เส้นหมี่",
+    "nameEn": "Rice vermicelli, cooked",
+    "category": "ธัญพืชและแป้ง",
+    "state": "cooked",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการทางการที่ยืนยันเส้นหมี่ไทยและสภาพปรุงสุกตรงกัน; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "glass-noodles",
+    "nameTh": "วุ้นเส้น",
+    "nameEn": "Cellophane noodles, mung bean, dry",
+    "category": "ธัญพืชและแป้ง",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 351,
+      "proteinG": 0.16,
+      "carbohydrateG": 86.1,
+      "fatG": 0.06,
+      "saturatedFatG": 0.017,
+      "sugarG": 0,
+      "fiberG": 0.5,
+      "sodiumMg": 10,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/174258/nutrients",
+      "foodId": "174258",
+      "matchedDescription": "Noodles, chinese, cellophane or long rice (mung beans), dehydrated",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ใช้วุ้นเส้นแก้วจากถั่วเขียวแบบแห้งตาม USDA; ระบุสภาพแห้งเพื่อไม่ปะปนกับน้ำหนักหลังแช่"
+  },
+  {
+    "id": "yellow-egg-noodles",
+    "nameTh": "บะหมี่เหลือง",
+    "nameEn": "Egg noodles, enriched, cooked",
+    "category": "ธัญพืชและแป้ง",
+    "state": "cooked",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 138,
+      "proteinG": 4.54,
+      "carbohydrateG": 25.2,
+      "fatG": 2.07,
+      "saturatedFatG": 0.419,
+      "sugarG": 0.4,
+      "fiberG": 1.2,
+      "sodiumMg": 5,
+      "cholesterolMg": 29
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169732/nutrients",
+      "foodId": "169732",
+      "matchedDescription": "Noodles, egg, enriched, cooked",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ใช้เส้นบะหมี่ไข่ปรุงสุกเสริมสารอาหารตามรายการ USDA; ไม่จำเพาะสีเหลืองหรือสูตรบะหมี่ไทย"
+  },
+  {
+    "id": "khanom-chin",
+    "nameTh": "ขนมจีน",
+    "nameEn": "Thai fermented rice noodles, cooked",
+    "category": "ธัญพืชและแป้ง",
+    "state": "cooked",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการทางการที่ยืนยันขนมจีนหมักไทยและสภาพปรุงสุกตรงกัน; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "sen-chan",
+    "nameTh": "เส้นจันท์",
+    "nameEn": "Chanthaburi rice noodles, dry",
+    "category": "ธัญพืชและแป้ง",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการทางการที่ยืนยันเส้นจันท์แห้งตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "white-bread",
+    "nameTh": "ขนมปังขาว",
+    "nameEn": "White bread, commercially prepared",
+    "category": "ธัญพืชและแป้ง",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 266,
+      "proteinG": 8.85,
+      "carbohydrateG": 49.4,
+      "fatG": 3.33,
+      "saturatedFatG": 0.698,
+      "sugarG": 5.67,
+      "fiberG": 2.7,
+      "sodiumMg": 490,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/174924/nutrients",
+      "foodId": "174924",
+      "matchedDescription": "Bread, white, commercially prepared (includes soft bread crumbs)",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ขนมปังขาวผลิตเชิงพาณิชย์ตามรายการ USDA; สูตรและยี่ห้ออาจต่างกัน"
+  },
+  {
+    "id": "rolled-oats",
+    "nameTh": "ข้าวโอ๊ต",
+    "nameEn": "Oats, regular and quick, dry",
+    "category": "ธัญพืชและแป้ง",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 379,
+      "proteinG": 13.2,
+      "carbohydrateG": 67.7,
+      "fatG": 6.52,
+      "saturatedFatG": 1.11,
+      "sugarG": 0.99,
+      "fiberG": 10.1,
+      "sodiumMg": 6,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/173904/nutrients",
+      "foodId": "173904",
+      "matchedDescription": "Cereals, oats, regular and quick, not fortified, dry",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ข้าวโอ๊ต regular/quick แบบแห้ง ไม่เสริมสารอาหารตามรายการ USDA"
+  },
+  {
+    "id": "sweet-potato",
+    "nameTh": "มันเทศ",
+    "nameEn": "Sweet potato, raw",
+    "category": "ธัญพืชและแป้ง",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 86,
+      "proteinG": 1.57,
+      "carbohydrateG": 20.1,
+      "fatG": 0.05,
+      "saturatedFatG": 0.018,
+      "sugarG": 4.18,
+      "fiberG": 3,
+      "sodiumMg": 55,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/168482/nutrients",
+      "foodId": "168482",
+      "matchedDescription": "Sweet potato, raw, unprepared (Includes foods for USDA's Food Distribution Program)",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "มันเทศดิบตามรายการ USDA; สีและสายพันธุ์อาจทำให้ค่าแตกต่าง"
+  },
+  {
+    "id": "potato",
+    "nameTh": "มันฝรั่ง",
+    "nameEn": "Potato, flesh and skin, raw",
+    "category": "ธัญพืชและแป้ง",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 77,
+      "proteinG": 2.05,
+      "carbohydrateG": 17.5,
+      "fatG": 0.09,
+      "saturatedFatG": 0.025,
+      "sugarG": 0.82,
+      "fiberG": 2.1,
+      "sodiumMg": 6,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/170026/nutrients",
+      "foodId": "170026",
+      "matchedDescription": "Potatoes, flesh and skin, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "มันฝรั่งดิบทั้งเนื้อและเปลือกตามรายการ USDA"
+  },
+  {
+    "id": "white-tofu",
+    "nameTh": "เต้าหู้ขาว",
+    "nameEn": "Firm tofu, raw, calcium-set",
+    "category": "ถั่วและเต้าหู้",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 144,
+      "proteinG": 17.3,
+      "carbohydrateG": 2.78,
+      "fatG": 8.72,
+      "saturatedFatG": 1.26,
+      "sugarG": null,
+      "fiberG": 2.3,
+      "sodiumMg": 14,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/172475/nutrients",
+      "foodId": "172475",
+      "matchedDescription": "Tofu, raw, firm, prepared with calcium sulfate",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "partial",
+    "notes": "เต้าหู้เนื้อแน่นทำให้จับตัวด้วยแคลเซียมซัลเฟตตาม USDA; ไม่ใช่เต้าหู้ไทยทุกความแน่น"
+  },
+  {
+    "id": "egg-tofu",
+    "nameTh": "เต้าหู้ไข่",
+    "nameEn": "Egg tofu, cooked",
+    "category": "ถั่วและเต้าหู้",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันเต้าหู้ไข่ไทยและสูตรตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "fried-tofu",
+    "nameTh": "เต้าหู้ทอด",
+    "nameEn": "Fried tofu",
+    "category": "ถั่วและเต้าหู้",
+    "state": "cooked",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 270,
+      "proteinG": 18.8,
+      "carbohydrateG": 8.86,
+      "fatG": 20.2,
+      "saturatedFatG": 2.92,
+      "sugarG": null,
+      "fiberG": 3.9,
+      "sodiumMg": 16,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/174304/nutrients",
+      "foodId": "174304",
+      "matchedDescription": "Tofu, fried, prepared with calcium sulfate",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "partial",
+    "notes": "เต้าหู้ทอดทำจากเต้าหู้แคลเซียมซัลเฟตตาม USDA; น้ำมันที่ใช้ทอดและการสะเด็ดน้ำมีผลต่อค่า"
+  },
+  {
+    "id": "roasted-peanuts",
+    "nameTh": "ถั่วลิสงคั่ว",
+    "nameEn": "Peanuts, dry-roasted, unsalted",
+    "category": "ถั่วและเต้าหู้",
+    "state": "cooked",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 587,
+      "proteinG": 24.4,
+      "carbohydrateG": 21.3,
+      "fatG": 49.7,
+      "saturatedFatG": 7.72,
+      "sugarG": 4.9,
+      "fiberG": 8.4,
+      "sodiumMg": 6,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/173806/nutrients",
+      "foodId": "173806",
+      "matchedDescription": "Peanuts, all types, dry-roasted, without salt",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ถั่วลิสงคั่วแห้งไม่เติมเกลือตาม USDA"
+  },
+  {
+    "id": "mung-beans",
+    "nameTh": "ถั่วเขียว",
+    "nameEn": "Mung beans, mature seeds, raw",
+    "category": "ถั่วและเต้าหู้",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 347,
+      "proteinG": 23.9,
+      "carbohydrateG": 62.6,
+      "fatG": 1.15,
+      "saturatedFatG": 0.348,
+      "sugarG": 6.6,
+      "fiberG": 16.3,
+      "sodiumMg": 15,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/174256/nutrients",
+      "foodId": "174256",
+      "matchedDescription": "Mung beans, mature seeds, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "เมล็ดถั่วเขียวแก่ดิบตาม USDA; ไม่ใช่ถั่วเขียวต้ม"
+  },
+  {
+    "id": "cashews",
+    "nameTh": "เม็ดมะม่วงหิมพานต์",
+    "nameEn": "Cashews, dry-roasted, unsalted",
+    "category": "ถั่วและเต้าหู้",
+    "state": "cooked",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 574,
+      "proteinG": 15.3,
+      "carbohydrateG": 32.7,
+      "fatG": 46.4,
+      "saturatedFatG": 9.16,
+      "sugarG": 5.01,
+      "fiberG": 3,
+      "sodiumMg": 16,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/170571/nutrients",
+      "foodId": "170571",
+      "matchedDescription": "Nuts, cashew nuts, dry roasted, without salt added",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "เม็ดมะม่วงหิมพานต์คั่วแห้งไม่เติมเกลือตาม USDA"
+  },
+  {
+    "id": "napa-cabbage",
+    "nameTh": "ผักกาดขาว",
+    "nameEn": "Chinese cabbage (pe-tsai), raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 16,
+      "proteinG": 1.2,
+      "carbohydrateG": 3.23,
+      "fatG": 0.2,
+      "saturatedFatG": 0.043,
+      "sugarG": 1.41,
+      "fiberG": 1.2,
+      "sodiumMg": 9,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169979/nutrients",
+      "foodId": "169979",
+      "matchedDescription": "Cabbage, chinese (pe-tsai), raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ผักกาดขาว pe-tsai ดิบตาม USDA"
+  },
+  {
+    "id": "lettuce",
+    "nameTh": "ผักกาดหอม",
+    "nameEn": "Green leaf lettuce, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 15,
+      "proteinG": 1.36,
+      "carbohydrateG": 2.87,
+      "fatG": 0.15,
+      "saturatedFatG": 0.02,
+      "sugarG": 0.78,
+      "fiberG": 1.3,
+      "sodiumMg": 28,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169249/nutrients",
+      "foodId": "169249",
+      "matchedDescription": "Lettuce, green leaf, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ผักกาดหอมชนิด green leaf ดิบตาม USDA; ไม่ใช่ผักกาดแก้ว"
+  },
+  {
+    "id": "water-spinach",
+    "nameTh": "ผักบุ้ง",
+    "nameEn": "Water spinach, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันผักบุ้งไทยตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "chinese-kale",
+    "nameTh": "คะน้า",
+    "nameEn": "Chinese kale, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการทางการที่ยืนยันคะน้า Brassica oleracea var. alboglabra; ไม่ใช้ kale หรือ broccoli แทน"
+  },
+  {
+    "id": "bok-choy",
+    "nameTh": "กวางตุ้ง",
+    "nameEn": "Chinese pak-choi, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 13,
+      "proteinG": 1.5,
+      "carbohydrateG": 2.18,
+      "fatG": 0.2,
+      "saturatedFatG": 0.027,
+      "sugarG": 1.18,
+      "fiberG": 1,
+      "sodiumMg": 65,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/170390/nutrients",
+      "foodId": "170390",
+      "matchedDescription": "Cabbage, chinese (pak-choi), raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ใช้ผักกาดจีน pak-choi ดิบตาม USDA; กวางตุ้งไทยอาจเป็นพันธุ์ย่อยต่างกัน"
+  },
+  {
+    "id": "cabbage",
+    "nameTh": "กะหล่ำปลี",
+    "nameEn": "Common cabbage, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 24,
+      "proteinG": 1.21,
+      "carbohydrateG": 5.37,
+      "fatG": 0.18,
+      "saturatedFatG": 0.023,
+      "sugarG": null,
+      "fiberG": 2.3,
+      "sodiumMg": 18,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169335/nutrients",
+      "foodId": "169335",
+      "matchedDescription": "Cabbage, common (danish, domestic, and pointed types), freshly harvest, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "partial",
+    "notes": "กะหล่ำปลี common สดใหม่ดิบตามรายการ USDA"
+  },
+  {
+    "id": "broccoli",
+    "nameTh": "บรอกโคลี",
+    "nameEn": "Broccoli, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 34,
+      "proteinG": 2.82,
+      "carbohydrateG": 6.64,
+      "fatG": 0.37,
+      "saturatedFatG": 0.114,
+      "sugarG": 1.7,
+      "fiberG": 2.6,
+      "sodiumMg": 33,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/170379/nutrients",
+      "foodId": "170379",
+      "matchedDescription": "Broccoli, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "บรอกโคลีดิบตาม USDA"
+  },
+  {
+    "id": "carrot",
+    "nameTh": "แครอท",
+    "nameEn": "Carrots, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 41,
+      "proteinG": 0.93,
+      "carbohydrateG": 9.58,
+      "fatG": 0.24,
+      "saturatedFatG": 0.032,
+      "sugarG": 4.74,
+      "fiberG": 2.8,
+      "sodiumMg": 69,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/170393/nutrients",
+      "foodId": "170393",
+      "matchedDescription": "Carrots, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "แครอทดิบตาม USDA"
+  },
+  {
+    "id": "cucumber",
+    "nameTh": "แตงกวา",
+    "nameEn": "Cucumber with peel, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 15,
+      "proteinG": 0.65,
+      "carbohydrateG": 3.63,
+      "fatG": 0.11,
+      "saturatedFatG": 0.037,
+      "sugarG": 1.67,
+      "fiberG": 0.5,
+      "sodiumMg": 2,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/168409/nutrients",
+      "foodId": "168409",
+      "matchedDescription": "Cucumber, with peel, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "แตงกวาดิบพร้อมเปลือกตาม USDA; พันธุ์ไทยอาจต่างจากรายการอ้างอิง"
+  },
+  {
+    "id": "tomato",
+    "nameTh": "มะเขือเทศ",
+    "nameEn": "Tomatoes, red, ripe, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 18,
+      "proteinG": 0.88,
+      "carbohydrateG": 3.89,
+      "fatG": 0.2,
+      "saturatedFatG": 0.028,
+      "sugarG": 2.63,
+      "fiberG": 1.2,
+      "sodiumMg": 5,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/170457/nutrients",
+      "foodId": "170457",
+      "matchedDescription": "Tomatoes, red, ripe, raw, year round average",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "มะเขือเทศแดงสุกดิบ (raw) ค่าเฉลี่ยตลอดปีตาม USDA"
+  },
+  {
+    "id": "onion",
+    "nameTh": "หอมหัวใหญ่",
+    "nameEn": "Onions, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 40,
+      "proteinG": 1.1,
+      "carbohydrateG": 9.34,
+      "fatG": 0.1,
+      "saturatedFatG": 0.042,
+      "sugarG": 4.24,
+      "fiberG": 1.7,
+      "sodiumMg": 4,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/170000/nutrients",
+      "foodId": "170000",
+      "matchedDescription": "Onions, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "หอมหัวใหญ่ดิบตาม USDA"
+  },
+  {
+    "id": "shallot",
+    "nameTh": "หอมแดง",
+    "nameEn": "Shallots, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 72,
+      "proteinG": 2.5,
+      "carbohydrateG": 16.8,
+      "fatG": 0.1,
+      "saturatedFatG": 0.017,
+      "sugarG": 7.87,
+      "fiberG": 3.2,
+      "sodiumMg": 12,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/170499/nutrients",
+      "foodId": "170499",
+      "matchedDescription": "Shallots, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "shallot ดิบตาม USDA; พันธุ์หอมแดงไทยอาจมีองค์ประกอบต่างกัน"
+  },
+  {
+    "id": "garlic",
+    "nameTh": "กระเทียม",
+    "nameEn": "Garlic, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 149,
+      "proteinG": 6.36,
+      "carbohydrateG": 33.1,
+      "fatG": 0.5,
+      "saturatedFatG": 0.089,
+      "sugarG": 1,
+      "fiberG": 2.1,
+      "sodiumMg": 17,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169230/nutrients",
+      "foodId": "169230",
+      "matchedDescription": "Garlic, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "กระเทียมดิบตาม USDA"
+  },
+  {
+    "id": "bird-eye-chili",
+    "nameTh": "พริกขี้หนู",
+    "nameEn": "Thai bird's eye chili, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการทางการที่ยืนยันพริกขี้หนูไทย (Capsicum annuum) ตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "spur-chili",
+    "nameTh": "พริกชี้ฟ้า",
+    "nameEn": "Thai spur chili, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการทางการที่ยืนยันพริกชี้ฟ้าไทยตรงชนิด; ไม่ใช้พริกหวานหรือพริกต่างสายพันธุ์แทน"
+  },
+  {
+    "id": "holy-basil",
+    "nameTh": "ใบกะเพรา",
+    "nameEn": "Thai holy basil, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันกะเพราไทยตรงชนิด; ไม่ใช้ sweet basil แทน"
+  },
+  {
+    "id": "thai-basil",
+    "nameTh": "ใบโหระพา",
+    "nameEn": "Thai basil, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันโหระพาไทยตรงชนิด; ไม่ใช้ sweet basil แทน"
+  },
+  {
+    "id": "lemongrass",
+    "nameTh": "ตะไคร้",
+    "nameEn": "Lemongrass, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 99,
+      "proteinG": 1.82,
+      "carbohydrateG": 25.3,
+      "fatG": 0.49,
+      "saturatedFatG": 0.119,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": 6,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/168573/nutrients",
+      "foodId": "168573",
+      "matchedDescription": "Lemon grass (citronella), raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "partial",
+    "notes": "ตะไคร้สดตามรายการ USDA"
+  },
+  {
+    "id": "galangal",
+    "nameTh": "ข่า",
+    "nameEn": "Galangal, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันข่าไทยตรงชนิด; ไม่ใช้ขิงแทน"
+  },
+  {
+    "id": "mung-bean-sprouts",
+    "nameTh": "ถั่วงอก",
+    "nameEn": "Mung bean sprouts, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 30,
+      "proteinG": 3.04,
+      "carbohydrateG": 5.94,
+      "fatG": 0.18,
+      "saturatedFatG": 0.046,
+      "sugarG": 4.13,
+      "fiberG": 1.8,
+      "sodiumMg": 6,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169957/nutrients",
+      "foodId": "169957",
+      "matchedDescription": "Mung beans, mature seeds, sprouted, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ถั่วงอกจากเมล็ดถั่วเขียวดิบตามรายการ USDA"
+  },
+  {
+    "id": "yardlong-bean",
+    "nameTh": "ถั่วฝักยาว",
+    "nameEn": "Yardlong bean, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันถั่วฝักยาวไทยตรงชนิด; ไม่ใช้ถั่วแขกแทน"
+  },
+  {
+    "id": "thai-eggplant",
+    "nameTh": "มะเขือเปราะ",
+    "nameEn": "Thai eggplant, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการทางการที่ยืนยันมะเขือเปราะไทยตรงชนิด; ไม่ใช้มะเขือม่วงแทน"
+  },
+  {
+    "id": "long-eggplant",
+    "nameTh": "มะเขือยาว",
+    "nameEn": "Thai long eggplant, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการทางการที่ยืนยันมะเขือยาวไทยตรงชนิด; ไม่ใช้มะเขือม่วงพันธุ์อื่นแทน"
+  },
+  {
+    "id": "pumpkin",
+    "nameTh": "ฟักทอง",
+    "nameEn": "Pumpkin, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 26,
+      "proteinG": 1,
+      "carbohydrateG": 6.5,
+      "fatG": 0.1,
+      "saturatedFatG": 0.052,
+      "sugarG": 2.76,
+      "fiberG": 0.5,
+      "sodiumMg": 1,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/168448/nutrients",
+      "foodId": "168448",
+      "matchedDescription": "Pumpkin, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ฟักทองดิบตามรายการ USDA; สายพันธุ์ฟักทองไทยอาจต่างจากตัวอย่าง"
+  },
+  {
+    "id": "green-papaya",
+    "nameTh": "มะละกอดิบ",
+    "nameEn": "Green papaya, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการทางการที่แยกมะละกอดิบจากมะละกอสุกตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "straw-mushroom",
+    "nameTh": "เห็ดฟาง",
+    "nameEn": "Straw mushrooms, canned, drained",
+    "category": "ผัก",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 32,
+      "proteinG": 3.83,
+      "carbohydrateG": 4.64,
+      "fatG": 0.68,
+      "saturatedFatG": 0.089,
+      "sugarG": null,
+      "fiberG": 2.5,
+      "sodiumMg": 384,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/168582/nutrients",
+      "foodId": "168582",
+      "matchedDescription": "Mushrooms, straw, canned, drained solids",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "partial",
+    "notes": "เห็ดฟางกระป๋องสะเด็ดน้ำตามรายการ USDA; ไม่ใช่เห็ดฟางสด"
+  },
+  {
+    "id": "oyster-mushroom",
+    "nameTh": "เห็ดนางฟ้า",
+    "nameEn": "Oyster mushroom, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 33,
+      "proteinG": 3.31,
+      "carbohydrateG": 6.09,
+      "fatG": 0.41,
+      "saturatedFatG": 0.062,
+      "sugarG": 1.11,
+      "fiberG": 2.3,
+      "sodiumMg": 18,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/168580/nutrients",
+      "foodId": "168580",
+      "matchedDescription": "Mushrooms, oyster, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "เห็ด oyster ดิบตามรายการ USDA; ชนิดเห็ดนางฟ้าไทยอาจต่างจากสายพันธุ์ที่ใช้ในแหล่งข้อมูล"
+  },
+  {
+    "id": "baby-corn",
+    "nameTh": "ข้าวโพดอ่อน",
+    "nameEn": "Baby corn, raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันข้าวโพดอ่อนไทยตรงชนิด; ไม่ใช้ข้าวโพดหวานแก่แทน"
+  },
+  {
+    "id": "coriander",
+    "nameTh": "ผักชี",
+    "nameEn": "Coriander leaves (cilantro), raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 23,
+      "proteinG": 2.13,
+      "carbohydrateG": 3.67,
+      "fatG": 0.52,
+      "saturatedFatG": 0.014,
+      "sugarG": 0.87,
+      "fiberG": 2.8,
+      "sodiumMg": 46,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169997/nutrients",
+      "foodId": "169997",
+      "matchedDescription": "Coriander (cilantro) leaves, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ใบผักชีดิบตาม USDA"
+  },
+  {
+    "id": "scallion",
+    "nameTh": "ต้นหอม",
+    "nameEn": "Spring onion (scallion), raw",
+    "category": "ผัก",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 32,
+      "proteinG": 1.83,
+      "carbohydrateG": 7.34,
+      "fatG": 0.19,
+      "saturatedFatG": 0.032,
+      "sugarG": 2.33,
+      "fiberG": 2.6,
+      "sodiumMg": 16,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/170005/nutrients",
+      "foodId": "170005",
+      "matchedDescription": "Onions, spring or scallions (includes tops and bulb), raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ต้นหอมดิบรวมส่วนยอดและหัวตาม USDA"
+  },
+  {
+    "id": "ripe-mango",
+    "nameTh": "มะม่วงสุก",
+    "nameEn": "Mango, raw",
+    "category": "ผลไม้",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 60,
+      "proteinG": 0.82,
+      "carbohydrateG": 15,
+      "fatG": 0.38,
+      "saturatedFatG": 0.092,
+      "sugarG": 13.7,
+      "fiberG": 1.6,
+      "sodiumMg": 1,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169910/nutrients",
+      "foodId": "169910",
+      "matchedDescription": "Mangos, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "มะม่วงดิบตามคำอธิบาย record USDA ไม่ระบุพันธุ์หรือระดับความสุก; ค่าอ้างอิงจึงไม่จำเพาะพันธุ์ไทย"
+  },
+  {
+    "id": "namwa-banana",
+    "nameTh": "กล้วยน้ำว้า",
+    "nameEn": "Namwa banana, raw",
+    "category": "ผลไม้",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ระบุพันธุ์กล้วยน้ำว้า; ไม่ใช้กล้วยสายพันธุ์อื่นแทน"
+  },
+  {
+    "id": "ripe-papaya",
+    "nameTh": "มะละกอสุก",
+    "nameEn": "Papaya, raw",
+    "category": "ผลไม้",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 43,
+      "proteinG": 0.47,
+      "carbohydrateG": 10.8,
+      "fatG": 0.26,
+      "saturatedFatG": 0.081,
+      "sugarG": 7.82,
+      "fiberG": 1.7,
+      "sodiumMg": 8,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169926/nutrients",
+      "foodId": "169926",
+      "matchedDescription": "Papayas, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "มะละกอดิบตาม USDA ไม่ระบุพันธุ์หรือระดับความสุก; ค่าอ้างอิงไม่จำเพาะพันธุ์ไทย"
+  },
+  {
+    "id": "pineapple",
+    "nameTh": "สับปะรด",
+    "nameEn": "Pineapple, raw, all varieties",
+    "category": "ผลไม้",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 50,
+      "proteinG": 0.54,
+      "carbohydrateG": 13.1,
+      "fatG": 0.12,
+      "saturatedFatG": 0.009,
+      "sugarG": 9.85,
+      "fiberG": 1.4,
+      "sodiumMg": 1,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169124/nutrients",
+      "foodId": "169124",
+      "matchedDescription": "Pineapple, raw, all varieties",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "สับปะรดสดทุกพันธุ์ตามรายการ USDA"
+  },
+  {
+    "id": "watermelon",
+    "nameTh": "แตงโม",
+    "nameEn": "Watermelon, raw",
+    "category": "ผลไม้",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 30,
+      "proteinG": 0.61,
+      "carbohydrateG": 7.55,
+      "fatG": 0.15,
+      "saturatedFatG": 0.016,
+      "sugarG": 6.2,
+      "fiberG": 0.4,
+      "sodiumMg": 1,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/167765/nutrients",
+      "foodId": "167765",
+      "matchedDescription": "Watermelon, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "แตงโมดิบตาม USDA"
+  },
+  {
+    "id": "mandarin-orange",
+    "nameTh": "ส้มเขียวหวาน",
+    "nameEn": "Mandarin orange (tangerine), raw",
+    "category": "ผลไม้",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 53,
+      "proteinG": 0.81,
+      "carbohydrateG": 13.3,
+      "fatG": 0.31,
+      "saturatedFatG": 0.039,
+      "sugarG": 10.6,
+      "fiberG": 1.8,
+      "sodiumMg": 2,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169105/nutrients",
+      "foodId": "169105",
+      "matchedDescription": "Tangerines, (mandarin oranges), raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ส้มแมนดาริน/tangerine ดิบตาม USDA; ไม่จำเพาะพันธุ์ส้มเขียวหวานไทย"
+  },
+  {
+    "id": "guava",
+    "nameTh": "ฝรั่ง",
+    "nameEn": "Common guava, raw",
+    "category": "ผลไม้",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 68,
+      "proteinG": 2.55,
+      "carbohydrateG": 14.3,
+      "fatG": 0.95,
+      "saturatedFatG": 0.272,
+      "sugarG": 8.92,
+      "fiberG": 5.4,
+      "sodiumMg": 2,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/173044/nutrients",
+      "foodId": "173044",
+      "matchedDescription": "Guavas, common, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ฝรั่ง common ดิบตาม USDA; พันธุ์ไทยอาจต่างจากรายการอ้างอิง"
+  },
+  {
+    "id": "lime",
+    "nameTh": "มะนาว",
+    "nameEn": "Thai lime, raw",
+    "category": "ผลไม้",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันมะนาวไทยทั้งผลตรงชนิด; ไม่ใช้ค่าน้ำมะนาวแทน"
+  },
+  {
+    "id": "longan",
+    "nameTh": "ลำไย",
+    "nameEn": "Longan, raw",
+    "category": "ผลไม้",
+    "state": "raw",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 60,
+      "proteinG": 1.31,
+      "carbohydrateG": 15.1,
+      "fatG": 0.1,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": 1.1,
+      "sodiumMg": 0,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169089/nutrients",
+      "foodId": "169089",
+      "matchedDescription": "Longans, raw",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "partial",
+    "notes": "ลำไยสดตาม USDA; ไม่ใช่ลำไยอบแห้ง"
+  },
+  {
+    "id": "coconut-water",
+    "nameTh": "มะพร้าวน้ำหอม",
+    "nameEn": "Coconut water, unsweetened, ready-to-drink",
+    "category": "ผลไม้",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 18,
+      "proteinG": 0.22,
+      "carbohydrateG": 4.24,
+      "fatG": 0,
+      "saturatedFatG": 0,
+      "sugarG": 3.92,
+      "fiberG": 0,
+      "sodiumMg": 26,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/174831/nutrients",
+      "foodId": "174831",
+      "matchedDescription": "Beverages, Coconut water, ready-to-drink, unsweetened",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "น้ำมะพร้าวพร้อมดื่มไม่เติมน้ำตาลตาม USDA; ไม่จำเพาะมะพร้าวน้ำหอมไทย"
+  },
+  {
+    "id": "fish-sauce",
+    "nameTh": "น้ำปลา",
+    "nameEn": "Fish sauce, ready-to-serve",
+    "category": "เครื่องปรุง",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 35,
+      "proteinG": 5.06,
+      "carbohydrateG": 3.64,
+      "fatG": 0.01,
+      "saturatedFatG": 0.003,
+      "sugarG": 3.64,
+      "fiberG": 0,
+      "sodiumMg": 7850,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/174531/nutrients",
+      "foodId": "174531",
+      "matchedDescription": "Sauce, fish, ready-to-serve",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "น้ำปลาพร้อมเสิร์ฟตาม USDA; ความเค็มและสูตรยี่ห้อไทยอาจแตกต่าง"
+  },
+  {
+    "id": "light-soy-sauce",
+    "nameTh": "ซีอิ๊วขาว",
+    "nameEn": "Soy sauce (shoyu)",
+    "category": "เครื่องปรุง",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 53,
+      "proteinG": 8.14,
+      "carbohydrateG": 4.93,
+      "fatG": 0.57,
+      "saturatedFatG": 0.073,
+      "sugarG": 0.4,
+      "fiberG": 0.8,
+      "sodiumMg": 5490,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/174277/nutrients",
+      "foodId": "174277",
+      "matchedDescription": "Soy sauce made from soy and wheat (shoyu)",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ซีอิ๊วหมักจากถั่วเหลืองและข้าวสาลีตาม USDA; ไม่จำเพาะสูตรซีอิ๊วขาวไทย"
+  },
+  {
+    "id": "oyster-sauce",
+    "nameTh": "ซอสหอยนางรม",
+    "nameEn": "Oyster sauce, ready-to-serve",
+    "category": "เครื่องปรุง",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 51,
+      "proteinG": 1.35,
+      "carbohydrateG": 10.9,
+      "fatG": 0.25,
+      "saturatedFatG": 0.043,
+      "sugarG": 0,
+      "fiberG": 0.3,
+      "sodiumMg": 2730,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/174529/nutrients",
+      "foodId": "174529",
+      "matchedDescription": "Sauce, oyster, ready-to-serve",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ซอสหอยนางรมพร้อมเสิร์ฟตาม USDA; สูตรยี่ห้อไทยอาจต่างกัน"
+  },
+  {
+    "id": "granulated-sugar",
+    "nameTh": "น้ำตาลทราย",
+    "nameEn": "Granulated sugar",
+    "category": "เครื่องปรุง",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 387,
+      "proteinG": 0,
+      "carbohydrateG": 100,
+      "fatG": 0,
+      "saturatedFatG": 0,
+      "sugarG": 99.8,
+      "fiberG": 0,
+      "sodiumMg": 1,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/169655/nutrients",
+      "foodId": "169655",
+      "matchedDescription": "Sugars, granulated",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "น้ำตาลทรายตามรายการ USDA"
+  },
+  {
+    "id": "soybean-oil",
+    "nameTh": "น้ำมันพืช",
+    "nameEn": "Soybean oil, salad or cooking",
+    "category": "เครื่องปรุง",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 884,
+      "proteinG": 0,
+      "carbohydrateG": 0,
+      "fatG": 100,
+      "saturatedFatG": 15.6,
+      "sugarG": 0,
+      "fiberG": 0,
+      "sodiumMg": 0,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/171411/nutrients",
+      "foodId": "171411",
+      "matchedDescription": "Oil, soybean, salad or cooking",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "verified",
+    "notes": "ใช้น้ำมันถั่วเหลืองเป็นตัวอย่างน้ำมันพืชตาม USDA; ไม่แทนน้ำมันปาล์มหรือน้ำมันชนิดอื่น"
+  },
+  {
+    "id": "coconut-milk",
+    "nameTh": "กะทิ",
+    "nameEn": "Coconut milk, canned",
+    "category": "เครื่องปรุง",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; รายการอ้างอิง USDA ระบุสภาพและรายละเอียดตามชื่อภาษาอังกฤษ",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": 197,
+      "proteinG": 2.02,
+      "carbohydrateG": 2.81,
+      "fatG": 21.3,
+      "saturatedFatG": 18.9,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": 13,
+      "cholesterolMg": 0
+    },
+    "source": {
+      "provider": "USDA FoodData Central",
+      "title": "USDA SR Legacy (April 2018)",
+      "url": "https://fdc.nal.usda.gov/food-details/170173/nutrients",
+      "foodId": "170173",
+      "matchedDescription": "Nuts, coconut milk, canned (liquid expressed from grated meat and water)",
+      "retrievedAt": "2026-10-06"
+    },
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "partial",
+    "notes": "กะทิกระป๋องตาม USDA; ไม่ใช่กะทิคั้นสดและอาจมีไขมันต่างกัน"
+  },
+  {
+    "id": "roasted-chili-paste",
+    "nameTh": "น้ำพริกเผา",
+    "nameEn": "Thai roasted chili paste",
+    "category": "เครื่องปรุง",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันน้ำพริกเผาไทยตามสูตรตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  },
+  {
+    "id": "red-curry-paste",
+    "nameTh": "พริกแกงเผ็ด",
+    "nameEn": "Thai red curry paste",
+    "category": "เครื่องปรุง",
+    "state": "processed",
+    "referenceBasis": "ส่วนที่กินได้ 100 กรัม; ยังไม่มีรายการแหล่งข้อมูลที่ยืนยันตรงชนิด",
+    "referenceGrams": 100,
+    "nutrients": {
+      "energyKcal": null,
+      "proteinG": null,
+      "carbohydrateG": null,
+      "fatG": null,
+      "saturatedFatG": null,
+      "sugarG": null,
+      "fiberG": null,
+      "sodiumMg": null,
+      "cholesterolMg": null
+    },
+    "source": null,
+    "image": {
+      "imageUrl": "/images/catalog/placeholder.svg",
+      "photographer": "",
+      "sourceUrl": "",
+      "source": "Placeholder",
+      "license": "Original placeholder"
+    },
+    "needsImage": true,
+    "dataStatus": "unmatched",
+    "notes": "ยังไม่มีรายการ USDA/INMUCAL ที่ยืนยันพริกแกงเผ็ดไทยตามสูตรตรงชนิด; เว้นค่าสารอาหารทั้งหมดเป็น null"
+  }
+]

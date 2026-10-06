@@ -45,6 +45,7 @@ const { default: PublicProfilePage, PublicProfileView } = loadUiModule(path.join
 const { default: ProfileSettings, savedProfileFields, validateProfileFields } = loadUiModule(path.join(sourceRoot, "ProfileSettings"));
 const { default: CommunityPage, CommunityPost } = loadUiModule(path.join(sourceRoot, "CommunityPage"));
 const { default: AuthorProfileLink, AuthorProfileCard, profileCardPosition } = loadUiModule(path.join(sourceRoot, "AuthorProfileLink"));
+const { CatalogGrid, filterCatalog, ImageCredits } = loadUiModule(path.join(sourceRoot, "Catalog"));
 const user = { id: "ui-fixture-user", name: "สมาชิกทดสอบ", role: "admin" };
 const noop = () => {};
 const siteFixture = () => structuredClone(defaultSite);
@@ -78,22 +79,42 @@ test("saved branding, page copy and image icons reach the login page and dashboa
   assert.ok(home.includes('src="https://assets.example.com/edited-hero.png"'));
 });
 
-test("saved meal values, nutrition goals and newly added categories appear together", t => {
-  const meal = { id: "edited-meal", name: "ซุปพิเศษของเรา", tag: "หมวดใหม่จากแอดมิน", calories: 321, protein: 42, carbs: 17, fat: 9, emoji: "🍲", color: "#fedcba", photo: "" };
-  withStorage(t, JSON.stringify([meal]));
+test("legacy site meals stay removed while the dashboard catalog and nutrition tracker remain", t => {
+  const legacyMeal = { id: "old-menu-item", name: "เมนูเก่าที่ต้องไม่แสดง", tag: "หมวดเดิม", calories: 321, protein: 42, carbs: 17, fat: 9 };
+  withStorage(t, "[]");
   const site = siteFixture();
-  site.meals = [meal];
+  site.meals = [legacyMeal];
   site.goals = { calories: 642, protein: 84, carbs: 34, fat: 18 };
-  site.copy.dashboard.proteinLabel = "โปรตีนที่ปรับแล้ว";
+  site.copy.dashboard.menuTitle = "เมนูจากคลัง";
   site.guides = [{ id: "edited-guide", title: "คู่มือใหม่", text: "รายละเอียดจากแอดมิน" }];
   const html = dashboard(site);
-  assert.ok(html.includes("ซุปพิเศษของเรา"));
-  assert.match(html, /<button[^>]*>หมวดใหม่จากแอดมิน<\/button>/);
-  for (const value of ["321 kcal", "42g", "17g", "9g", "84g", "50%", "โปรตีนที่ปรับแล้ว", "🍲", "คู่มือใหม่", "รายละเอียดจากแอดมิน"]) {
+  assert.ok(html.includes('id="menu"'));
+  assert.ok(html.includes("เมนูจากคลัง"));
+  assert.ok(html.includes("84g"));
+  assert.ok(html.includes("0%"));
+  assert.ok(!html.includes("เมนูเก่าที่ต้องไม่แสดง"));
+  for (const value of ["คู่มือใหม่", "รายละเอียดจากแอดมิน"]) {
     assert.ok(html.includes(value), `the rendered dashboard must include ${value}`);
   }
-  assert.equal((html.match(/style="width:50%"/g) || []).length, 3);
-  assert.ok(!html.includes(defaultSite.meals[0].name));
+});
+
+test("catalog cards provide search, category filtering, placeholders, credits, and the nutrition disclaimer", () => {
+  const ingredients = [
+    { id: "pork", nameTh: "หมูสับ", nameEn: "Ground pork", category: "เนื้อสัตว์", state: "raw", nutrients: { energyKcal: 200 }, referenceGrams: 100, image: { imageUrl: "/images/catalog/placeholder.svg" }, needsImage: true },
+    { id: "rice", nameTh: "ข้าวสวย", nameEn: "Cooked rice", category: "ธัญพืช", state: "cooked", nutrients: { energyKcal: 130 }, referenceGrams: 100, image: { imageUrl: "/images/catalog/placeholder.svg" }, needsImage: true },
+  ];
+  assert.deepEqual(filterCatalog(ingredients, "ground", ""), [ingredients[0]]);
+  assert.deepEqual(filterCatalog(ingredients, "", "ธัญพืช"), [ingredients[1]]);
+  const recipe = { id: "kaprao", nameTh: "กะเพราหมู", nameEn: "Pork basil stir-fry", category: "ตามสั่ง", servingGrams: 350, nutrients: { energyKcal: null }, ingredients: [], image: { imageUrl: "/images/catalog/placeholder.svg" }, needsImage: true };
+  const catalog = { ingredients, recipes: [recipe] };
+  const html = render(CatalogGrid, siteFixture(), { catalog });
+  assert.ok(html.includes('type="search"'));
+  assert.ok(html.includes("<option value=\"ตามสั่ง\">ตามสั่ง</option>"));
+  assert.ok(html.includes("กะเพราหมู"));
+  assert.ok(html.includes("/images/catalog/placeholder.svg"));
+  assert.ok(html.includes("ค่าโภชนาการเป็นค่าประมาณ"));
+  const credits = render(ImageCredits, siteFixture(), { catalog });
+  assert.equal((credits.match(/รูปสำรอง · ยังไม่มีรูปที่ตรวจสอบแล้ว/g) || []).length, 3);
 });
 
 test("saved copy is escaped and damaged local nutrition history does not break rendering", t => {

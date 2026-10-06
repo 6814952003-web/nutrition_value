@@ -24,6 +24,7 @@ app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 app.use("/api/uploads", require("./routes/upload.routes"));
 // Site settings must always be read fresh, including temporary service errors.
 app.use("/api/site", (req, res, next) => { res.set("Cache-Control", "no-store"); next(); });
+app.use("/api/catalog", (req, res, next) => { res.set("Cache-Control", "no-store"); next(); });
 app.use("/api/profiles", (req, res, next) => { res.set("Cache-Control", "no-store"); next(); });
 app.use("/api", async (req, res, next) => {
   if (!await connectDB()) return res.status(503).json({ message: "Database is unavailable. Please try again in a moment." });
@@ -34,6 +35,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/profiles", require("./routes/profile.routes"));
 app.use("/api/posts", postRoutes);
 app.use("/api/site", require("./routes/site.routes"));
+app.use("/api/catalog", require("./routes/catalog.routes"));
 
 // 3. Error handling — must be LAST
 app.use(notFound);

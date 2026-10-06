@@ -21,6 +21,12 @@ export const request = async (path, options = {}) => {
 export const api = {
   health: () => request("/health", { auth: false }),
   site: () => request("/site", { auth: false }),
+  catalog: (options) => request("/catalog", { ...options, auth: false }),
+  catalogCredits: (options) => request("/catalog/credits", { ...options, auth: false }),
+  saveCatalogItem: (kind, id, revision, item, create = false) => request(`/catalog/${kind}${create ? "" : `/${encodeURIComponent(id)}`}`, {
+    method: create ? "POST" : "PATCH", body: JSON.stringify({ revision, [kind === "ingredients" ? "ingredient" : "recipe"]: item }),
+  }),
+  deleteCatalogItem: (kind, id, revision) => request(`/catalog/${kind}/${encodeURIComponent(id)}`, { method: "DELETE", body: JSON.stringify({ revision }) }),
   saveSite: (data) => request("/site", { method: "PUT", body: JSON.stringify(data) }),
   register: (data) => request("/users/register", { auth: false, method: "POST", body: JSON.stringify(data) }),
   login: (data) => request("/users/login", { auth: false, method: "POST", body: JSON.stringify(data) }),

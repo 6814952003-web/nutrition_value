@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { BrandLogo, SiteSymbol, useSite } from "./SiteContext";
+import Catalog from "./Catalog";
 
 function readToday() {
   try {
@@ -9,15 +10,11 @@ function readToday() {
 }
 
 export default function Dashboard({ user, logout, openAccount, openAdmin, community }) {
-  const { brand, meals, guides, goals, icons, copy: { dashboard: c } } = useSite();
+  const { brand, guides, goals, icons, copy: { dashboard: c } } = useSite();
   const [today, setToday] = useState(readToday);
-  const [filter, setFilter] = useState("");
   const [bmi, setBmi] = useState(null);
   useEffect(() => { localStorage.setItem("nouri-today", JSON.stringify(today)); }, [today]);
   const total = useMemo(() => today.reduce((a, m) => ({ calories: a.calories + m.calories, protein: a.protein + m.protein, carbs: a.carbs + m.carbs, fat: a.fat + m.fat }), { calories: 0, protein: 0, carbs: 0, fat: 0 }), [today]);
-  const tags = [...new Set(meals.map(m => m.tag))];
-  const effectiveFilter = tags.includes(filter) ? filter : "";
-  const items = effectiveFilter ? meals.filter(m => m.tag === effectiveFilter) : meals;
   const percentage = key => Math.min(100, Math.round(total[key] / goals[key] * 100));
   const pct = percentage("protein");
   const displayNumber = n => Math.round(n * 10) / 10;
@@ -39,8 +36,7 @@ export default function Dashboard({ user, logout, openAccount, openAdmin, commun
         <div className="rounded-[2rem] bg-white/85 p-7 shadow-lg ring-1 ring-[#dfe7dd]"><div className="flex items-center justify-between gap-4"><div><p className="text-slate-500">{c.proteinToday}</p><p className="mt-1 text-5xl font-bold">{displayNumber(total.protein)}g</p><small className="text-slate-500">{c.goalLabel} {goals.protein}g</small></div><div className="grid h-28 w-28 shrink-0 place-items-center rounded-full" style={{ background: `conic-gradient(var(--forest) ${pct * 3.6}deg,var(--sage) 0)` }}><div className="grid h-20 w-20 place-items-center rounded-full bg-white font-bold text-[var(--forest)]">{pct}%</div></div></div><div className="mt-8 grid gap-5 sm:grid-cols-3"><Metric label={c.caloriesLabel} value={`${displayNumber(total.calories)} kcal`} percent={percentage("calories")}/><Metric label={c.carbsLabel} value={`${displayNumber(total.carbs)}g`} percent={percentage("carbs")}/><Metric label={c.fatLabel} value={`${displayNumber(total.fat)}g`} percent={percentage("fat")}/></div></div>
       </section>
       <section id="menu" className="bg-white/70 px-6 py-16"><div className="mx-auto max-w-7xl"><div className="flex flex-wrap items-end justify-between gap-5"><div><p className="text-xs font-bold tracking-[.2em] text-[var(--forest)]">{c.menuEyebrow}</p><h2 className="mt-3 text-4xl font-bold">{c.menuTitle} <i className="font-serif text-[var(--forest)]">{c.menuHighlight}</i></h2></div><p className="max-w-sm whitespace-pre-line leading-6 text-slate-500">{c.menuDescription}</p></div>
-        <div className="mt-8 flex flex-wrap gap-2">{["", ...tags].map(tag => <button key={tag} onClick={() => setFilter(tag)} className={`rounded-full px-4 py-2 text-sm font-medium ${effectiveFilter === tag ? "bg-[var(--forest)] text-white shadow-lg" : "border border-[#d9dfd7] bg-white text-slate-600"}`}>{tag || c.allFilter}</button>)}</div>
-        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{items.map(meal => <article key={meal.id} className="meal-card group overflow-hidden rounded-[1.6rem] border border-[#d9dfd7] bg-white/80 shadow-lg"><div className="meal-visual" style={{ backgroundColor: meal.color }}>{meal.photo ? <img src={meal.photo} alt={meal.name} loading="lazy" className="h-full w-full object-cover"/> : <span>{meal.emoji}</span>}</div><div className="p-5"><span className="rounded-full bg-[var(--sage)] px-3 py-1 text-xs font-semibold text-[var(--forest)]">{meal.tag}</span><div className="mt-4 flex justify-between gap-3"><h3 className="text-xl font-bold">{meal.name}</h3><span className="whitespace-nowrap text-xs text-slate-500">{meal.calories} kcal</span></div><p className="mt-3 text-sm text-slate-500">{c.proteinLabel} {meal.protein}g · {c.carbsLabel} {meal.carbs}g · {c.fatLabel} {meal.fat}g</p><button onClick={() => setToday(current => [...current, meal])} className="mt-5 w-full rounded-xl bg-[var(--forest)] py-2.5 text-sm font-bold text-white">{c.addMealButton}</button></div></article>)}</div>{!items.length && <p className="py-12 text-center text-slate-500">{c.emptyMeals}</p>}
+        <Catalog onAddRecipe={recipe => setToday(current => [...current, { id: recipe.id, name: recipe.nameTh, calories: recipe.nutrients.energyKcal, protein: recipe.nutrients.proteinG, carbs: recipe.nutrients.carbohydrateG, fat: recipe.nutrients.fatG }])}/>
       </div></section>
       {community && <section id="community" className="scroll-mt-28 border-y border-[#d9dfd7] bg-[var(--bg-ivory)] px-4 py-12 sm:px-6 sm:py-16"><div className="mx-auto max-w-4xl">{community}</div></section>}
       <section className="mx-auto grid max-w-7xl gap-10 px-6 py-16 lg:grid-cols-2">

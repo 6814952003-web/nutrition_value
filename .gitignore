@@ -1,4 +1,5 @@
 node_modules/
+.catalog-research/
 dist/
 .vercel/
 .env*

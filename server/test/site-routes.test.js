@@ -102,7 +102,7 @@ test("production without a signing secret reports a service error before any dat
   assert.equal(storage.update.mock.callCount(), 0);
 });
 
-test("admin settings are persisted and returned by new public requests", async t => {
+test("admin settings are persisted and returned without legacy site meal data", async t => {
   authenticateFixtures(t);
   const storage = fixtureStorage(t);
   const config = structuredClone(defaults);
@@ -110,11 +110,11 @@ test("admin settings are persisted and returned by new public requests", async t
   config.copy.dashboard.heroTitle = "อาหารสำหรับทุกวัน";
   config.icons.user = "🧑‍🍳";
   config.icons.spark = "https://images.example.com/spark.png";
-  config.meals[0].calories = 420;
   const firstResponse = await request("PUT", { ...config, revision: 0 }, "admin");
   assert.equal(firstResponse.status, 200);
   const saved = await firstResponse.json();
   assert.equal(saved.revision, 1);
+  assert.deepEqual(saved.meals, []);
   assert.equal(saved.updatedAt, "2026-10-06T08:00:00.000Z");
   assert.equal(storage.create.mock.calls[0].arguments[0]._id, "public-site");
   assert.deepEqual(await (await request()).json(), saved);
@@ -143,21 +143,16 @@ test("site validation rejects unsafe URLs, CSS, unknown keys, oversized values a
   const mutations = [
     config => { config.brand.logoUrl = "javascript:alert(1)"; },
     config => { config.brand.faviconUrl = "data:image/svg+xml,<svg>"; },
-    config => { config.meals[0].photo = "http://images.example.com/image.png"; },
-    config => { config.meals[0].photo = "https://user:secret@example.com/image.png"; },
+    config => { config.meals = [{ id: "legacy-meal", name: "Old menu" }]; },
     config => { config.theme.primary = "red; background:url(javascript:alert(1))"; },
     config => { config.theme.accent = "#GG00FF"; },
     config => { config.icons.user = "<script>alert(1)</script>"; },
     config => { config.icons.hero = "x".repeat(10000); },
     config => { config.goals.protein = 0; },
     config => { config.goals.calories = "2000"; },
-    config => { config.meals[0].fat = -1; },
-    config => { config.meals[0].protein = null; },
-    config => { config.meals[0].name = "x".repeat(121); },
     config => { config.copy.auth.loginTitle = "x".repeat(3001); },
     config => { config.copy.auth.unknownLabel = "unknown"; },
     config => { config.extra = "unknown"; },
-    config => { config.meals[1].id = config.meals[0].id; },
     config => { config.guides = Array.from({ length: 41 }, (_, id) => ({ id: `guide-${id}`, title: "Title", text: "Text" })); },
   ];
   for (const mutate of mutations) {
@@ -172,7 +167,7 @@ test("site validation rejects unsafe URLs, CSS, unknown keys, oversized values a
 });
 
 test("older documents safely merge newly shipped defaults and discard invalid fields", async t => {
-  const oldConfig = { brand: { name: "Existing brand", logoUrl: "javascript:bad" }, copy: { auth: { loginTitle: "Existing title" } }, theme: { primary: "red" }, unknown: "removed" };
+  const oldConfig = { brand: { name: "Existing brand", logoUrl: "javascript:bad" }, copy: { auth: { loginTitle: "Existing title" } }, theme: { primary: "red" }, meals: [{ id: "legacy-meal", name: "Old menu" }], unknown: "removed" };
   t.mock.method(Site, "findById", () => ({ lean: async () => ({ config: oldConfig, revision: 3, updatedAt: "2026-10-06T08:00:00.000Z" }) }));
   const site = await (await request()).json();
   assert.equal(site.brand.name, "Existing brand");
@@ -180,6 +175,7 @@ test("older documents safely merge newly shipped defaults and discard invalid fi
   assert.equal(site.copy.auth.loginTitle, "Existing title");
   assert.equal(site.copy.auth.registerTitle, defaults.copy.auth.registerTitle);
   assert.equal(site.theme.primary, defaults.theme.primary);
+  assert.deepEqual(site.meals, []);
   assert.equal(site.unknown, undefined);
   const { revision, updatedAt, ...config } = site;
   assert.equal(validateSiteConfig(config), true);

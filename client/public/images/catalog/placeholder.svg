@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600" role="img" aria-labelledby="title desc">
+  <title id="title">รอรูปภาพที่ตรงกับรายการ</title><desc id="desc">รูปสำรองสำหรับวัตถุดิบและเมนูที่ยังไม่มีภาพที่ตรวจสอบแล้ว</desc>
+  <rect width="900" height="600" fill="#edf0e5"/><rect x="24" y="24" width="852" height="552" rx="24" fill="none" stroke="#cad2be" stroke-width="2"/>
+  <g fill="none" stroke="#426451" stroke-width="8" stroke-linecap="round"><circle cx="450" cy="245" r="78"/><circle cx="450" cy="245" r="54"/><path d="M320 172v60m-15-60v40c0 18 30 18 30 0v-40m-15 62v85m260-145v145m0-145c-26 20-28 54 0 61"/></g>
+  <text x="450" y="394" text-anchor="middle" fill="#426451" font-family="Tahoma, sans-serif" font-size="28">รอรูปภาพที่ตรงกับรายการ</text>
+  <text x="450" y="438" text-anchor="middle" fill="#788670" font-family="Tahoma, sans-serif" font-size="18">NOURI</text>
+</svg>

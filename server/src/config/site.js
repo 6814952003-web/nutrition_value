@@ -20,10 +20,6 @@ const identifier = { kind: "string", valid: value => /^[a-zA-Z0-9_-]{1,64}$/.tes
 const number = positive => ({ kind: "number", valid: value => Number.isFinite(value) && value <= 1_000_000 && (positive ? value > 0 : value >= 0) });
 const object = fields => ({ kind: "object", fields });
 const stringFields = value => object(Object.fromEntries(Object.entries(value).map(([key, child]) => [key, isObject(child) ? stringFields(child) : text(3000)])));
-const mealSchema = object({
-  id: identifier, name: text(120, true), tag: text(80), calories: number(false), protein: number(false), carbs: number(false), fat: number(false),
-  emoji: { kind: "string", valid: emoji }, color, photo: image,
-});
 const guideSchema = object({ id: identifier, title: text(160, true), text: text(3000) });
 const schema = object({
   brand: object({ name: text(80, true), logoText: text(32), logoUrl: image, faviconUrl: image }),
@@ -31,7 +27,7 @@ const schema = object({
   goals: object({ calories: number(true), protein: number(true), carbs: number(true), fat: number(true) }),
   copy: stringFields(defaults.copy),
   icons: object({ user: icon, clock: icon, arrow: icon, spark: icon, hero: icon }),
-  meals: { kind: "array", item: mealSchema, max: 40 },
+  meals: { kind: "array", item: object({}), max: 0 },
   guides: { kind: "array", item: guideSchema, max: 40 },
 });
 
