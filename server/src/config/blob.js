@@ -4,10 +4,11 @@ const MEDIA_TYPES = [...IMAGE_TYPES, "image/gif", "video/mp4", "video/webm", "vi
 const PURPOSES = {
   avatar: { types: IMAGE_TYPES, maximumSizeInBytes: 1_500_000 },
   post: { types: MEDIA_TYPES, maximumSizeInBytes: 4_000_000 },
+  site: { types: IMAGE_TYPES, maximumSizeInBytes: 1_500_000 },
 };
 
 const parseUploadPath = pathname => typeof pathname === "string"
-  ? /^uploads\/([a-zA-Z0-9_-]+)\/(avatar|post)\/[a-zA-Z0-9][a-zA-Z0-9._-]*$/.exec(pathname)
+  ? /^uploads\/([a-zA-Z0-9_-]+)\/(avatar|post|site)\/[a-zA-Z0-9][a-zA-Z0-9._-]*$/.exec(pathname)
   : null;
 
 const blobPublicOrigin = () => {
@@ -63,4 +64,4 @@ const validateBlob = async (value, userId, purpose, mediaType) => {
       && (!mediaType || blob.contentType.startsWith(`${mediaType}/`));
   } catch { return false; }
 };
-module.exports = { blobPublicOrigin, uploadPolicy, validateBlob };
+module.exports = { blobPublicOrigin, uploadPolicy, validateBlob, parseUploadPath };

@@ -66,6 +66,21 @@ test("token requests return a service error when MongoDB is unavailable", async 
   assert.equal((await post(generateEvent("uploads/user1/post/photo.png"), authHeaders())).status, 503);
 });
 
+test("site artwork uploads require the current admin role and restrict image size/types", async t => {
+  t.mock.method(database, "connectDB", async () => true);
+  const user = t.mock.method(User, "findById", () => ({ select: async () => ({ _id: "user1", role: "user" }) }));
+  const event = generateEvent("uploads/user1/site/logo.png");
+  assert.equal((await post(event, authHeaders())).status, 403);
+  user.mock.mockImplementation(() => ({ select: async () => ({ _id: "user1", role: "admin" }) }));
+  const response = await post(event, authHeaders());
+  assert.equal(response.status, 200);
+  const payload = getPayloadFromClientToken((await response.json()).clientToken);
+  assert.equal(payload.maximumSizeInBytes, 1_500_000);
+  assert.deepEqual(payload.allowedContentTypes, ["image/png", "image/jpeg", "image/webp"]);
+  assert.equal(payload.pathname, "uploads/user1/site/logo.png");
+  assert.equal((await post(generateEvent("uploads/user2/site/logo.png"), authHeaders())).status, 400);
+});
+
 test("legacy completion callbacks require a valid Blob signature and do not need MongoDB", async t => {
   const connected = t.mock.method(database, "connectDB", async () => assert.fail("callbacks must not contact MongoDB"));
   const event = { type: "blob.upload-completed", payload: { blob: { url: "https://teststore.public.blob.vercel-storage.com/uploads/user1/avatar/photo.png" }, tokenPayload: null } };

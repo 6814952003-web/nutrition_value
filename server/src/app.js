@@ -16,6 +16,8 @@ app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 // Blob verifies completion signatures without requiring an Atlas connection.
 // Requests for new upload tokens connect to Atlas inside the upload route.
 app.use("/api/uploads", require("./routes/upload.routes"));
+// Site settings must always be read fresh, including temporary service errors.
+app.use("/api/site", (req, res, next) => { res.set("Cache-Control", "no-store"); next(); });
 app.use("/api", async (req, res, next) => {
   if (!await connectDB()) return res.status(503).json({ message: "Database is unavailable. Please try again in a moment." });
   next();
@@ -23,6 +25,7 @@ app.use("/api", async (req, res, next) => {
 app.use("/api/tracks", trackRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/site", require("./routes/site.routes"));
 
 // 3. Error handling — must be LAST
 app.use(notFound);

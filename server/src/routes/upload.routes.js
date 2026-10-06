@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { authenticate } = require("../middlewares/auth.middleware");
 const database = require("../config/db");
-const { blobPublicOrigin, uploadPolicy } = require("../config/blob");
+const { blobPublicOrigin, uploadPolicy, parseUploadPath } = require("../config/blob");
 const { handleUpload } = require("@vercel/blob/client");
 
 router.post("/", async (req, res, next) => {
@@ -25,6 +25,12 @@ router.post("/", async (req, res, next) => {
     return res.status(503).json({ message: "Database is unavailable. Please try again later." });
   }
   return authenticate(req, res, next);
+}, (req, res, next) => {
+  if (req.body?.type === "blob.generate-client-token"
+    && parseUploadPath(req.body.payload.pathname)?.[2] === "site" && req.user?.role !== "admin") {
+    return res.status(403).json({ message: "เฉพาะผู้ดูแลระบบเท่านั้นที่อัปโหลดรูปเว็บไซต์ได้" });
+  }
+  next();
 }, async (req, res) => {
   try {
     const result = await handleUpload({

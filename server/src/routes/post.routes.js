@@ -1,8 +1,11 @@
 const express = require("express");
-const { getPosts, createPost, likePost, commentPost } = require("../controllers/post.controller");
-const { authenticate } = require("../middlewares/auth.middleware");
+const { getPosts, createPost, likePost, commentPost, updatePost, deletePost, deleteComment } = require("../controllers/post.controller");
+const { authenticate, authorize } = require("../middlewares/auth.middleware");
 const router = express.Router();
 router.route("/").get(authenticate, getPosts).post(authenticate, createPost);
 router.post("/:id/like", authenticate, likePost);
 router.post("/:id/comments", authenticate, commentPost);
+router.patch("/:id", authenticate, authorize("admin"), updatePost);
+router.delete("/:id", authenticate, authorize("admin"), deletePost);
+router.delete("/:id/comments/:commentId", authenticate, authorize("admin"), deleteComment);
 module.exports = router;

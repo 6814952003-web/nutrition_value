@@ -3,6 +3,7 @@ import { upload } from "@vercel/blob/client";
 const imageTypes = ["image/png", "image/jpeg", "image/webp"];
 const uploadPolicies = {
   avatar: { types: imageTypes, maxSize: 1_500_000, formats: "PNG, JPG, or WebP" },
+  site: { types: imageTypes, maxSize: 1_500_000, formats: "PNG, JPG, or WebP" },
   post: { types: [...imageTypes, "image/gif", "video/mp4", "video/webm", "video/quicktime"], maxSize: 4_000_000, formats: "PNG, JPG, WebP, GIF, MP4, WebM, or MOV" },
 };
 

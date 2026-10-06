@@ -101,8 +101,8 @@ button, input, select {
   animation: wobble 4s ease-in-out infinite;
 }
 
-.account-shell { background: radial-gradient(circle at 86% 4%, rgba(216,237,159,.7), transparent 23%), linear-gradient(140deg, #f4efe8, #e8e1d6); }
-.account-hero { background: radial-gradient(circle at 88% 18%, rgba(216,237,159,.25), transparent 25%), linear-gradient(120deg, #18382e, #285a47); }
+.account-shell { background: radial-gradient(circle at 86% 4%, color-mix(in srgb, var(--sage) 70%, transparent), transparent 23%), var(--bg-ivory); }
+.account-hero { background: radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--sage) 25%, transparent), transparent 25%), var(--forest); }
 .account-avatar, .account-icon { display: grid; place-items: center; border-radius: 999px; }
 .account-avatar { width: 4.5rem; height: 4.5rem; color: #214d3f; background: #d8ed9f; box-shadow: 0 10px 25px rgba(0,0,0,.18); animation: account-float 4s ease-in-out infinite; }
 .account-avatar svg { width: 2rem; height: 2rem; }

@@ -3,6 +3,11 @@
 React/Vite frontend with an Express API, MongoDB Atlas for application data, and
 direct browser uploads to Vercel Blob for profile photos and community media.
 
+Administrators can edit site branding, colors, text, images/icons, nutrition
+goals, meals and guides at `/admin`, and manage users and community posts.
+Saved content lives in Atlas and updates the website without rebuilding it.
+See [ADMIN_GUIDE.md](ADMIN_GUIDE.md) for the Thai administration guide.
+
 ## Local development
 
 Use Node.js 24. Install packages from the repository root:

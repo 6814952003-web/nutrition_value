@@ -19,6 +19,9 @@ test("upload tokens restrict owner, purpose, content types and size", () => {
   const post = uploadPolicy("uploads/user1/post/video.mp4", "user1");
   assert.equal(post.maximumSizeInBytes, 4_000_000);
   assert.ok(post.allowedContentTypes.includes("video/mp4"));
+  const site = uploadPolicy("uploads/user1/site/logo.png", "user1");
+  assert.equal(site.maximumSizeInBytes, 1_500_000);
+  assert.deepEqual(site.allowedContentTypes, avatar.allowedContentTypes);
   for (const path of ["uploads/user2/avatar/photo.png", "uploads/user1/other/a", "uploads/user1/post/../a", "uploads/user1/post/..", "uploads/user1/post/%2fphoto.png", "arbitrary.html", null, {}]) {
     assert.throws(() => uploadPolicy(path, "user1"), /Invalid upload path/);
   }

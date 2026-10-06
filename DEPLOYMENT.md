@@ -89,6 +89,24 @@ be acknowledged without querying MongoDB.
 
 ## Verification
 
+The website now includes `/admin` for accounts with the `admin` role. Deploy the
+frontend, API, and `shared/site-defaults.json` together. No new environment
+variables are required. `ADMIN_EMAIL` still selects the initial administrator;
+an existing account with that email receives its admin role on its next login.
+
+The admin page manages branding, colors, page text, images/icons, nutrition
+goals, meals, guides, users, and community moderation. Site settings use
+`GET /api/site` and admin-only `PUT /api/site`; MongoDB stores the configuration
+in one `sites` document. Existing default meals and text are preserved until
+an administrator saves a change. Concurrent edits return HTTP 409 and retain
+the editor's draft rather than replacing the other administrator's changes.
+
+After this deployment, content changes saved through `/admin` appear on reload
+and are checked by open pages every 30 seconds or when a tab regains focus.
+Code/layout changes still require another deployment. Site image uploads use
+the existing Blob store, accept PNG/JPEG/WebP up to 1.5 MB, and require an admin
+account. Public HTTPS image URLs can also be entered directly.
+
 Run `npm.cmd test` and `npm.cmd run build`. Tests use mocks for Atlas and Blob;
 they do not create cloud data. After deploying, check `/api/health`,
 register/sign in, upload an avatar and a post image/video, then reload. Confirm

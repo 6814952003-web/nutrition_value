@@ -84,7 +84,7 @@ const updateUser = async (req, res, next) => {
     if (typeof req.body.email === "string" && req.body.email.trim()) updates.email = req.body.email.trim().toLowerCase();
     if (["user", "admin"].includes(req.body.role)) updates.role = req.body.role;
     if (!Object.keys(updates).length) return res.status(400).json({ message: "No valid fields to update." });
-    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true }).select("_id name email role");
+    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true }).select("_id name email role avatarData createdAt");
     if (!user) return res.status(404).json({ message: "User not found." });
     res.json(userResponse(user));
   } catch (error) {
