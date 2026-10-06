@@ -112,6 +112,10 @@ Food logs are stored in the `foodlogs` collection and every `/api/food-logs`
 endpoint requires a valid session. Queries and mutations are scoped to the
 authenticated account; the API never accepts a caller-supplied `userId`.
 Nutrition and menu names are snapshotted by the server when a log is created.
+The dashboard tracker reads the authenticated account's server-side logs for
+the current local date and refreshes after a successful log. Logs can snapshot
+either a recipe serving or a directly consumed catalog ingredient; ingredient
+amounts are entered in grams and the snapshot uses the ingredient's 100 g basis.
 Logs are private by default. Only a profile owner who explicitly enables
 “Share food logs” can expose all logged menu names, servings, timestamps and
 nutrition snapshots on a public profile; disabling the switch hides them again.

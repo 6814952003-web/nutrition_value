@@ -53,7 +53,7 @@ export function CatalogDetail({ item, kind, ingredients, onClose, onSaveRecipe }
     <div className="catalog-detail-body"><span className="catalog-category">{item.category}</span><h2 id="catalog-detail-title">{item.nameTh}</h2><p className="catalog-muted">{item.nameEn}{ingredient && ` · ${stateLabels[item.state] || item.state}`}</p>
       <p className="catalog-basis">{ingredient ? `ต่อ ${item.referenceGrams} กรัม · ${item.referenceBasis}` : `ต่อหนึ่งเสิร์ฟ ${item.servingGrams} กรัม`}</p>
       <NutritionTable nutrients={item.nutrients}/>
-      {!ingredient && <><h3>วัตถุดิบในหนึ่งเสิร์ฟ</h3><ul className="catalog-ingredients">{item.ingredients.map(part => { const entry = ingredients.find(value => value.id === part.ingredientId); return <li key={part.ingredientId}><span>{entry?.nameTh || part.ingredientId} {entry?.state && `(${stateLabels[entry.state]})`}</span><b>{part.grams} กรัม</b></li>; })}</ul><p className="catalog-muted">คำนวณจากข้อมูลต่อ 100 กรัมของวัตถุดิบ หากวัตถุดิบใดไม่มีข้อมูลสารอาหารนั้น ยอดรวมสารอาหารนั้นจะแสดงว่าไม่มีข้อมูล</p><button type="button" className="catalog-button" onClick={() => onSaveRecipe(item)}>บันทึกว่ากินแล้ว</button></>}
+      {ingredient ? <button type="button" className="catalog-button" onClick={() => onSaveRecipe(item)}>บันทึกว่ากินแล้ว</button> : <><h3>วัตถุดิบในหนึ่งเสิร์ฟ</h3><ul className="catalog-ingredients">{item.ingredients.map(part => { const entry = ingredients.find(value => value.id === part.ingredientId); return <li key={part.ingredientId}><span>{entry?.nameTh || part.ingredientId} {entry?.state && `(${stateLabels[entry.state]})`}</span><b>{part.grams} กรัม</b></li>; })}</ul><p className="catalog-muted">คำนวณจากข้อมูลต่อ 100 กรัมของวัตถุดิบ หากวัตถุดิบใดไม่มีข้อมูลสารอาหารนั้น ยอดรวมสารอาหารนั้นจะแสดงว่าไม่มีข้อมูล</p><button type="button" className="catalog-button" onClick={() => onSaveRecipe(item)}>บันทึกว่ากินแล้ว</button></>}
       {ingredient ? <SourceReference source={item.source}/> : item.ingredients.map(part => { const entry = ingredients.find(value => value.id === part.ingredientId); return entry && <div key={part.ingredientId}><h4>{entry.nameTh}</h4><SourceReference source={entry.source}/></div>; })}
       {item.notes && <p className="catalog-muted">{item.notes}</p>}
       <PhotoCredit image={item.image} needsImage={item.needsImage}/><a href="/image-credits" className="catalog-credit-link">เครดิตรูปภาพทั้งหมด</a><p className="catalog-disclaimer">ค่าโภชนาการเป็นค่าประมาณ</p>
@@ -63,7 +63,7 @@ export function CatalogDetail({ item, kind, ingredients, onClose, onSaveRecipe }
 
 export function FoodLogDialog({ item, onClose, onSaved }) {
   const [meal, setMeal] = useState("breakfast");
-  const [servings, setServings] = useState("1");
+  const [servings, setServings] = useState(() => item.itemType === "ingredient" ? String(item.referenceGrams) : "1");
   const [eatenAt, setEatenAt] = useState(() => localDateTimeValue(new Date()));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -72,15 +72,17 @@ export function FoodLogDialog({ item, onClose, onSaved }) {
     event.preventDefault();
     if (saving) return;
     if (!localStorage.getItem("nouri-token")) { setLoginRequired(true); return; }
-    const count = Number(servings);
+    const enteredAmount = Number(servings);
+    const isIngredient = item.itemType === "ingredient";
+    const count = isIngredient ? enteredAmount / item.referenceGrams : enteredAmount;
     const date = new Date(eatenAt);
-    if (!Number.isFinite(count) || count < 0.1 || count > 100 || Number.isNaN(date.getTime())) {
-      setError("กรุณาตรวจสอบจำนวนเสิร์ฟและวันที่/เวลา");
+    if (!Number.isFinite(enteredAmount) || !Number.isFinite(count) || count < 0.1 || count > 100 || Number.isNaN(date.getTime())) {
+      setError(isIngredient ? "ปริมาณวัตถุดิบต้องอยู่ในช่วง 10–10,000 กรัม" : "กรุณาตรวจสอบจำนวนเสิร์ฟและวันที่/เวลา");
       return;
     }
     setSaving(true); setError("");
     try {
-      await api.createFoodLog({ menuId: item.id, meal, servings: count, eatenAt: date.toISOString() });
+      await api.createFoodLog({ menuId: item.id, ...(isIngredient ? { itemType: "ingredient" } : {}), meal, servings: count, eatenAt: date.toISOString() });
       onSaved?.();
       onClose();
     } catch (failure) {
@@ -93,7 +95,9 @@ export function FoodLogDialog({ item, onClose, onSaved }) {
     <div className="catalog-detail-body"><h2 id="food-log-title">บันทึกว่ากินแล้ว</h2><p className="catalog-muted">{item.nameTh}</p>
       {loginRequired ? <p role="alert" className="food-log-error">กรุณาเข้าสู่ระบบก่อนบันทึกการกิน <a href="/">เข้าสู่ระบบ</a></p> : <form className="food-log-form" onSubmit={submit} aria-busy={saving}>
         <label>มื้ออาหาร<select value={meal} onChange={event => setMeal(event.target.value)} disabled={saving}><option value="breakfast">เช้า</option><option value="lunch">กลางวัน</option><option value="dinner">เย็น</option><option value="snack">ของว่าง</option></select></label>
-        <label>จำนวนเสิร์ฟ<input type="number" min="0.1" max="100" step="0.1" required value={servings} onChange={event => setServings(event.target.value)} disabled={saving}/></label>
+        {item.itemType === "ingredient"
+          ? <label>ปริมาณวัตถุดิบ (กรัม)<input type="number" min="10" max="10000" step="1" required value={servings} onChange={event => setServings(event.target.value)} disabled={saving}/></label>
+          : <label>จำนวนเสิร์ฟ<input type="number" min="0.1" max="100" step="0.1" required value={servings} onChange={event => setServings(event.target.value)} disabled={saving}/></label>}
         <label>วันที่และเวลา<input type="datetime-local" required value={eatenAt} onChange={event => setEatenAt(event.target.value)} disabled={saving}/></label>
         {error && <p role="alert" className="food-log-error">{error}</p>}
         <div className="catalog-admin-actions"><button className="catalog-button" type="submit" disabled={saving}>{saving ? "กำลังบันทึก…" : "ยืนยันบันทึก"}</button><button className="catalog-button catalog-button-light" type="button" onClick={onClose} disabled={saving}>ยกเลิก</button></div>
@@ -103,7 +107,7 @@ export function FoodLogDialog({ item, onClose, onSaved }) {
   </section></div>;
 }
 
-export function CatalogGrid({ catalog }) {
+export function CatalogGrid({ catalog, onFoodLogSaved }) {
   const [kind, setKind] = useState("recipes");
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
@@ -113,18 +117,18 @@ export function CatalogGrid({ catalog }) {
   const categories = [...new Set(entries.map(item => item.category))];
   const items = useMemo(() => filterCatalog(entries, search, category), [entries, search, category]);
   const changeKind = next => { setKind(next); setCategory(""); setSelected(null); setLoggingItem(null); };
-  const saveRecipe = item => { setSelected(null); setLoggingItem(item); };
+  const saveRecipe = item => { setSelected(null); setLoggingItem({ ...item, itemType: kind === "ingredients" ? "ingredient" : "recipe" }); };
   return <><div className="catalog-tabs" role="group" aria-label="เลือกประเภทอาหาร"><button type="button" aria-pressed={kind === "ingredients"} onClick={() => changeKind("ingredients")}>วัตถุดิบ <span>{catalog.ingredients?.length || 0}</span></button><button type="button" aria-pressed={kind === "recipes"} onClick={() => changeKind("recipes")}>เมนูอาหารไทย <span>{catalog.recipes?.length || 0}</span></button></div>
     <div className="catalog-filters"><label><span>ค้นหาชื่อไทยหรืออังกฤษ</span><input type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="ค้นหาวัตถุดิบหรือเมนู…"/></label><label><span>หมวดหมู่</span><select value={category} onChange={event => setCategory(event.target.value)}><option value="">ทุกหมวด</option>{categories.map(value => <option key={value} value={value}>{value}</option>)}</select></label></div>
-    <p className="catalog-count">พบ {items.length} รายการ</p><div className="catalog-grid">{items.map(item => <article className="catalog-card" key={item.id}><button type="button" onClick={() => setSelected(item)} aria-label={`ดูโภชนาการ ${item.nameTh}`}><div className="catalog-cover"><img src={item.image?.imageUrl || "/images/catalog/placeholder.svg"} alt={item.needsImage ? "รูปสำรอง" : item.nameTh} loading="lazy"/>{item.needsImage && <span>รอรูปภาพ</span>}</div><div className="catalog-card-body"><span className="catalog-category">{item.category}</span><h3>{item.nameTh}</h3><p>{item.nameEn}</p><p className="catalog-muted">{kind === "ingredients" ? `${stateLabels[item.state]} · ต่อ 100 กรัม` : `หนึ่งเสิร์ฟ ${item.servingGrams} กรัม`}</p><b>{nutrientText(item.nutrients?.energyKcal)}{Number.isFinite(item.nutrients?.energyKcal) ? " kcal" : "พลังงาน"}</b><span className="catalog-detail-link">ดูโภชนาการเต็ม →</span></div></button>{kind === "recipes" && <div className="catalog-card-action"><button type="button" className="catalog-button catalog-card-log-button" aria-label={`บันทึกว่ากินแล้ว ${item.nameTh}`} onClick={() => saveRecipe(item)}>บันทึกว่ากินแล้ว</button></div>}</article>)}</div>
+    <p className="catalog-count">พบ {items.length} รายการ</p><div className="catalog-grid">{items.map(item => <article className="catalog-card" key={item.id}><button type="button" onClick={() => setSelected(item)} aria-label={`ดูโภชนาการ ${item.nameTh}`}><div className="catalog-cover"><img src={item.image?.imageUrl || "/images/catalog/placeholder.svg"} alt={item.needsImage ? "รูปสำรอง" : item.nameTh} loading="lazy"/>{item.needsImage && <span>รอรูปภาพ</span>}</div><div className="catalog-card-body"><span className="catalog-category">{item.category}</span><h3>{item.nameTh}</h3><p>{item.nameEn}</p><p className="catalog-muted">{kind === "ingredients" ? `${stateLabels[item.state]} · ต่อ 100 กรัม` : `หนึ่งเสิร์ฟ ${item.servingGrams} กรัม`}</p><b>{nutrientText(item.nutrients?.energyKcal)}{Number.isFinite(item.nutrients?.energyKcal) ? " kcal" : "พลังงาน"}</b><span className="catalog-detail-link">ดูโภชนาการเต็ม →</span></div></button><div className="catalog-card-action"><button type="button" className="catalog-button catalog-card-log-button" aria-label={`บันทึกว่ากินแล้ว ${item.nameTh}`} onClick={() => saveRecipe({ ...item, itemType: kind === "ingredients" ? "ingredient" : "recipe" })}>บันทึกว่ากินแล้ว</button></div></article>)}</div>
     {!items.length && <p className="catalog-empty">{entries.length ? "ไม่พบรายการที่ตรงกับการค้นหา" : kind === "recipes" ? "ยังไม่มีเมนูอาหารไทย" : "ยังไม่มีวัตถุดิบ"}</p>}
     <div className="catalog-bottom"><p className="catalog-disclaimer">ค่าโภชนาการเป็นค่าประมาณ</p><a href="/image-credits">เครดิตรูปภาพ</a></div>
     {selected && <CatalogDetail item={selected} kind={kind} ingredients={catalog.ingredients || []} onClose={() => setSelected(null)} onSaveRecipe={saveRecipe}/>}
-    {loggingItem && <FoodLogDialog key={loggingItem.id} item={loggingItem} onClose={() => setLoggingItem(null)}/>}
+    {loggingItem && <FoodLogDialog key={loggingItem.id} item={loggingItem} onClose={() => setLoggingItem(null)} onSaved={onFoodLogSaved}/>}
   </>;
 }
 
-export default function Catalog({ onAddRecipe, standalone = false, credits = false, onBack }) {
+export default function Catalog({ onAddRecipe, onFoodLogSaved, standalone = false, credits = false, onBack }) {
   const [state, setState] = useState({ catalog: null, error: "" });
   const [retry, setRetry] = useState(0);
   useEffect(() => {
@@ -132,7 +136,7 @@ export default function Catalog({ onAddRecipe, standalone = false, credits = fal
     api.catalog({ signal: controller.signal }).then(catalog => { if (active) setState({ catalog, error: "" }); }).catch(error => { if (active && error.name !== "AbortError") setState({ catalog: null, error: "โหลดข้อมูลไม่สำเร็จ กรุณาลองอีกครั้ง" }); });
     return () => { active = false; controller.abort(); };
   }, [retry]);
-  const content = state.catalog ? credits ? <ImageCredits catalog={state.catalog}/> : <CatalogGrid catalog={state.catalog} onAddRecipe={onAddRecipe}/> : state.error ? <div role="alert" className="catalog-empty"><p>{state.error}</p><button type="button" className="catalog-button" onClick={() => setRetry(value => value + 1)}>ลองอีกครั้ง</button></div> : <p role="status" className="catalog-empty">กำลังโหลดคลังอาหาร…</p>;
+  const content = state.catalog ? credits ? <ImageCredits catalog={state.catalog}/> : <CatalogGrid catalog={state.catalog} onAddRecipe={onAddRecipe} onFoodLogSaved={onFoodLogSaved}/> : state.error ? <div role="alert" className="catalog-empty"><p>{state.error}</p><button type="button" className="catalog-button" onClick={() => setRetry(value => value + 1)}>ลองอีกครั้ง</button></div> : <p role="status" className="catalog-empty">กำลังโหลดคลังอาหาร…</p>;
   return standalone ? <main className="account-shell catalog-page"><header><button type="button" className="catalog-button catalog-button-light" onClick={onBack}>← กลับหน้าหลัก</button><BrandLogo compact/></header><h1>{credits ? "เครดิตรูปภาพ" : "วัตถุดิบและเมนูอาหารไทย"}</h1>{content}</main> : content;
 }
 

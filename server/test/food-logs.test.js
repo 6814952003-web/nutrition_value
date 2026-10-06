@@ -102,9 +102,31 @@ test("food log snapshots menu nutrition from the server and scales servings on e
   assert.equal(Object.hasOwn(created, "userId"), true);
 });
 
+test("food logs can snapshot and scale a directly consumed ingredient by grams", async t => {
+  authenticateAs(t);
+  const seed = loadSeed();
+  t.mock.method(Catalog, "findById", () => ({ lean: async () => ({ tables: seed, revision: 1 }) }));
+  let created;
+  t.mock.method(FoodLog, "create", async value => { created = value; return value; });
+  const ingredient = seed.ingredients.find(item => item.id === "ground-pork");
+  const response = await request("", "POST", {
+    itemType: "ingredient", menuId: ingredient.id, meal: "lunch", servings: 1.5,
+    eatenAt: "2026-10-07T05:00:00.000Z",
+  });
+  assert.equal(response.status, 201);
+  assert.equal(created.itemType, "ingredient");
+  assert.equal(created.menuId, ingredient.id);
+  assert.equal(created.menuName, ingredient.nameTh);
+  assert.equal(created.referenceGrams, 100);
+  assert.equal(created.servings, 1.5);
+  assert.equal(created.nutrientsPerServing.energyKcal, ingredient.nutrients.energyKcal);
+  assert.equal(created.nutrients.energyKcal, ingredient.nutrients.energyKcal * 1.5);
+});
+
 test("food log date and meal validation reject malformed input", async t => {
   authenticateAs(t);
   assert.equal((await request("?date=2026-02-31")).status, 400);
   assert.equal((await request("?date=2026-10-07&timezoneOffsetMinutes=900")).status, 400);
   assert.equal((await request("", "POST", { menuId: "recipe", meal: "midnight", servings: 1, eatenAt: "2026-10-07T05:00:00.000Z" })).status, 400);
+  assert.equal((await request("", "POST", { itemType: "other", menuId: "ingredient", meal: "lunch", servings: 1, eatenAt: "2026-10-07T05:00:00.000Z" })).status, 400);
 });

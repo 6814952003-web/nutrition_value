@@ -18,6 +18,9 @@ const formatTime = value => {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? "—" : date.toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit" });
 };
+const displayQuantity = log => log.itemType === "ingredient"
+  ? Math.round(log.servings * (log.referenceGrams || 100) * 10) / 10
+  : log.servings;
 const addDays = (date, offset) => {
   const value = new Date(`${date}T12:00:00`);
   value.setDate(value.getDate() + offset);
@@ -55,9 +58,12 @@ export default function FoodLogHistory({ goals }) {
   ])), [logs]);
 
   const updateLog = async log => {
-    const servings = Number(drafts[log._id] ?? log.servings);
+    const enteredQuantity = Number(drafts[log._id] ?? displayQuantity(log));
+    const servings = log.itemType === "ingredient"
+      ? enteredQuantity / (log.referenceGrams || 100)
+      : enteredQuantity;
     if (!Number.isFinite(servings) || servings < 0.1 || servings > 100) {
-      setError("จำนวนเสิร์ฟต้องอยู่ระหว่าง 0.1 ถึง 100");
+      setError(log.itemType === "ingredient" ? "ปริมาณวัตถุดิบต้องอยู่ในช่วง 10–10,000 กรัม" : "จำนวนเสิร์ฟต้องอยู่ระหว่าง 0.1 ถึง 100");
       return;
     }
     setBusyId(log._id); setError(""); setNotice("");
@@ -104,7 +110,7 @@ export default function FoodLogHistory({ goals }) {
             const entries = logs.filter(log => log.meal === meal);
             if (!entries.length) return null;
             return <section key={meal} aria-labelledby={`food-log-${meal}`}><h3 id={`food-log-${meal}`} className="mb-3 font-bold">{mealLabels[meal]}</h3><div className="space-y-3">
-              {entries.map(log => <article key={log._id} className="food-log-entry"><img src={log.imageUrl || "/images/catalog/placeholder.svg"} alt={log.menuName} loading="lazy"/><div className="min-w-0 flex-1"><h4 className="font-semibold">{log.menuName}</h4><p className="mt-1 text-xs text-[#66746c]">{formatTime(log.eatenAt)} · {formatNumber(log.nutrients?.energyKcal)} kcal</p><label className="mt-3 flex items-center gap-2 text-xs">จำนวนเสิร์ฟ<input type="number" min="0.1" max="100" step="0.1" value={drafts[log._id] ?? log.servings} disabled={busyId === log._id} onChange={event => setDrafts(current => ({ ...current, [log._id]: event.target.value }))} className="w-24 rounded-lg border border-[#ccd8c5] px-2 py-1"/></label></div><div className="flex flex-col gap-2"><button type="button" disabled={busyId === log._id || String(drafts[log._id] ?? log.servings) === String(log.servings)} onClick={() => updateLog(log)} className="food-log-secondary">บันทึกจำนวน</button><button type="button" disabled={busyId === log._id} onClick={() => removeLog(log)} className="food-log-danger">ลบ</button></div></article>)}
+              {entries.map(log => <article key={log._id} className="food-log-entry"><img src={log.imageUrl || "/images/catalog/placeholder.svg"} alt={log.menuName} loading="lazy"/><div className="min-w-0 flex-1"><h4 className="font-semibold">{log.menuName}</h4><p className="mt-1 text-xs text-[#66746c]">{formatTime(log.eatenAt)} · {formatNumber(log.nutrients?.energyKcal)} kcal</p><label className="mt-3 flex items-center gap-2 text-xs">{log.itemType === "ingredient" ? "ปริมาณ (กรัม)" : "จำนวนเสิร์ฟ"}<input type="number" min={log.itemType === "ingredient" ? 10 : 0.1} max={log.itemType === "ingredient" ? 10000 : 100} step={log.itemType === "ingredient" ? 1 : 0.1} value={drafts[log._id] ?? displayQuantity(log)} disabled={busyId === log._id} onChange={event => setDrafts(current => ({ ...current, [log._id]: event.target.value }))} className="w-24 rounded-lg border border-[#ccd8c5] px-2 py-1"/></label></div><div className="flex flex-col gap-2"><button type="button" disabled={busyId === log._id || String(drafts[log._id] ?? displayQuantity(log)) === String(displayQuantity(log))} onClick={() => updateLog(log)} className="food-log-secondary">บันทึกจำนวน</button><button type="button" disabled={busyId === log._id} onClick={() => removeLog(log)} className="food-log-danger">ลบ</button></div></article>)}
             </div></section>;
           })}</div>
         </>}

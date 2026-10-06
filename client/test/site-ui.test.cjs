@@ -38,7 +38,7 @@ function loadUiModule(candidate) {
 }
 const { SiteContext, defaultSite } = loadUiModule(path.join(sourceRoot, "SiteContext"));
 const { default: AuthPage } = loadUiModule(path.join(sourceRoot, "AuthPage"));
-const { default: Dashboard } = loadUiModule(path.join(sourceRoot, "Dashboard"));
+const { default: Dashboard, summarizeFoodLogs } = loadUiModule(path.join(sourceRoot, "Dashboard"));
 const { default: AdminPage } = loadUiModule(path.join(sourceRoot, "AdminPage"));
 const { default: App, AccountPage, AdminRoute, resolveAppView } = loadUiModule(path.join(sourceRoot, "App"));
 const { default: PublicProfilePage, PublicProfileView } = loadUiModule(path.join(sourceRoot, "PublicProfilePage"));
@@ -100,6 +100,17 @@ test("legacy site meals stay removed while the dashboard catalog and nutrition t
   }
 });
 
+test("dashboard tracker totals use saved food-log snapshots and preserve unknown nutrients", () => {
+  assert.deepEqual(summarizeFoodLogs([
+    { nutrients: { energyKcal: 350, proteinG: 20, carbohydrateG: 45, fatG: 8 } },
+    { nutrients: { energyKcal: 150, proteinG: 10, carbohydrateG: 25, fatG: 4 } },
+  ]), { calories: 500, protein: 30, carbs: 70, fat: 12 });
+  assert.deepEqual(summarizeFoodLogs([
+    { nutrients: { energyKcal: null, proteinG: 10, carbohydrateG: 2, fatG: 1 } },
+  ]), { calories: null, protein: 10, carbs: 2, fat: 1 });
+  assert.deepEqual(summarizeFoodLogs([]), { calories: 0, protein: 0, carbs: 0, fat: 0 });
+});
+
 test("catalog cards provide search, category filtering, placeholders, credits, and the nutrition disclaimer", () => {
   const ingredients = [
     { id: "pork", nameTh: "หมูสับ", nameEn: "Ground pork", category: "เนื้อสัตว์", state: "raw", nutrients: { energyKcal: 200 }, referenceGrams: 100, image: { imageUrl: "/images/catalog/placeholder.svg" }, needsImage: true },
@@ -131,6 +142,19 @@ test("every recipe card has its own visible and accessible food-log action", () 
   const html = render(CatalogGrid, siteFixture(), { catalog: { ingredients, recipes } });
   assert.equal((html.match(/class="catalog-button catalog-card-log-button"/g) || []).length, 100);
   assert.equal((html.match(/aria-label="บันทึกว่ากินแล้ว เมนู \d+"/g) || []).length, 100);
+});
+
+test("ingredient cards also expose a food-log action", t => {
+  const originals = { useState: React.useState, useMemo: React.useMemo, useEffect: React.useEffect };
+  let stateIndex = 0;
+  React.useState = initial => [stateIndex++ === 0 ? "ingredients" : typeof initial === "function" ? initial() : initial, noop];
+  React.useMemo = calculate => calculate();
+  React.useEffect = noop;
+  t.after(() => Object.assign(React, originals));
+  const ingredient = { id: "rice", nameTh: "ข้าวสวย", nameEn: "Cooked rice", category: "ธัญพืช", state: "cooked", referenceGrams: 100, nutrients: { energyKcal: 130 }, image: { imageUrl: "/images/catalog/placeholder.svg" }, needsImage: true };
+  const html = render(CatalogGrid, siteFixture(), { catalog: { ingredients: [ingredient], recipes: [] } });
+  assert.ok(html.includes('aria-label="บันทึกว่ากินแล้ว ข้าวสวย"'));
+  assert.ok(html.includes("บันทึกว่ากินแล้ว"));
 });
 
 test("batch photo selection matches record IDs and validates ownership, credits, and duplicates", () => {
@@ -168,6 +192,16 @@ test("menu logging requires an explicit action and prompts signed-out visitors t
   assert.ok(history.includes("บันทึกการกิน"));
   assert.ok(history.includes("เป็นส่วนตัว"));
   assert.ok(history.includes("ไม่แสดงบนโปรไฟล์สาธารณะ"));
+});
+
+test("ingredient food-log dialog defaults to 100 grams and offers meal/date selection", t => {
+  withStorage(t, "test-token");
+  const ingredient = { id: "rice", itemType: "ingredient", nameTh: "ข้าวสวย", referenceGrams: 100 };
+  const dialog = render(FoodLogDialog, siteFixture(), { item: ingredient, onClose: noop });
+  assert.ok(dialog.includes("ปริมาณวัตถุดิบ (กรัม)"));
+  assert.ok(dialog.includes('value="100"'));
+  assert.ok(dialog.includes("มื้ออาหาร"));
+  assert.ok(dialog.includes("วันที่และเวลา"));
 });
 
 test("saved copy is escaped and damaged local nutrition history does not break rendering", t => {

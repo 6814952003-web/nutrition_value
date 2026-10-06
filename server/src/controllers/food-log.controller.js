@@ -34,18 +34,27 @@ const getFoodLogs = async (req, res, next) => {
 
 const createFoodLog = async (req, res, next) => {
   try {
-    if (!exactKeys(req.body, ["menuId", "meal", "servings", "eatenAt"])
+    if (!exactKeys(req.body, ["menuId", "meal", "servings", "eatenAt", "itemType"])
       || !identifier(req.body.menuId) || !meals.has(req.body.meal)
+      || (req.body.itemType !== undefined && !["recipe", "ingredient"].includes(req.body.itemType))
       || !validServings(req.body.servings) || !validDate(req.body.eatenAt)) return badRequest(res);
     const catalog = catalogResponse(await Catalog.findById(CATALOG_ID).lean());
-    const recipe = catalog.recipes.find(item => item.id === req.body.menuId);
-    if (!recipe) return res.status(404).json({ message: "ไม่พบเมนูนี้ในคลังอาหาร" });
-    const nutrientsPerServing = recipe.nutrients;
+    const itemType = req.body.itemType || "recipe";
+    const item = itemType === "recipe"
+      ? catalog.recipes.find(recipe => recipe.id === req.body.menuId)
+      : catalog.ingredients.find(ingredient => ingredient.id === req.body.menuId);
+    if (!item) return res.status(404).json({ message: itemType === "recipe" ? "ไม่พบเมนูนี้ในคลังอาหาร" : "ไม่พบวัตถุดิบนี้ในคลังอาหาร" });
+    const referenceGrams = itemType === "ingredient" ? item.referenceGrams : null;
+    const nutrientsPerServing = itemType === "ingredient"
+      ? scaleNutrients(item.nutrients, referenceGrams / 100)
+      : item.nutrients;
     const log = await FoodLog.create({
       userId: req.user._id,
-      menuId: recipe.id,
-      menuName: recipe.nameTh,
-      imageUrl: recipe.image?.imageUrl || "/images/catalog/placeholder.svg",
+      itemType,
+      menuId: item.id,
+      menuName: item.nameTh,
+      imageUrl: item.image?.imageUrl || "/images/catalog/placeholder.svg",
+      referenceGrams,
       meal: req.body.meal,
       servings: req.body.servings,
       eatenAt: new Date(req.body.eatenAt),
