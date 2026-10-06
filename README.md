@@ -12,6 +12,9 @@ The dashboard includes the community feed, which refreshes automatically every
 two seconds while visible and on focus/reconnection. Members can delete their
 own posts and comments; administrators can moderate all content. Existing
 Atlas/Blob configuration supports these features without new services.
+Community attachments retain their original aspect ratio and support files up
+to 100 MB, with multipart uploads for large files. Hearts count once per account
+and post; legacy totals without account records restart at zero.
 
 ## Local development
 

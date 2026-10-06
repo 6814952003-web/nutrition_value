@@ -16,6 +16,8 @@ const postSchema = new mongoose.Schema({
   mediaData: { type: String, default: "" },
   mediaType: { type: String, enum: ["", "image", "video"], default: "" },
   likes: { type: Number, default: 0 },
+  // Only the aggregate and current-account flag are exposed by the controller.
+  likedBy: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], default: [] },
   comments: { type: [commentSchema], default: [] },
 }, { timestamps: true });
 

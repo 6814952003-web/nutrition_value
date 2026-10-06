@@ -17,7 +17,8 @@ test("upload tokens restrict owner, purpose, content types and size", () => {
   assert.equal(avatar.allowOverwrite, false);
   assert.ok(avatar.validUntil > Date.now() && avatar.validUntil <= Date.now() + 5 * 60 * 1000);
   const post = uploadPolicy("uploads/user1/post/video.mp4", "user1");
-  assert.equal(post.maximumSizeInBytes, 4_000_000);
+  assert.equal(post.maximumSizeInBytes, 100_000_000);
+  assert.ok(post.validUntil > Date.now() + 29 * 60 * 1000 && post.validUntil <= Date.now() + 30 * 60 * 1000);
   assert.ok(post.allowedContentTypes.includes("video/mp4"));
   const site = uploadPolicy("uploads/user1/site/logo.png", "user1");
   assert.equal(site.maximumSizeInBytes, 1_500_000);
@@ -56,9 +57,16 @@ test("media references accept verified avatar and video metadata at the size lim
   assert.deepEqual(head.mock.calls[0].arguments, [avatarUrl, { token: "vercel_blob_rw_test_fixture" }]);
 
   const videoUrl = `${origin}/uploads/user1/post/video.mp4`;
-  head.mock.mockImplementation(async () => ({ url: videoUrl, pathname: "uploads/user1/post/video.mp4", contentType: "video/mp4", size: 4_000_000 }));
+  head.mock.mockImplementation(async () => ({ url: videoUrl, pathname: "uploads/user1/post/video.mp4", contentType: "video/mp4", size: 100_000_000 }));
   assert.equal(await validateBlob(videoUrl, "user1", "post", "video"), true);
   assert.equal(await validateBlob(videoUrl, "user1", "post", "image"), false);
+  head.mock.mockImplementation(async () => ({ url: videoUrl, pathname: "uploads/user1/post/video.mp4", contentType: "video/mp4", size: 100_000_001 }));
+  assert.equal(await validateBlob(videoUrl, "user1", "post", "video"), false);
+  const imageUrl = `${origin}/uploads/user1/post/photo.jpg`;
+  head.mock.mockImplementation(async () => ({ url: imageUrl, pathname: "uploads/user1/post/photo.jpg", contentType: "image/jpeg", size: 100_000_000 }));
+  assert.equal(await validateBlob(imageUrl, "user1", "post", "image"), true);
+  head.mock.mockImplementation(async () => ({ url: imageUrl, pathname: "uploads/user1/post/photo.jpg", contentType: "image/jpeg", size: 100_000_001 }));
+  assert.equal(await validateBlob(imageUrl, "user1", "post", "image"), false);
 });
 
 test("media references reject missing blobs and invalid server metadata", async t => {

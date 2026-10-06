@@ -66,10 +66,19 @@ to its filesystem. The browser then sends the URL with its profile/post save.
 The API checks the Blob origin, owner, file metadata and size before saving the
 URL to Atlas. The read/write token stays on the server.
 Profile photos support PNG/JPEG/WebP up to 1.5 MB; posts support those formats,
-GIF, MP4, WebM and MOV up to 4 MB. Existing `avatarData` and `mediaData` fields now
+GIF, MP4, WebM and MOV up to 100 MB per file (100,000,000 bytes). Larger community
+files use multipart uploads directly to Blob, with parallel parts and retries.
+Community upload tokens last 30 minutes; avatar/site tokens retain their
+five-minute limit. Existing `avatarData` and `mediaData` fields now
 store URLs; existing base64 records still render but are not migrated automatically.
 Uploads completed before a failed/cancelled save can leave unused objects in Blob;
 there is no automatic cleanup job.
+
+Community hearts are recorded per account in `likedBy`. API responses expose
+only the unique count and `likedByMe`; the list of account identifiers stays on
+the server. Adding a heart uses an atomic MongoDB update, so repeated clicks or
+concurrent requests from one account cannot increase the count twice. Old totals
+without account records restart at zero, as requested, without deleting posts.
 
 ## Local development
 

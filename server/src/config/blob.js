@@ -4,7 +4,7 @@ const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
 const MEDIA_TYPES = [...IMAGE_TYPES, "image/gif", "video/mp4", "video/webm", "video/quicktime"];
 const PURPOSES = {
   avatar: { types: IMAGE_TYPES, maximumSizeInBytes: 1_500_000 },
-  post: { types: MEDIA_TYPES, maximumSizeInBytes: 4_000_000 },
+  post: { types: MEDIA_TYPES, maximumSizeInBytes: 100_000_000 },
   site: { types: IMAGE_TYPES, maximumSizeInBytes: 1_500_000 },
 };
 
@@ -44,7 +44,7 @@ const uploadPolicy = (pathname, userId) => {
     maximumSizeInBytes: policy.maximumSizeInBytes,
     addRandomSuffix: true,
     allowOverwrite: false,
-    validUntil: Date.now() + 5 * 60 * 1000,
+    validUntil: Date.now() + (match[2] === "post" ? 30 : 5) * 60 * 1000,
   };
 };
 

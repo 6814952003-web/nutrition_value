@@ -68,8 +68,64 @@ test("negotiates an authenticated client token and uploads PNG bytes directly to
   assert.equal(puts.length, 1);
   assert.equal(puts[0].pathname, payload.payload.pathname);
   assert.equal(puts[0].body, selected);
-  assert.deepEqual(puts[0].options, { access: "public", token: "vercel_blob_client_scoped_fixture", contentType: "image/png", onUploadProgress: progress });
+  assert.deepEqual(puts[0].options, { access: "public", token: "vercel_blob_client_scoped_fixture", contentType: "image/png", multipart: false, onUploadProgress: progress });
   assert.equal(url, `https://fixture.public.blob.vercel-storage.com/${payload.payload.pathname}`);
+});
+
+test("100 MB community photos and videos use matching multipart negotiation and preserve progress", async t => {
+  const { requests, puts } = fixture(t);
+  const progressEvents = [];
+  const progress = event => progressEvents.push(event);
+  sdkPut = async (pathname, body, options) => {
+    puts.push({ pathname, body, options });
+    options.onUploadProgress({ loaded: body.size, total: body.size, percentage: 100 });
+    return { url: `https://fixture.public.blob.vercel-storage.com/${pathname}` };
+  };
+  for (const type of ["image/jpeg", "video/mp4"]) {
+    const selected = file({
+      type, size: 100_000_000,
+      toJSON() { throw new Error("File content must not be serialized into an API request"); },
+    });
+    const url = await uploadFile(selected, "owner", "post", progress);
+    const sent = requests.at(-1);
+    const uploaded = puts.at(-1);
+    const payload = JSON.parse(sent.options.body);
+    assert.equal(sent.url, "/api/uploads");
+    assert.ok(sent.options.body.length < 512, "100 MB files still need only a small token request");
+    assert.deepEqual(Object.keys(payload.payload).sort(), ["clientPayload", "multipart", "pathname"]);
+    assert.equal(payload.payload.multipart, true);
+    assert.equal(uploaded.options.multipart, payload.payload.multipart);
+    assert.equal(uploaded.options.contentType, type);
+    assert.equal(uploaded.options.onUploadProgress, progress);
+    assert.equal(uploaded.body, selected, "the original file must go directly to Blob");
+    assert.equal(uploaded.pathname, payload.payload.pathname);
+    assert.equal(url, `https://fixture.public.blob.vercel-storage.com/${payload.payload.pathname}`);
+  }
+  assert.equal(requests.length, 2);
+  assert.equal(puts.length, 2);
+  assert.deepEqual(progressEvents, [
+    { loaded: 100_000_000, total: 100_000_000, percentage: 100 },
+    { loaded: 100_000_000, total: 100_000_000, percentage: 100 },
+  ]);
+});
+
+test("community uploads switch to multipart at 8 MB while avatar and site uploads stay single part", async t => {
+  const { requests, puts } = fixture(t);
+  for (const [purpose, size, multipart] of [
+    ["post", 7_999_999, false], ["post", 8_000_000, true],
+    ["avatar", 1_500_000, false], ["site", 1_500_000, false],
+  ]) {
+    await uploadFile(file({ size }), "owner", purpose);
+    const payload = JSON.parse(requests.at(-1).options.body);
+    assert.equal(payload.payload.multipart, multipart);
+    assert.equal(puts.at(-1).options.multipart, multipart);
+  }
+});
+
+test("the 100 MB post limit accepts every supported image and video format", () => {
+  for (const type of ["image/png", "image/jpeg", "image/webp", "image/gif", "video/mp4", "video/webm", "video/quicktime"]) {
+    assert.doesNotThrow(() => validateUploadFile(file({ type, size: 100_000_000 }), "post"));
+  }
 });
 
 test("missing storage reports an actionable Thai error and never pretends a base64 file was uploaded", async t => {
@@ -141,13 +197,14 @@ test("the SDK's double-space token error is translated instead of exposed or con
 test("oversized, empty and unsupported files are rejected before any API or Blob request", async t => {
   const { requests, puts } = fixture(t);
   await assert.rejects(uploadFile(file({ size: 1_500_001 }), "owner", "site"), /1.5 MB/);
-  await assert.rejects(uploadFile(file({ size: 4_000_001 }), "owner", "post"), /4 MB/);
+  await assert.rejects(uploadFile(file({ size: 1_500_001 }), "owner", "avatar"), /1.5 MB/);
+  await assert.rejects(uploadFile(file({ size: 100_000_001 }), "owner", "post"), /100 MB/);
   await assert.rejects(uploadFile(file({ size: 0 }), "owner", "post"), /ไฟล์ที่มีข้อมูล/);
   await assert.rejects(uploadFile(file({ type: "text/html" }), "owner", "post"), /ชนิดไฟล์ไม่รองรับ/);
   await assert.rejects(uploadFile(file({ type: "video/mp4" }), "owner", "avatar"), /ชนิดไฟล์ไม่รองรับ/);
   assert.equal(requests.length, 0);
   assert.equal(puts.length, 0);
-  assert.doesNotThrow(() => validateUploadFile(file({ type: "video/mp4", size: 4_000_000 }), "post"));
+  assert.doesNotThrow(() => validateUploadFile(file({ type: "video/mp4", size: 100_000_000 }), "post"));
 });
 
 test("anonymous uploads and invalid owner paths cannot manufacture local upload success", async t => {

@@ -6,7 +6,7 @@ const imageTypes = ["image/png", "image/jpeg", "image/webp"];
 const uploadPolicies = {
   avatar: { types: imageTypes, maxSize: 1_500_000, formats: "PNG, JPG หรือ WebP" },
   site: { types: imageTypes, maxSize: 1_500_000, formats: "PNG, JPG หรือ WebP" },
-  post: { types: [...imageTypes, "image/gif", "video/mp4", "video/webm", "video/quicktime"], maxSize: 4_000_000, formats: "PNG, JPG, WebP, GIF, MP4, WebM หรือ MOV" },
+  post: { types: [...imageTypes, "image/gif", "video/mp4", "video/webm", "video/quicktime"], maxSize: 100_000_000, formats: "PNG, JPG, WebP, GIF, MP4, WebM หรือ MOV" },
 };
 
 export function validateUploadFile(file, purpose) {
@@ -57,11 +57,12 @@ export async function uploadFile(file, userId, purpose, onUploadProgress) {
   try {
     const filename = String(file.name || "file").replace(/[^a-zA-Z0-9._-]/g, "_").slice(-100) || "file";
     const pathname = `uploads/${userId}/${purpose}/${crypto.randomUUID()}-${filename}`;
+    const multipart = purpose === "post" && file.size >= 8_000_000;
     // The SDK's upload() wrapper hides HTTP status/body behind a generic token
     // error. Use our API helper so storage errors and expired sessions survive.
     const result = await request("/uploads", {
       method: "POST",
-      body: JSON.stringify({ type: "blob.generate-client-token", payload: { pathname, clientPayload: null, multipart: false } }),
+      body: JSON.stringify({ type: "blob.generate-client-token", payload: { pathname, clientPayload: null, multipart } }),
     });
     if (result?.type !== "blob.generate-client-token" || typeof result.clientToken !== "string" || !result.clientToken.startsWith("vercel_blob_client_")) {
       throw failure("เซิร์ฟเวอร์ไม่ได้ส่งสิทธิ์อัปโหลดที่ถูกต้อง กรุณาลองอีกครั้ง", undefined, "UPLOAD_TOKEN_INVALID");
@@ -71,6 +72,7 @@ export async function uploadFile(file, userId, purpose, onUploadProgress) {
       access: "public",
       token: result.clientToken,
       contentType: file.type,
+      multipart,
       onUploadProgress,
     });
     if (!validPublicBlobUrl(blob?.url, userId, purpose)) throw failure("ระบบเก็บไฟล์ไม่ได้ส่งลิงก์รูปภาพที่ถูกต้อง กรุณาลองอัปโหลดใหม่", undefined, "UPLOAD_URL_INVALID");

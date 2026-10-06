@@ -1,36 +1,47 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const path = require("node:path");
+const fs = require("node:fs");
 const Module = require("node:module");
 const esbuild = require("esbuild");
 const React = require("react");
 const { renderToStaticMarkup } = require("react-dom/server");
 
-// Bundle all components together so the provider and consumers share the same
-// SiteContext instance. Render actual JSX using the project's existing tools.
+// Compile the actual JSX modules with a shared cache. Relative imports stay
+// inside this project, so tests do not need to discover parent configuration.
 const sourceRoot = path.resolve(__dirname, "../src");
-const compiled = esbuild.buildSync({
-  stdin: {
-    contents: 'export { SiteContext, defaultSite } from "./SiteContext"; export { default as AuthPage } from "./AuthPage"; export { default as Dashboard } from "./Dashboard"; export { default as AdminPage } from "./AdminPage"; export { AccountPage, CommunityPage } from "./App"; export { CommunityPost } from "./CommunityPage";',
-    resolveDir: sourceRoot,
-    sourcefile: "site-ui-test-entry.jsx",
-    loader: "jsx",
-  },
-  bundle: true,
-  write: false,
-  platform: "node",
-  format: "cjs",
-  jsx: "automatic",
-  external: ["react", "react-dom", "react/jsx-runtime"],
-  loader: { ".css": "empty" },
-  logLevel: "silent",
-});
-const bundleFilename = path.join(sourceRoot, "site-ui-test-bundle.cjs");
-const loaded = new Module(bundleFilename, module);
-loaded.filename = bundleFilename;
-loaded.paths = Module._nodeModulePaths(sourceRoot);
-loaded._compile(compiled.outputFiles[0].text, bundleFilename);
-const { SiteContext, defaultSite, AuthPage, Dashboard, AdminPage, AccountPage, CommunityPage, CommunityPost } = loaded.exports;
+const projectRoot = path.resolve(sourceRoot, "../..");
+const modules = new Map();
+function loadUiModule(candidate) {
+  const filename = [candidate, ...[".jsx", ".js", ".json"].map(extension => candidate + extension)].find(file => fs.existsSync(file) && fs.statSync(file).isFile());
+  if (!filename) throw new Error(`Missing UI fixture module: ${candidate}`);
+  const relative = path.relative(projectRoot, filename);
+  if (relative === ".." || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative)) throw new Error("UI fixture imports must stay inside the project");
+  if (filename.endsWith(".css")) return {};
+  if (modules.has(filename)) return modules.get(filename).exports;
+  if (filename.endsWith(".json")) {
+    const parsed = JSON.parse(fs.readFileSync(filename, "utf8"));
+    modules.set(filename, { exports: parsed });
+    return parsed;
+  }
+  const loaded = new Module(filename, module);
+  loaded.filename = filename;
+  loaded.paths = Module._nodeModulePaths(path.dirname(filename));
+  modules.set(filename, loaded);
+  const nativeRequire = loaded.require.bind(loaded);
+  loaded.require = specifier => specifier.startsWith(".") ? loadUiModule(path.resolve(path.dirname(filename), specifier)) : nativeRequire(specifier);
+  const compiled = esbuild.transformSync(fs.readFileSync(filename, "utf8"), {
+    sourcefile: filename, loader: filename.endsWith(".jsx") ? "jsx" : "js", jsx: "automatic", format: "cjs",
+  });
+  loaded._compile(compiled.code, filename);
+  return loaded.exports;
+}
+const { SiteContext, defaultSite } = loadUiModule(path.join(sourceRoot, "SiteContext"));
+const { default: AuthPage } = loadUiModule(path.join(sourceRoot, "AuthPage"));
+const { default: Dashboard } = loadUiModule(path.join(sourceRoot, "Dashboard"));
+const { default: AdminPage } = loadUiModule(path.join(sourceRoot, "AdminPage"));
+const { AccountPage } = loadUiModule(path.join(sourceRoot, "App"));
+const { default: CommunityPage, CommunityPost } = loadUiModule(path.join(sourceRoot, "CommunityPage"));
 const user = { id: "ui-fixture-user", name: "สมาชิกทดสอบ", role: "admin" };
 const noop = () => {};
 const siteFixture = () => structuredClone(defaultSite);
@@ -175,4 +186,23 @@ test("community posts show deletion controls only for the message owner or an ad
     assert.equal((html.match(/>ลบความคิดเห็น<\/button>/g) || []).length, commentDeletes);
     assert.ok(html.includes('value="ความคิดเห็นที่กำลังพิมพ์"'));
   }
+});
+
+test("the heart remembers the account's vote and prevents another click after reloading a post", () => {
+  const site = siteFixture();
+  const post = {
+    _id: "heart-ui-fixture", author: "another-member", authorName: "เจ้าของโพสต์", category: "food",
+    createdAt: "2026-10-06T11:00:00.000Z", content: "โพสต์ที่ถูกใจได้ครั้งเดียว", likes: 2, comments: [],
+  };
+  const before = render(CommunityPost, site, { post: { ...post, likedByMe: false }, user });
+  const after = render(CommunityPost, site, { post: { ...post, likedByMe: true }, user });
+  const beforeButton = before.match(/<button[^>]*aria-pressed="false"[^>]*>[\s\S]*?<\/button>/)?.[0];
+  const afterButton = after.match(/<button[^>]*aria-pressed="true"[^>]*>[\s\S]*?<\/button>/)?.[0];
+  assert.ok(beforeButton && afterButton);
+  assert.ok(!beforeButton.includes('disabled=""'));
+  assert.ok(beforeButton.includes("♡"));
+  assert.ok(afterButton.includes('disabled=""'));
+  assert.ok(afterButton.includes("♥"));
+  assert.ok(afterButton.includes("text-red-600"));
+  assert.ok(afterButton.includes("ถูกใจแล้ว"));
 });

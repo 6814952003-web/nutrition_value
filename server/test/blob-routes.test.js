@@ -124,6 +124,20 @@ test("site artwork uploads require the current admin role and restrict image siz
   assert.equal((await post(generateEvent("uploads/user2/site/logo.png"), authHeaders())).status, 400);
 });
 
+test("community media tokens allow 100 MB and thirty minutes for large multipart uploads", async t => {
+  t.mock.method(database, "connectDB", async () => true);
+  t.mock.method(User, "findById", () => ({ select: async () => ({ _id: "user1", role: "user" }) }));
+  const event = generateEvent("uploads/user1/post/video.mp4");
+  event.payload.multipart = true;
+  const response = await post(event, authHeaders());
+  assert.equal(response.status, 200);
+  const payload = getPayloadFromClientToken((await response.json()).clientToken);
+  assert.equal(payload.maximumSizeInBytes, 100_000_000);
+  assert.ok(payload.allowedContentTypes.includes("image/png"));
+  assert.ok(payload.allowedContentTypes.includes("video/mp4"));
+  assert.ok(payload.validUntil > Date.now() + 29 * 60 * 1000 && payload.validUntil <= Date.now() + 30 * 60 * 1000);
+});
+
 test("legacy completion callbacks require a valid Blob signature and do not need MongoDB", async t => {
   const connected = t.mock.method(database, "connectDB", async () => assert.fail("callbacks must not contact MongoDB"));
   const event = { type: "blob.upload-completed", payload: { blob: { url: "https://teststore.public.blob.vercel-storage.com/uploads/user1/avatar/photo.png" }, tokenPayload: null } };

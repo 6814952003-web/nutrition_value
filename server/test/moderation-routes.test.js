@@ -133,11 +133,11 @@ test("feed polling returns fresh JSON with stable descending ordering and requir
   const first = await get("owner");
   assert.equal(first.status, 200);
   assert.equal(first.headers.get("cache-control"), "no-store");
-  assert.deepEqual(await first.json(), posts);
+  assert.deepEqual(await first.json(), posts.map(post => ({ ...post, likes: 0, likedByMe: false })));
   posts = [{ _id: "d".repeat(24), content: "New post" }, ...posts];
   const second = await get("owner");
   assert.equal(second.headers.get("cache-control"), "no-store");
-  assert.deepEqual(await second.json(), posts);
+  assert.deepEqual(await second.json(), posts.map(post => ({ ...post, likes: 0, likedByMe: false })));
   assert.deepEqual(sorts, [{ createdAt: -1, _id: -1 }, { createdAt: -1, _id: -1 }]);
   assert.deepEqual(limits, [50, 50]);
 });

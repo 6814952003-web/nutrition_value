@@ -119,7 +119,7 @@
                                    "removeButton":  "นำออก",
                                    "postButton":  "โพสต์",
                                    "waitButton":  "กรุณารอสักครู่…",
-                                   "uploadHint":  "รูปโปรไฟล์ไม่เกิน 1.5 MB รูปภาพและวิดีโอในโพสต์ไม่เกิน 4 MB",
+                                   "uploadHint":  "รูปโปรไฟล์ไม่เกิน 1.5 MB รูปภาพและวิดีโอในโพสต์ไม่เกิน 100 MB ต่อไฟล์",
                                    "commentLabel":  "ความคิดเห็น",
                                    "commentPlaceholder":  "เขียนความคิดเห็น…",
                                    "sendButton":  "ส่ง",
