@@ -58,8 +58,10 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
 Signed-in users obtain short-lived, path-restricted upload tokens from
-`/api/uploads`. File bytes go straight from the browser to Blob using
-`@vercel/blob/client`; they do not pass through a Vercel Function or get written
+`/api/uploads` through the authenticated API helper, so authentication and
+storage errors retain their HTTP status and user-facing message. The browser
+uses that client token with `put` from `@vercel/blob/client`. File bytes go
+straight from the browser to Blob; they do not pass through a Vercel Function or get written
 to its filesystem. The browser then sends the URL with its profile/post save.
 The API checks the Blob origin, owner, file metadata and size before saving the
 URL to Atlas. The read/write token stays on the server.
@@ -136,7 +138,13 @@ environment files and dependencies should be absent.
   and Atlas Network Access. `/api/health` alone does not verify Atlas.
 - **File storage is not configured:** connect a public Blob store, set
   `BLOB_READ_WRITE_TOKEN` and `BLOB_PUBLIC_ORIGIN`, and redeploy. Check that the
-  variables are enabled for the environment you are testing.
+  variables are enabled for the environment you are testing. Connecting a
+  store automatically supplies its token/store identifiers, but this app's
+  `BLOB_PUBLIC_ORIGIN` must also be set to that store's public HTTPS origin.
+  Upload authorization validates that the token and origin identify the same
+  store. Invalid/missing configuration returns HTTP 503; invalid sessions
+  return 401. The client keeps the selected file available for retry and does
+  not replace a failed upload with base64 JSON.
 - **Upload succeeds but the post/profile save fails:** check that
   `BLOB_PUBLIC_ORIGIN` is the origin of the same public store as the token, with
   no object path. The API intentionally rejects URLs from a different store.

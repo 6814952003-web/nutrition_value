@@ -1,4 +1,5 @@
 const blobStorage = require("@vercel/blob");
+const { generateClientTokenFromReadWriteToken } = require("@vercel/blob/client");
 const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
 const MEDIA_TYPES = [...IMAGE_TYPES, "image/gif", "video/mp4", "video/webm", "video/quicktime"];
 const PURPOSES = {
@@ -20,6 +21,20 @@ const blobPublicOrigin = () => {
   } catch { return null; }
 };
 
+const blobUploadConfiguration = async () => {
+  const token = process.env.BLOB_READ_WRITE_TOKEN;
+  const origin = blobPublicOrigin();
+  if (!origin || typeof token !== "string" || !/^vercel_blob_rw_[a-zA-Z0-9-]+_[a-zA-Z0-9_-]+$/.test(token)) return null;
+  try {
+    // Ask the installed SDK to resolve/sign its store identity. This probe is
+    // never returned, logged or sent to Blob, and no raw secret segments are read.
+    const probe = await generateClientTokenFromReadWriteToken({ token, pathname: "configuration-check", validUntil: Date.now() + 1000 });
+    const storeHostname = new URL(origin).hostname.split(".")[0];
+    if (!probe.toLowerCase().startsWith(`vercel_blob_client_${storeHostname}_`)) return null;
+    return { token, origin };
+  } catch { return null; }
+};
+
 const uploadPolicy = (pathname, userId) => {
   const match = parseUploadPath(pathname);
   if (!match || match[1] !== String(userId)) throw new Error("Invalid upload path.");
@@ -38,7 +53,9 @@ const validateBlob = async (value, userId, purpose, mediaType) => {
     if (typeof value !== "string" || !Object.hasOwn(PURPOSES, purpose)) return false;
 
     const localDataUrl = /^data:(image|video)\/([a-zA-Z0-9.+-]+);base64,([A-Za-z0-9+/=\s]+)$/i.exec(value);
-    if (localDataUrl && !blobPublicOrigin()) {
+    const localUnconfigured = process.env.NODE_ENV !== "production" && !process.env.VERCEL
+      && !process.env.BLOB_READ_WRITE_TOKEN && !process.env.BLOB_PUBLIC_ORIGIN;
+    if (localDataUrl && localUnconfigured) {
       const [, kind, extension, encoded] = localDataUrl;
       const mimeType = `${kind}/${extension.toLowerCase()}`;
       const dataLength = Buffer.from(encoded.replace(/\s+/g, ""), "base64").length;
@@ -48,15 +65,17 @@ const validateBlob = async (value, userId, purpose, mediaType) => {
         && (!mediaType || kind === mediaType);
     }
 
+    const configuration = await blobUploadConfiguration();
+    if (!configuration) return false;
     const url = new URL(value);
     const pathname = url.pathname.slice(1);
     const match = parseUploadPath(pathname);
-    if (url.href !== value || url.origin !== blobPublicOrigin() || url.username || url.password || url.search || url.hash
+    if (url.href !== value || url.origin !== configuration.origin || url.username || url.password || url.search || url.hash
       || !match || match[1] !== String(userId) || match[2] !== purpose) return false;
 
     // Fetch metadata through the authenticated Blob API, never through a URL
     // supplied by the browser. The returned identity must also match the URL.
-    const blob = await blobStorage.head(value, { token: process.env.BLOB_READ_WRITE_TOKEN });
+    const blob = await blobStorage.head(value, { token: configuration.token });
     const policy = PURPOSES[purpose];
     return blob.url === value && blob.pathname === pathname
       && policy.types.includes(blob.contentType)
@@ -64,4 +83,4 @@ const validateBlob = async (value, userId, purpose, mediaType) => {
       && (!mediaType || blob.contentType.startsWith(`${mediaType}/`));
   } catch { return false; }
 };
-module.exports = { blobPublicOrigin, uploadPolicy, validateBlob, parseUploadPath };
+module.exports = { blobPublicOrigin, blobUploadConfiguration, uploadPolicy, validateBlob, parseUploadPath };

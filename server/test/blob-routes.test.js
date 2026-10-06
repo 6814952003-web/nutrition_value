@@ -61,6 +61,49 @@ test("tokens cannot authorize another user's path", async t => {
   assert.equal((await post(generateEvent("uploads/user2/post/photo.png"), authHeaders())).status, 400);
 });
 
+test("unconfigured, malformed and mismatched storage returns actionable service errors without issuing tokens", async t => {
+  t.after(() => {
+    process.env.BLOB_READ_WRITE_TOKEN = blobToken;
+    process.env.BLOB_PUBLIC_ORIGIN = "https://teststore.public.blob.vercel-storage.com";
+  });
+  const connected = t.mock.method(database, "connectDB", async () => assert.fail("misconfigured storage must not connect to MongoDB"));
+  const configurations = [
+    { token: "", origin: "https://teststore.public.blob.vercel-storage.com" },
+    { token: blobToken, origin: "" },
+    { token: "malformed_token_with_teststore_secret", origin: "https://teststore.public.blob.vercel-storage.com" },
+    { token: "vercel_blob_rw_teststore", origin: "https://teststore.public.blob.vercel-storage.com" },
+    { token: "vercel_blob_rw_otherstore_fixture", origin: "https://teststore.public.blob.vercel-storage.com" },
+    { token: blobToken, origin: "https://teststore.private.blob.vercel-storage.com" },
+    { token: blobToken, origin: "https://otherstore.public.blob.vercel-storage.com" },
+    { token: blobToken, origin: "https://teststore.public.blob.vercel-storage.com/invalid" },
+  ];
+  for (const configuration of configurations) {
+    process.env.BLOB_READ_WRITE_TOKEN = configuration.token;
+    process.env.BLOB_PUBLIC_ORIGIN = configuration.origin;
+    const response = await post(generateEvent("uploads/user1/avatar/photo.png"), authHeaders());
+    assert.equal(response.status, 503);
+    assert.equal(response.headers.get("cache-control"), "no-store");
+    const body = await response.json();
+    assert.match(body.message, /Vercel Blob/);
+    assert.equal(body.clientToken, undefined);
+    assert.ok(!body.message.includes(blobToken));
+    assert.ok(!body.message.includes("otherstore"));
+  }
+  assert.equal(connected.mock.callCount(), 0);
+  // Authentication errors stay meaningful even if storage is unavailable.
+  assert.equal((await post(generateEvent("uploads/user1/avatar/photo.png"))).status, 401);
+});
+
+test("malformed upload paths return an explicit client error before contacting the database", async t => {
+  const connected = t.mock.method(database, "connectDB", async () => assert.fail("invalid paths must not connect to MongoDB"));
+  for (const path of ["arbitrary.png", "uploads/user1/unknown/photo.png", "uploads/user1/avatar/../photo.png", "uploads/user1/avatar/%2fphoto.png"]) {
+    const response = await post(generateEvent(path), authHeaders());
+    assert.equal(response.status, 400);
+    assert.match((await response.json()).message, /ตำแหน่งไฟล์/);
+  }
+  assert.equal(connected.mock.callCount(), 0);
+});
+
 test("token requests return a service error when MongoDB is unavailable", async t => {
   t.mock.method(database, "connectDB", async () => false);
   assert.equal((await post(generateEvent("uploads/user1/post/photo.png"), authHeaders())).status, 503);

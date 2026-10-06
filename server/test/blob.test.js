@@ -1,7 +1,7 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const blobStorage = require("@vercel/blob");
-const { blobPublicOrigin, uploadPolicy, validateBlob } = require("../src/config/blob");
+const { blobPublicOrigin, blobUploadConfiguration, uploadPolicy, validateBlob } = require("../src/config/blob");
 
 const origin = "https://test.public.blob.vercel-storage.com";
 const avatarUrl = `${origin}/uploads/user1/avatar/photo.png`;
@@ -101,4 +101,46 @@ test("storage configuration requires a public Vercel Blob origin", t => {
     process.env.BLOB_PUBLIC_ORIGIN = configuredOrigin;
     assert.equal(blobPublicOrigin(), null);
   }
+});
+
+test("SDK token identity must match the configured public store without any Blob request", async t => {
+  t.after(() => {
+    process.env.BLOB_PUBLIC_ORIGIN = origin;
+    process.env.BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_test_fixture";
+  });
+  const head = t.mock.method(blobStorage, "head", () => assert.fail("configuration preflight must not contact Blob"));
+  assert.deepEqual(await blobUploadConfiguration(), { token: "vercel_blob_rw_test_fixture", origin });
+  process.env.BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_Test_fixture";
+  assert.equal((await blobUploadConfiguration()).origin, origin);
+  process.env.BLOB_READ_WRITE_TOKEN = "vercel_blob_rw_other_fixture";
+  assert.equal(await blobUploadConfiguration(), null);
+  assert.equal(await validateBlob(avatarUrl, "user1", "avatar"), false);
+  process.env.BLOB_READ_WRITE_TOKEN = "vercel_blob_client_test_fixture";
+  assert.equal(await blobUploadConfiguration(), null);
+  assert.equal(head.mock.callCount(), 0);
+});
+
+test("base64 media is rejected in production and when local storage configuration is malformed", async t => {
+  const originalEnv = Object.fromEntries(["BLOB_PUBLIC_ORIGIN", "BLOB_READ_WRITE_TOKEN", "NODE_ENV", "VERCEL"].map(key => [key, process.env[key]]));
+  t.after(() => {
+    for (const [key, value] of Object.entries(originalEnv)) {
+      if (value === undefined) delete process.env[key]; else process.env[key] = value;
+    }
+  });
+  const head = t.mock.method(blobStorage, "head", () => assert.fail("invalid media must not contact Blob"));
+  const data = "data:image/png;base64,AAAA";
+  delete process.env.BLOB_PUBLIC_ORIGIN;
+  delete process.env.BLOB_READ_WRITE_TOKEN;
+  process.env.NODE_ENV = "production";
+  assert.equal(await validateBlob(data, "user1", "avatar"), false);
+  process.env.NODE_ENV = "development";
+  process.env.VERCEL = "1";
+  assert.equal(await validateBlob(data, "user1", "avatar"), false);
+  delete process.env.VERCEL;
+  process.env.BLOB_PUBLIC_ORIGIN = "malformed";
+  assert.equal(await validateBlob(data, "user1", "avatar"), false);
+  delete process.env.BLOB_PUBLIC_ORIGIN;
+  process.env.BLOB_READ_WRITE_TOKEN = "malformed";
+  assert.equal(await validateBlob(data, "user1", "avatar"), false);
+  assert.equal(head.mock.callCount(), 0);
 });
