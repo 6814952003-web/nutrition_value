@@ -9,6 +9,12 @@ const app = express();
 
 // 1. Global middleware
 app.use(cors());
+// Privacy responses stay uncached even when JSON parsing or the shared database
+// preflight fails before their router is reached.
+app.use((req, res, next) => {
+  if (/^\/api\/(?:profiles|users)(?:\/|$)/.test(req.path)) res.set("Cache-Control", "no-store");
+  next();
+});
 app.use(express.json({ limit: "256kb" }));
 
 // 2. Routes
@@ -18,12 +24,14 @@ app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 app.use("/api/uploads", require("./routes/upload.routes"));
 // Site settings must always be read fresh, including temporary service errors.
 app.use("/api/site", (req, res, next) => { res.set("Cache-Control", "no-store"); next(); });
+app.use("/api/profiles", (req, res, next) => { res.set("Cache-Control", "no-store"); next(); });
 app.use("/api", async (req, res, next) => {
   if (!await connectDB()) return res.status(503).json({ message: "Database is unavailable. Please try again in a moment." });
   next();
 });
 app.use("/api/tracks", trackRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/profiles", require("./routes/profile.routes"));
 app.use("/api/posts", postRoutes);
 app.use("/api/site", require("./routes/site.routes"));
 

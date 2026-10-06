@@ -82,6 +82,32 @@ the server. Adding a heart uses an atomic MongoDB update, so repeated clicks or
 concurrent requests from one account cannot increase the count twice. Old totals
 without account records restart at zero, as requested, without deleting posts.
 
+## Public profiles and privacy
+
+The React route `/u/:username` and its public profile API expose a visitor DTO
+containing only `avatarUrl`, `displayName`, `bio`, `joinedAt`, `streak` and
+`posts`. Each public post exposes only `_id`, `content`, `category`, `mediaData`,
+`mediaType`, `createdAt`, `likes` and `commentCount`. Email, health data,
+account roles, author IDs, comment bodies and like identities are omitted by
+explicit projections and serializers. The signed-in community API also uses
+field allowlists, omits author email snapshots and never stores email on new
+posts. Existing email snapshots in Atlas need no destructive data migration;
+they are never serialized.
+
+Profiles default to private. Missing and private profiles return the same
+unavailable response, and profile API responses must not be cached. Members
+edit their own username, display name, bio and visibility from their private
+account page. Visitor preview uses saved settings: a saved private profile
+is unavailable in the preview too. Changing visibility does not delete community
+posts or revoke previously shared public Blob object URLs.
+
+Deploy the client and server together. No new service or environment variable
+is required. Usernames use a unique index and community posts have an
+`author`/`createdAt`/`_id` compound index for profile feed ordering. Existing
+accounts remain private until their owner configures a public profile. Verify a
+private profile is unavailable anonymously, a public profile contains exactly
+the visitor DTO, and an owner can save settings and preview the resulting view.
+
 ## Local development
 
 From this project directory:

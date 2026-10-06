@@ -16,6 +16,17 @@ Community attachments retain their original aspect ratio and support files up
 to 100 MB, with multipart uploads for large files. Hearts count once per account
 and post; legacy totals without account records restart at zero.
 
+Public profiles are available at `/u/:username` after a member chooses a username
+and makes their profile public in their private account settings. Profiles are
+private by default. The visitor view contains only the photo, display name, bio,
+join date, daily activity streak and community posts. Public profile responses
+use explicit field allowlists and never include email, health records, author
+identifiers, comment bodies or the identities of accounts that liked a post.
+The preview button opens the saved visitor view; a saved private profile is
+unavailable to visitors. Making a profile private hides that profile without
+removing its posts from the signed-in community. Already shared public Blob
+media URLs remain accessible to people who hold the URL.
+
 ## Local development
 
 Use Node.js 24. Install packages from the repository root:

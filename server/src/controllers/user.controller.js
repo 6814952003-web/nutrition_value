@@ -6,7 +6,11 @@ const { signToken } = require("../config/auth");
 const { createActivity } = require("./activity.controller");
 const { configuredAdminEmail: bootstrapAdminEmail, validName, validEmail, validConfiguredLocalEmail, validLoginEmail, validPassword, validLoginPassword } = require("../config/user-validation");
 
-const userResponse = user => ({ id: user._id, name: user.name, email: user.email, role: user.role, avatarData: user.avatarData || "", createdAt: user.createdAt });
+const userResponse = user => ({
+  id: user._id, name: user.name, email: user.email, role: user.role, avatarData: user.avatarData || "", createdAt: user.createdAt,
+  username: user.username || "", displayName: user.displayName || user.name, bio: user.bio || "",
+  profileVisibility: user.profileVisibility === "public" ? "public" : "private",
+});
 const authResponse = user => ({ user: userResponse(user), token: signToken({ id: user._id, role: user.role }) });
 const promoteAdminIfNeeded = async user => {
   const configuredAdminEmail = bootstrapAdminEmail();
@@ -83,7 +87,7 @@ const loginUser = async (req, res, next) => {
 const getMe = (req, res) => res.json(userResponse(req.user));
 
 const listUsers = async (req, res, next) => {
-  try { res.json((await User.find().select("_id name email role createdAt").sort({ createdAt: -1 })).map(userResponse)); }
+  try { res.json((await User.find().select("_id name email role avatarData createdAt username displayName bio profileVisibility").sort({ createdAt: -1 })).map(userResponse)); }
   catch (error) { next(error); }
 };
 
@@ -126,7 +130,7 @@ const updateUser = async (req, res, next) => {
         updates.role = "admin";
       }
     }
-    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true }).select("_id name email role avatarData createdAt");
+    const user = await User.findByIdAndUpdate(req.params.id, updates, { new: true, runValidators: true }).select("_id name email role avatarData createdAt username displayName bio profileVisibility");
     if (!user) return res.status(404).json({ message: "User not found." });
     res.json(userResponse(user));
   } catch (error) {
@@ -137,14 +141,59 @@ const updateUser = async (req, res, next) => {
 
 const updateMyProfile = async (req, res, next) => {
   try {
-    const avatarData = bodyFields(req).avatarData;
-    if (typeof avatarData !== "string" || !await validateBlob(avatarData, req.user._id, "avatar")) {
-      return res.status(400).json({ message: "Please upload a PNG, JPG, or WebP image smaller than 1.5 MB to Blob first." });
+    const body = bodyFields(req);
+    const allowed = ["avatarData", "username", "displayName", "bio", "profileVisibility"];
+    if (!Object.keys(body).length || Object.keys(body).some(key => !allowed.includes(key))) {
+      return res.status(400).json({ message: "Only avatar, username, display name, bio and profile visibility may be updated." });
     }
-    const user = await User.findByIdAndUpdate(req.user._id, { avatarData }, { new: true, runValidators: true });
-    if (!user) return res.status(404).json({ message: "User not found." });
+    const updates = {};
+    let clearUsername = false;
+    if (Object.hasOwn(body, "avatarData")) {
+      if (typeof body.avatarData !== "string" || !await validateBlob(body.avatarData, req.user._id, "avatar")) {
+        return res.status(400).json({ message: "Please upload a PNG, JPG, or WebP image smaller than 1.5 MB to Blob first." });
+      }
+      updates.avatarData = body.avatarData;
+    }
+    if (Object.hasOwn(body, "username")) {
+      if (typeof body.username !== "string") return res.status(400).json({ message: "Username must use 3 to 30 lowercase letters, numbers, underscores or hyphens." });
+      const username = body.username.trim().toLowerCase();
+      if (username && !/^[a-z0-9_-]{3,30}$/.test(username)) return res.status(400).json({ message: "Username must use 3 to 30 lowercase letters, numbers, underscores or hyphens." });
+      if (username) updates.username = username;
+      else clearUsername = true;
+    }
+    if (Object.hasOwn(body, "displayName")) {
+      if (!validName(body.displayName)) return res.status(400).json({ message: "Display name must be between 1 and 80 characters." });
+      updates.displayName = body.displayName.trim();
+    }
+    if (Object.hasOwn(body, "bio")) {
+      if (typeof body.bio !== "string" || body.bio.trim().length > 300) return res.status(400).json({ message: "Bio must be at most 300 characters." });
+      updates.bio = body.bio.trim();
+    }
+    if (Object.hasOwn(body, "profileVisibility")) {
+      if (!["private", "public"].includes(body.profileVisibility)) return res.status(400).json({ message: "Profile visibility must be private or public." });
+      updates.profileVisibility = body.profileVisibility;
+    }
+    const visibility = updates.profileVisibility || req.user.profileVisibility || "private";
+    const username = clearUsername ? "" : updates.username || req.user.username;
+    if (visibility === "public" && !/^[a-z0-9_-]{3,30}$/.test(username || "")) return res.status(400).json({ message: "Choose a username before making your profile public." });
+    const operation = clearUsername ? { $set: updates, $unset: { username: 1 } } : updates;
+    const changesAddressOrVisibility = Object.hasOwn(body, "username") || Object.hasOwn(body, "profileVisibility");
+    // Privacy transitions must use the same saved state that was validated.
+    // Otherwise simultaneous publish / clear-username requests could race.
+    const user = changesAddressOrVisibility
+      ? await User.findOneAndUpdate({
+        _id: req.user._id,
+        username: req.user.username || null,
+        profileVisibility: req.user.profileVisibility === "public" ? "public" : { $in: ["private", null] },
+      }, operation, { new: true, runValidators: true })
+      : await User.findByIdAndUpdate(req.user._id, operation, { new: true, runValidators: true });
+    if (!user) return res.status(changesAddressOrVisibility ? 409 : 404).json({ message: changesAddressOrVisibility
+      ? "Profile settings changed. Reload your account and try again." : "User not found." });
     res.json(userResponse(user));
-  } catch (error) { next(error); }
+  } catch (error) {
+    if (error?.code === 11000) return res.status(409).json({ message: "This username is already taken." });
+    next(error);
+  }
 };
 
 module.exports = { registerUser, loginUser, getMe, listUsers, updateUser, updateMyProfile };

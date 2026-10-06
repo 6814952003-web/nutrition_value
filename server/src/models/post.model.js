@@ -8,7 +8,6 @@ const commentSchema = new mongoose.Schema({
 
 const postSchema = new mongoose.Schema({
   authorName: { type: String, required: true, trim: true, maxlength: 80 },
-  authorEmail: { type: String, required: true, trim: true, lowercase: true },
   author: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
   authorAvatar: { type: String, default: "" },
   category: { type: String, enum: ["food", "workout", "knowledge", "recipe"], required: true },
@@ -20,5 +19,7 @@ const postSchema = new mongoose.Schema({
   likedBy: { type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], default: [] },
   comments: { type: [commentSchema], default: [] },
 }, { timestamps: true });
+
+postSchema.index({ author: 1, createdAt: -1, _id: -1 });
 
 module.exports = mongoose.model("Post", postSchema);

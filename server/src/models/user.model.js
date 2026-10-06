@@ -18,6 +18,14 @@ const userSchema = new mongoose.Schema({
   passwordSalt: { type: String, required: true },
   role: { type: String, enum: ["user", "admin"], default: "user", index: true },
   avatarData: { type: String, default: "" },
+  // No default username: a sparse unique index lets existing accounts remain
+  // private until their owner chooses a public address.
+  username: { type: String, trim: true, lowercase: true, minlength: 3, maxlength: 30, match: /^[a-z0-9_-]{3,30}$/ },
+  displayName: { type: String, trim: true, minlength: 1, maxlength: 80 },
+  bio: { type: String, trim: true, maxlength: 300, default: "" },
+  profileVisibility: { type: String, enum: ["private", "public"], default: "private" },
 }, { timestamps: true });
+
+userSchema.index({ username: 1 }, { unique: true, sparse: true });
 
 module.exports = mongoose.model("User", userSchema);

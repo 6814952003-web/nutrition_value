@@ -40,7 +40,9 @@ const { SiteContext, defaultSite } = loadUiModule(path.join(sourceRoot, "SiteCon
 const { default: AuthPage } = loadUiModule(path.join(sourceRoot, "AuthPage"));
 const { default: Dashboard } = loadUiModule(path.join(sourceRoot, "Dashboard"));
 const { default: AdminPage } = loadUiModule(path.join(sourceRoot, "AdminPage"));
-const { default: App, AccountPage, AdminRoute } = loadUiModule(path.join(sourceRoot, "App"));
+const { default: App, AccountPage, AdminRoute, resolveAppView } = loadUiModule(path.join(sourceRoot, "App"));
+const { default: PublicProfilePage, PublicProfileView } = loadUiModule(path.join(sourceRoot, "PublicProfilePage"));
+const { default: ProfileSettings, savedProfileFields, validateProfileFields } = loadUiModule(path.join(sourceRoot, "ProfileSettings"));
 const { default: CommunityPage, CommunityPost } = loadUiModule(path.join(sourceRoot, "CommunityPage"));
 const user = { id: "ui-fixture-user", name: "สมาชิกทดสอบ", role: "admin" };
 const noop = () => {};
@@ -233,11 +235,13 @@ function appStateFixture(t, view) {
   const originalGlobals = Object.fromEntries(["localStorage", "history"].map(key => [key, Object.getOwnPropertyDescriptor(global, key)]));
   const { api } = loadUiModule(path.join(sourceRoot, "api"));
   const originalRecord = api.recordSession;
-  let stateIndex = 0; let token = "member-token";
+  let stateIndex = 0; let refIndex = 0; let token = "member-token";
+  const refs = [];
   const routes = []; const durations = [];
+  const effects = [];
   React.useState = () => { const index = stateIndex++; return [states[index], next => { states[index] = typeof next === "function" ? next(states[index]) : next; }]; };
-  React.useEffect = noop;
-  React.useRef = () => ({ current: Date.now() - 65000 });
+  React.useEffect = callback => effects.push(callback);
+  React.useRef = initial => { const index = refIndex++; return refs[index] ||= { current: index === 0 ? Date.now() - 65000 : initial }; };
   global.localStorage = { getItem: () => token, removeItem: () => { token = null; }, setItem: (key, value) => { token = value; } };
   global.history = { pushState: (state, title, pathname) => routes.push({ state, pathname }) };
   api.recordSession = async seconds => { durations.push(seconds); };
@@ -248,7 +252,7 @@ function appStateFixture(t, view) {
       else delete global[key];
     }
   });
-  return { states, routes, durations, token: () => token, page: () => { stateIndex = 0; return App().props.children; } };
+  return { states, routes, durations, effects, token: () => token, page: () => { stateIndex = 0; refIndex = 0; return App().props.children; } };
 }
 
 test("switching the member out of /admin saves the session and keeps the admin login intent", async t => {
@@ -293,4 +297,230 @@ test("login accepts an existing five-character password while new registration s
   assert.match(registerPassword, /minlength="6"/i);
   assert.match(confirmation, /minlength="6"/i);
   assert.ok(login.includes("เข้าสู่ระบบด้วยบัญชีผู้ดูแลเพื่อจัดการเว็บไซต์"));
+});
+
+const publicProfile = () => ({
+  avatarUrl: "https://assets.example.com/profile.png", displayName: "เพื่อนชุมชน", bio: "บรรทัดแรก\n<script>unsafe</script>",
+  joinedAt: "2026-10-01T00:00:00.000Z", streak: 4,
+  posts: [{ _id: "public-post", content: "ข้อความสาธารณะ", category: "food", mediaData: "https://assets.example.com/portrait.jpg", mediaType: "image", createdAt: "2026-10-06T11:00:00.000Z", likes: 2, commentCount: 3 }],
+});
+
+test("public URL parsing takes precedence over stale member/admin history and safely rejects malformed paths", () => {
+  for (const pathname of ["/u/nouri_friend", "/u/NOURI_friend", "/u/nouri_friend/"]) {
+    assert.equal(resolveAppView(pathname, { view: "admin" }), "public:nouri_friend");
+  }
+  for (const pathname of ["/u/%E0%A4%A", "/u/a%2Fb", "/u/two/parts", "/u/", "/u", "/u/ab", "/u/%25foo"]) {
+    assert.equal(resolveAppView(pathname, { view: "account" }), "public:");
+  }
+  assert.equal(resolveAppView("/admin", { view: "dashboard" }), "admin");
+  assert.equal(resolveAppView("/", { view: "account" }), "account");
+  assert.equal(resolveAppView("/", { view: "profile-preview" }), "profile-preview");
+  assert.equal(resolveAppView("/", { view: "public:stale" }), "dashboard");
+});
+
+test("public profiles bypass the authentication page for visitors and signed-in users", t => {
+  const fixture = appStateFixture(t, "public:nouri_friend");
+  fixture.states[0] = null;
+  let page = fixture.page();
+  assert.equal(page.type, PublicProfilePage);
+  assert.equal(page.props.username, "nouri_friend");
+  fixture.states[0] = { id: "private-user", email: "private@example.com", health: "private-health", role: "admin" };
+  page = fixture.page();
+  assert.equal(page.type, PublicProfilePage);
+  assert.ok(!Object.hasOwn(page.props, "user"));
+  fixture.states[3] = "public:";
+  assert.equal(fixture.page().type, PublicProfilePage);
+});
+
+test("public routes skip owner session data and leaving restores only the account matching the current token", async t => {
+  const fixture = appStateFixture(t, "public:nouri_friend");
+  fixture.states[0] = null;
+  const { api } = loadUiModule(path.join(sourceRoot, "api"));
+  const previousMe = api.me; let calls = 0; let resolve;
+  api.me = () => { calls++; return new Promise(done => { resolve = done; }); };
+  t.after(() => { api.me = previousMe; });
+  fixture.page();
+  assert.equal(fixture.effects[3](), undefined);
+  assert.equal(fixture.effects[5](), undefined);
+  assert.equal(calls, 0);
+  fixture.states[3] = "dashboard"; fixture.effects.length = 0; fixture.page();
+  const cleanup = fixture.effects[3]();
+  assert.equal(calls, 1);
+  const newAccount = { id: "new-account", email: "new@example.com" };
+  global.localStorage.setItem("nouri-token", "new-account-token"); fixture.states[0] = newAccount;
+  resolve({ id: "old-account", email: "old@example.com" });
+  await Promise.resolve();
+  assert.deepEqual(fixture.states[0], newAccount);
+  cleanup();
+});
+
+test("browser back and forward follow the public pathname and restore the private account view", t => {
+  const fixture = appStateFixture(t, "account");
+  const previousWindow = global.window; const previousLocation = global.location;
+  const listeners = {};
+  global.window = { addEventListener: (name, callback) => { listeners[name] = callback; }, removeEventListener: name => { delete listeners[name]; }, dispatchEvent: () => true };
+  global.location = { pathname: "/" };
+  t.after(() => { if (previousWindow === undefined) delete global.window; else global.window = previousWindow; if (previousLocation === undefined) delete global.location; else global.location = previousLocation; });
+  fixture.page();
+  const cleanup = fixture.effects[2]();
+  global.location.pathname = "/u/nouri_friend";
+  listeners.popstate({ state: { view: "account" } });
+  assert.equal(fixture.states[3], "public:nouri_friend");
+  global.location.pathname = "/";
+  listeners.popstate({ state: { view: "account" } });
+  assert.equal(fixture.states[3], "account");
+  cleanup();
+  assert.equal(listeners.popstate, undefined);
+});
+
+test("visitor preview keeps private drafts for returning to settings and respects saved privacy", t => {
+  const fixture = appStateFixture(t, "account");
+  const owner = { ...fixture.states[0], username: "saved_owner", profileVisibility: "private" };
+  fixture.states[0] = owner;
+  const draft = { username: "unsaved_owner", displayName: "Unsaved name", bio: "Unsaved bio", profileVisibility: "public" };
+  fixture.page().props.onPreview(draft);
+  const preview = fixture.page();
+  assert.equal(preview.type, PublicProfilePage);
+  assert.equal(preview.props.preview, true);
+  assert.equal(preview.props.isPrivate, true);
+  assert.ok(!Object.hasOwn(preview.props, "user"));
+  assert.ok(!Object.hasOwn(preview.props, "draft"));
+  preview.props.onBack();
+  const settings = fixture.page();
+  assert.equal(settings.type, AccountPage);
+  assert.deepEqual(settings.props.initialDraft, draft);
+  assert.deepEqual(fixture.states[0], owner);
+  fixture.states[0] = { ...owner, id: "different-owner" };
+  assert.equal(fixture.page().props.initialDraft, undefined);
+});
+
+test("public profile rendering exposes only its display fields and read-only posts, with full media proportions", () => {
+  const profile = publicProfile();
+  Object.assign(profile, { email: "secret@example.com", health: "medical-private", role: "admin", onlineSeconds: 999, username: "secret-username" });
+  Object.assign(profile.posts[0], { authorEmail: "author-secret@example.com", author: "private-owner-id", likedBy: ["private-liker-id"], comments: [{ authorName: "private-comment-name", content: "private-comment-text" }] });
+  const html = render(PublicProfileView, siteFixture(), { profile, onBack: noop });
+  for (const visible of ["เพื่อนชุมชน", "บรรทัดแรก", "4 วันต่อเนื่อง", "ข้อความสาธารณะ", "2 หัวใจ", "3 ความคิดเห็น", "เข้าร่วมเมื่อ"]) assert.ok(html.includes(visible));
+  for (const hidden of ["secret@example.com", "medical-private", "secret-username", "author-secret@example.com", "private-owner-id", "private-liker-id", "private-comment-name", "private-comment-text"]) assert.ok(!html.includes(hidden));
+  assert.ok(html.includes("&lt;script&gt;unsafe&lt;/script&gt;"));
+  assert.ok(!html.includes("<script>"));
+  assert.match(html, /<img[^>]*portrait\.jpg[^>]*class="[^"]*h-auto w-auto max-w-full[^"]*object-contain/);
+  assert.ok(!html.includes("max-h-96"));
+  assert.ok(!html.includes("<textarea"));
+  assert.ok(!html.includes("<form"));
+  assert.ok(!html.includes("aria-pressed"));
+  assert.ok(!html.includes("ลบโพสต์"));
+  profile.posts[0].mediaType = "video"; profile.posts[0].mediaData = "https://assets.example.com/portrait.mp4";
+  const video = render(PublicProfileView, siteFixture(), { profile });
+  assert.match(video, /<video[^>]*controls=""[^>]*playsinline=""[^>]*preload="metadata"/);
+  assert.ok(video.includes("h-auto w-auto max-w-full"));
+});
+
+test("private and missing profiles use the same unavailable visitor state and private previews hide owner contents", () => {
+  const missing = render(PublicProfileView, siteFixture(), { error: "unavailable" });
+  const privateProfile = render(PublicProfileView, siteFixture(), { error: "unavailable" });
+  assert.equal(privateProfile, missing);
+  assert.ok(missing.includes("ไม่สามารถดูโปรไฟล์นี้ได้"));
+  const preview = render(PublicProfileView, siteFixture(), { profile: publicProfile(), preview: true, isPrivate: true });
+  assert.ok(preview.includes("โปรไฟล์ที่บันทึกแล้วยังเป็นส่วนตัว"));
+  assert.ok(preview.includes("ไม่สามารถดูโปรไฟล์นี้ได้"));
+  for (const hidden of ["เพื่อนชุมชน", "ข้อความสาธารณะ", "portrait.jpg"]) assert.ok(!preview.includes(hidden));
+  const published = render(PublicProfileView, siteFixture(), { profile: publicProfile(), preview: true, isPrivate: false });
+  assert.ok(published.includes("ข้อความสาธารณะ"));
+  assert.ok(published.includes("ข้อมูลที่บันทึกแล้ว"));
+});
+
+test("existing accounts default private and settings explain saved visibility with blank usernames allowed only privately", () => {
+  const member = { id: "new-settings", name: "ชื่อปัจจุบัน", email: "private@example.com" };
+  assert.equal(savedProfileFields(member).profileVisibility, "private");
+  const html = render(ProfileSettings, siteFixture(), { user: member, setUser: noop, onPreview: noop });
+  assert.match(html, /type="radio"[^>]*name="profileVisibility"[^>]*checked=""[^>]*value="private"/);
+  assert.ok(html.includes("ชื่อปัจจุบัน"));
+  assert.ok(html.includes("โพสต์ในชุมชนยังแสดงในชุมชนตามเดิม"));
+  assert.ok(html.includes("พรีวิวแสดงข้อมูลที่บันทึกแล้วเท่านั้น"));
+  assert.equal(validateProfileFields({ ...savedProfileFields(member), username: "" }), "");
+  assert.ok(validateProfileFields({ ...savedProfileFields(member), profileVisibility: "public" }));
+  for (const username of ["a", "UPPERCASE", "contains space", "ไทย", "a".repeat(31)]) assert.ok(validateProfileFields({ ...savedProfileFields(member), username }));
+  assert.equal(validateProfileFields({ ...savedProfileFields(member), username: "nouri_friend-1", profileVisibility: "public" }), "");
+  assert.ok(validateProfileFields({ ...savedProfileFields(member), displayName: "  " }));
+  assert.ok(validateProfileFields({ ...savedProfileFields(member), bio: "a".repeat(301) }));
+});
+
+test("profile API uses an anonymous encoded URL while owner preview and editing remain authenticated", async t => {
+  const previousFetch = global.fetch; const previousStorage = global.localStorage;
+  const calls = [];
+  global.localStorage = { getItem: () => "owner-token" };
+  global.fetch = async (url, options) => { calls.push({ url, options }); return { ok: true, json: async () => ({}) }; };
+  t.after(() => { global.fetch = previousFetch; if (previousStorage === undefined) delete global.localStorage; else global.localStorage = previousStorage; });
+  const { api } = loadUiModule(path.join(sourceRoot, "api"));
+  const controller = new AbortController();
+  await api.publicProfile("name/a", { signal: controller.signal, auth: true });
+  await api.publicPreview({ signal: controller.signal });
+  await api.updateMyProfile({ username: "nouri_friend", displayName: "เพื่อน", bio: "", profileVisibility: "private" });
+  assert.equal(calls[0].url, "/api/profiles/name%2Fa");
+  assert.equal(calls[0].options.headers.Authorization, undefined);
+  assert.equal(calls[0].options.signal, controller.signal);
+  assert.equal(calls[1].url, "/api/users/me/public-preview");
+  assert.equal(calls[1].options.headers.Authorization, "Bearer owner-token");
+  assert.equal(calls[2].url, "/api/users/me/profile");
+  assert.equal(calls[2].options.method, "PATCH");
+  assert.deepEqual(JSON.parse(calls[2].options.body), { username: "nouri_friend", displayName: "เพื่อน", bio: "", profileVisibility: "private" });
+});
+
+function componentStateFixture(t, Component, props) {
+  const original = { useState: React.useState, useEffect: React.useEffect };
+  const states = []; let index = 0;
+  React.useState = initial => {
+    const key = index++;
+    if (!Object.hasOwn(states, key)) states[key] = typeof initial === "function" ? initial() : initial;
+    return [states[key], next => { states[key] = typeof next === "function" ? next(states[key]) : next; }];
+  };
+  React.useEffect = noop;
+  t.after(() => Object.assign(React, original));
+  return { states, page: next => { index = 0; return Component({ ...props, ...next }); } };
+}
+function findElement(element, predicate) {
+  if (!React.isValidElement(element)) return null;
+  if (predicate(element)) return element;
+  for (const child of React.Children.toArray(element.props.children)) {
+    const found = findElement(child, predicate);
+    if (found) return found;
+  }
+  return null;
+}
+
+test("profile saving waits for server success, handles failure, and avatar updates preserve drafts", async t => {
+  const { api } = loadUiModule(path.join(sourceRoot, "api"));
+  const previousUpdate = api.updateMyProfile;
+  t.after(() => { api.updateMyProfile = previousUpdate; });
+  const member = { id: "owner", name: "ชื่อเก่า", username: "owner_name", displayName: "ชื่อเก่า", bio: "ไบโอเก่า", profileVisibility: "private" };
+  const saved = []; const requests = []; const previews = [];
+  const fixture = componentStateFixture(t, ProfileSettings, { user: member, setUser: value => saved.push(value), onPreview: draft => previews.push(draft) });
+  let page = fixture.page();
+  findElement(page, element => element.props.id === "profile-bio").props.onChange({ target: { value: "ไบโอที่ยังไม่บันทึก" } });
+  page = fixture.page({ user: { ...member, avatarData: "new-avatar" } });
+  assert.equal(findElement(page, element => element.props.id === "profile-bio").props.value, "ไบโอที่ยังไม่บันทึก");
+  let resolve;
+  api.updateMyProfile = data => { requests.push(data); return new Promise(done => { resolve = done; }); };
+  const pending = findElement(page, element => element.type === "form").props.onSubmit({ preventDefault: noop });
+  assert.equal(saved.length, 0);
+  assert.equal(fixture.states[1], true);
+  assert.equal(requests[0].bio, "ไบโอที่ยังไม่บันทึก");
+  assert.ok(!Object.hasOwn(requests[0], "avatarData"));
+  resolve({ ...member, ...requests[0], avatarData: "new-avatar" });
+  await pending;
+  assert.equal(saved.length, 1);
+  assert.equal(fixture.states[1], false);
+  assert.equal(fixture.states[2], "บันทึกโปรไฟล์แล้ว");
+  page = fixture.page();
+  findElement(page, element => element.props.id === "profile-bio").props.onChange({ target: { value: "เก็บฉบับร่างแม้บันทึกไม่ผ่าน" } });
+  page = fixture.page();
+  api.updateMyProfile = async () => { throw new Error("ชื่อผู้ใช้นี้มีคนใช้แล้ว"); };
+  await findElement(page, element => element.type === "form").props.onSubmit({ preventDefault: noop });
+  assert.equal(saved.length, 1);
+  assert.equal(fixture.states[0].bio, "เก็บฉบับร่างแม้บันทึกไม่ผ่าน");
+  assert.equal(fixture.states[3], "ชื่อผู้ใช้นี้มีคนใช้แล้ว");
+  page = fixture.page();
+  findElement(page, element => element.type === "button" && element.props.type === "button").props.onClick();
+  assert.equal(previews.length, 1);
+  assert.equal(saved.length, 1);
 });

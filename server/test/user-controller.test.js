@@ -35,6 +35,7 @@ test("editing an admin account preserves its existing avatar and join date in th
   assert.deepEqual(response, {
     id: existing._id, name: "Edited name", email: existing.email, role: existing.role,
     avatarData: existing.avatarData, createdAt: existing.createdAt,
+    username: "", displayName: "Edited name", bio: "", profileVisibility: "private",
   });
   assert.equal(response.passwordHash, undefined);
   assert.equal(response.passwordSalt, undefined);
@@ -182,7 +183,7 @@ test("member editing normalizes changes, preserves profile fields and excludes c
   const res = response();
   await updateUser({ params: { id: "target" }, user: { _id: "admin" }, body: { name: " Member ", email: " MEMBER@Example.com ", role: "user" } }, res, unexpected);
   assert.deepEqual(update.mock.calls[0].arguments, ["target", { name: "Member", email: "member@example.com", role: "user" }, { new: true, runValidators: true }]);
-  assert.deepEqual(res.body, { id: "target", name: "Member", email: "member@example.com", role: "user", avatarData: "avatar", createdAt: "date" });
+  assert.deepEqual(res.body, { id: "target", name: "Member", email: "member@example.com", role: "user", avatarData: "avatar", createdAt: "date", username: "", displayName: "Member", bio: "", profileVisibility: "private" });
 });
 
 test("administrators cannot demote their own account, including a differently cased identifier", async t => {
