@@ -4,6 +4,7 @@ const { listMyActivity, saveSession } = require("../controllers/activity.control
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
 
 const router = express.Router();
+router.use((req, res, next) => { res.set("Cache-Control", "no-store"); next(); });
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/me", authenticate, getMe);

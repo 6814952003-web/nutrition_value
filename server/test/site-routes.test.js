@@ -79,7 +79,8 @@ test("an existing admin token loses write access immediately after role revocati
   assert.equal((await (await request()).json()).revision, 1);
 });
 
-test("production without a signing secret rejects writes before any database mutation", async t => {
+test("production without a signing secret reports a service error before any database mutation", async t => {
+  t.mock.method(console, "error", () => {});
   const previousEnv = Object.fromEntries(["JWT_SECRET", "jwt_secret", "NODE_ENV"].map(key => [key, process.env[key]]));
   const tokenHeaders = headers("admin");
   t.after(() => {
@@ -95,7 +96,8 @@ test("production without a signing secret rejects writes before any database mut
   const response = await fetch(endpoint, {
     method: "PUT", headers: { "Content-Type": "application/json", ...tokenHeaders }, body: JSON.stringify({ ...defaults, revision: 0 }),
   });
-  assert.equal(response.status, 401);
+  assert.equal(response.status, 500);
+  assert.match((await response.json()).message, /JWT_SECRET is required/);
   assert.equal(storage.create.mock.callCount(), 0);
   assert.equal(storage.update.mock.callCount(), 0);
 });

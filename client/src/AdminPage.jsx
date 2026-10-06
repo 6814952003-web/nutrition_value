@@ -7,6 +7,7 @@ const clone = value => JSON.parse(JSON.stringify(value));
 const newId = prefix => `${prefix}-${crypto.randomUUID()}`;
 const nutrientLabels = { calories: "พลังงาน (kcal)", protein: "โปรตีน (กรัม)", carbs: "คาร์โบไฮเดรต (กรัม)", fat: "ไขมัน (กรัม)" };
 const tabs = [{ id: "general", label: "ตั้งค่าเว็บไซต์" }, { id: "content", label: "ข้อความ" }, { id: "media", label: "รูปภาพและไอคอน" }, { id: "meals", label: "เมนูอาหาร" }, { id: "guides", label: "คู่มือโภชนาการ" }, { id: "users", label: "สมาชิก" }, { id: "community", label: "ดูแลชุมชน" }];
+const postCategories = { food: "มื้ออาหาร", recipe: "สูตรอาหาร", knowledge: "ความรู้ด้านอาหาร", workout: "สุขภาพและการออกกำลังกาย" };
 const copyGroups = { auth: "หน้าเข้าสู่ระบบและสมัครสมาชิก", dashboard: "หน้าหลัก", account: "หน้าบัญชี", community: "หน้าชุมชน" };
 const copyLabels = {
   loginTitle: "หัวข้อเข้าสู่ระบบ", registerTitle: "หัวข้อสมัครสมาชิก", loginDescription: "คำอธิบายเข้าสู่ระบบ", registerDescription: "คำอธิบายสมัครสมาชิก", emailLabel: "ป้ายชื่ออีเมล", nameLabel: "ป้ายชื่อสมาชิก", passwordLabel: "ป้ายรหัสผ่าน", loginButton: "ปุ่มเข้าสู่ระบบ", registerButton: "ปุ่มสร้างบัญชี", registerLink: "ลิงก์สมัครสมาชิก", loginLink: "ลิงก์เข้าสู่ระบบ",
@@ -61,6 +62,15 @@ export default function AdminPage({ user, site, onSaved, goBack, setUser }) {
   const locked = !loaded || loading || saving || uploading;
   const markDirty = useCallback((id, value) => setRowDirty(current => current[id] === value ? current : { ...current, [id]: value }), []);
   const markBusy = useCallback((id, value) => setRowBusy(current => current[id] === value ? current : { ...current, [id]: value }), []);
+  const panelProps = id => ({ id: `admin-panel-${id}`, role: "tabpanel", "aria-labelledby": `admin-tab-${id}`, hidden: tab !== id, tabIndex: 0 });
+  const moveTab = event => {
+    const index = tabs.findIndex(item => item.id === tab);
+    const destination = { ArrowRight: (index + 1) % tabs.length, ArrowLeft: (index + tabs.length - 1) % tabs.length, Home: 0, End: tabs.length - 1 }[event.key];
+    if (destination === undefined) return;
+    event.preventDefault();
+    setTab(tabs[destination].id);
+    document.getElementById(`admin-tab-${tabs[destination].id}`)?.focus();
+  };
 
   const loadSite = async () => {
     setLoading(true); setError("");
@@ -139,29 +149,29 @@ export default function AdminPage({ user, site, onSaved, goBack, setUser }) {
 
   return <main className="admin-shell"><div className="admin-wrap">
     <header className="admin-top"><button className="admin-btn admin-btn-light" disabled={busy} onClick={leave}>← กลับไปที่เว็บไซต์</button><span className="admin-pill">ผู้ดูแลระบบ · {user.name}</span></header>
-    <section className="admin-hero"><div><p className="admin-eyebrow">จัดการเว็บไซต์</p><h1>ทุกการเปลี่ยนแปลง<br/><span>เริ่มจากพื้นที่นี้.</span></h1><p>แก้แบรนด์ ข้อความ รูปภาพ เมนูอาหาร และดูแลสมาชิกในที่เดียว</p></div><div className="admin-save-box"><span className={`admin-status ${dirty ? "is-dirty" : ""}`}>{loading ? "กำลังโหลดข้อมูล…" : dirty ? "● มีข้อมูลที่ยังไม่บันทึก" : "✓ ข้อมูลตรงกับเว็บไซต์"}</span><button className="admin-btn admin-btn-save" disabled={!loaded || busy || !siteDirty} onClick={save}>{saving ? "กำลังบันทึก…" : uploading ? "กำลังอัปโหลด…" : "บันทึกทั้งหมด"}</button><p>บันทึกการตั้งค่า ข้อความ รูปภาพ เมนู และคู่มือ<br/>สมาชิกและโพสต์มีปุ่มบันทึกแยกแต่ละรายการ</p></div></section>
-    <nav className="admin-tabs" aria-label="หมวดการจัดการ">{tabs.map(item => <button key={item.id} onClick={() => setTab(item.id)} className={tab === item.id ? "active" : ""} aria-current={tab === item.id ? "page" : undefined}>{item.label}{item.id === "meals" && <span>{draft.meals.length}</span>}</button>)}</nav>
+    <section className="admin-hero"><div><p className="admin-eyebrow">จัดการเว็บไซต์</p><h1>ทุกการเปลี่ยนแปลง<br/><span>เริ่มจากพื้นที่นี้.</span></h1><p>แก้แบรนด์ ข้อความ รูปภาพ เมนูอาหาร และดูแลสมาชิกในที่เดียว</p></div><div className="admin-save-box"><span className={`admin-status ${dirty ? "is-dirty" : ""}`}>{loading ? "กำลังโหลดข้อมูล…" : !loaded ? "ยังไม่ได้โหลดข้อมูลเว็บไซต์" : dirty ? "● มีข้อมูลที่ยังไม่บันทึก" : "✓ ข้อมูลตรงกับเว็บไซต์"}</span><button className="admin-btn admin-btn-save" disabled={!loaded || busy || !siteDirty} onClick={save}>{saving ? "กำลังบันทึก…" : uploading ? "กำลังอัปโหลด…" : "บันทึกทั้งหมด"}</button><p>บันทึกการตั้งค่า ข้อความ รูปภาพ เมนู และคู่มือ<br/>สมาชิกและโพสต์มีปุ่มบันทึกแยกแต่ละรายการ</p></div></section>
+    <nav className="admin-tabs" role="tablist" aria-label="หมวดการจัดการ" onKeyDown={moveTab}>{tabs.map(item => <button type="button" key={item.id} id={`admin-tab-${item.id}`} role="tab" aria-controls={`admin-panel-${item.id}`} aria-selected={tab === item.id} tabIndex={tab === item.id ? 0 : -1} onClick={() => setTab(item.id)} className={tab === item.id ? "active" : ""}>{item.label}{item.id === "meals" && <span>{draft.meals.length}</span>}</button>)}</nav>
     {error && <div className="admin-message admin-error" role="alert"><p>{error}</p>{!loaded && !loading && <button className="admin-btn admin-btn-light" onClick={loadSite}>ลองโหลดอีกครั้ง</button>}{conflict && <div className="admin-actions"><button className="admin-btn admin-btn-light" onClick={downloadDraft}>ดาวน์โหลดแบบร่าง</button><button className="admin-btn admin-btn-light" disabled={busy || loading} onClick={reloadSite}>โหลดเวอร์ชันล่าสุด</button></div>}</div>}
     {notice && <p className="admin-message admin-success" role="status">{notice}</p>}
     {uploadStatus && <p className="admin-message" role="status" aria-live="polite">{uploadStatus}</p>}
     <div className={`admin-workspace ${["users", "community"].includes(tab) ? "admin-workspace-wide" : ""}`}>
       <div className="admin-editor">
         <fieldset className="admin-fieldset" disabled={locked} hidden={["users", "community"].includes(tab)}>
-          <div hidden={tab !== "general"}>
+          <div {...panelProps("general")} aria-busy={loading || saving}>
             <Card title="ชื่อและแบรนด์" text="ชื่อที่ผู้ใช้เห็นบนเว็บไซต์และข้อความแทนโลโก้"><div className="admin-grid"><Field label="ชื่อเว็บไซต์" value={draft.brand.name} maxLength={80} onChange={value => patch("brand", "name", value)}/><Field label="ตัวอักษรแทนโลโก้" value={draft.brand.logoText} maxLength={16} onChange={value => patch("brand", "logoText", value)} hint="ใช้เมื่อยังไม่มีรูปโลโก้"/></div></Card>
             <Card title="สีของเว็บไซต์" text="เลือกสีหลัก สีเน้น พื้นหลัง และตัวอักษร ดูผลทางด้านข้าง"><div className="admin-grid">{Object.entries({ primary: "สีหลัก", accent: "สีเน้น", background: "สีพื้นหลัง", text: "สีตัวอักษร" }).map(([key, label]) => <ColorField key={key} label={label} value={draft.theme[key]} onChange={value => patch("theme", key, value)}/>)}</div></Card>
             <Card title="เป้าหมายสารอาหารต่อวัน" text="ค่าเริ่มต้นสำหรับแถบติดตามโภชนาการ ระบุตัวเลขมากกว่า 0"><div className="admin-grid">{Object.entries(nutrientLabels).map(([key, label]) => <Field key={key} label={label} type="number" min="0.01" step="any" value={draft.goals[key]} onChange={value => patch("goals", key, value === "" ? "" : Number(value))}/>)}</div></Card>
           </div>
-          <div hidden={tab !== "content"}><Card title="ข้อความบนเว็บไซต์" text="เลือกหน้าที่ต้องการแก้ ข้อความจะแสดงตามที่พิมพ์โดยไม่มีการแทรก HTML">{Object.entries(draft.copy).map(([group, fields], index) => <details key={group} className="admin-accordion" open={index === 0}><summary>{copyGroups[group] || `ข้อความหน้า ${index + 1}`}<span>{Object.keys(fields).length} ช่อง</span></summary><div className="admin-grid admin-accordion-body">{Object.entries(fields).map(([key, value], fieldIndex) => <Field key={key} label={copyLabels[key] || `ข้อความที่ ${fieldIndex + 1}`} value={value} multiline maxLength={3000} onChange={next => { setNotice(""); setDraft(current => ({ ...current, copy: { ...current.copy, [group]: { ...current.copy[group], [key]: next } } })); }}/>)}</div></details>)}</Card></div>
-          <div hidden={tab !== "media"}>
+          <div {...panelProps("content")}><Card title="ข้อความบนเว็บไซต์" text="เลือกหน้าที่ต้องการแก้ ข้อความจะแสดงตามที่พิมพ์โดยไม่มีการแทรก HTML">{Object.entries(draft.copy).map(([group, fields], index) => <details key={group} className="admin-accordion" open={index === 0}><summary>{copyGroups[group] || `ข้อความหน้า ${index + 1}`}<span>{Object.keys(fields).length} ช่อง</span></summary><div className="admin-grid admin-accordion-body">{Object.entries(fields).map(([key, value], fieldIndex) => <Field key={key} label={copyLabels[key] || `ข้อความที่ ${fieldIndex + 1}`} value={value} multiline maxLength={3000} onChange={next => { setNotice(""); setDraft(current => ({ ...current, copy: { ...current.copy, [group]: { ...current.copy[group], [key]: next } } })); }}/>)}</div></details>)}</Card></div>
+          <div {...panelProps("media")}>
             <Card title="โลโก้และไอคอนแท็บ" text="วางลิงก์ HTTPS หรืออัปโหลด PNG, JPG หรือ WebP ขนาดไม่เกิน 1.5 MB"><AssetField label="รูปโลโก้" value={draft.brand.logoUrl} onChange={value => patch("brand", "logoUrl", value)} onUpload={event => uploadAsset(event, url => patch("brand", "logoUrl", url))}/><AssetField label="ไอคอนบนแท็บเบราว์เซอร์" value={draft.brand.faviconUrl} onChange={value => patch("brand", "faviconUrl", value)} onUpload={event => uploadAsset(event, url => patch("brand", "faviconUrl", url))}/></Card>
             <Card title="ไอคอนและภาพหลัก" text="ใส่อีโมจิหรือลิงก์รูป HTTPS เว้นว่างเพื่อใช้ไอคอนเริ่มต้น">{Object.entries({ hero: "ภาพอาหารในส่วนแนะนำ", user: "ไอคอนบัญชีผู้ใช้", clock: "ไอคอนเวลาและประวัติ", arrow: "ไอคอนย้อนกลับ", spark: "ไอคอนชุมชนและกิจกรรม" }).map(([key, label]) => <AssetField key={key} label={label} value={draft.icons[key]} emoji onChange={value => patch("icons", key, value)} onUpload={event => uploadAsset(event, url => patch("icons", key, url))}/>)}</Card>
           </div>
-          <div hidden={tab !== "meals"}><Card title="เมนูอาหาร" text="เพิ่ม แก้ไข ลบ หรือเลื่อนลำดับได้สูงสุด 40 เมนู เมนูชื่อซ้ำได้"><button className="admin-btn admin-btn-light" type="button" disabled={draft.meals.length >= 40} onClick={() => { setDraft(current => ({ ...current, meals: [...current.meals, { id: newId("meal"), name: "เมนูใหม่", tag: "ทั่วไป", calories: 0, protein: 0, carbs: 0, fat: 0, emoji: "🍽️", color: "#eaf0dd", photo: "" }] })); setNotice(""); }}>＋ เพิ่มเมนูอาหาร</button>{!draft.meals.length && <p className="admin-empty">ยังไม่มีเมนูอาหาร กดเพิ่มเมนูเพื่อเริ่มต้น</p>}<div className="admin-item-list">{draft.meals.map((meal, index) => <details className="admin-accordion" key={meal.id}><summary><span className="admin-item-number">{String(index + 1).padStart(2, "0")}</span><span className="admin-item-name">{meal.emoji} {meal.name || "เมนูยังไม่มีชื่อ"}</span><span className="admin-summary-meta">{meal.calories || 0} kcal</span></summary><div className="admin-accordion-body"><ItemActions name={meal.name} index={index} length={draft.meals.length} move={direction => moveItem("meals", index, direction)} remove={() => removeItem("meals", meal.id)}/><div className="admin-grid"><Field label="ชื่ออาหาร" value={meal.name} maxLength={120} onChange={value => patchItem("meals", meal.id, "name", value)}/><Field label="หมวดหมู่" value={meal.tag} maxLength={80} onChange={value => patchItem("meals", meal.id, "tag", value)} hint="ใช้ชื่อเดียวกันเพื่อจัดอาหารไว้ในตัวกรองเดียวกัน"/>{Object.entries(nutrientLabels).map(([key, label]) => <Field key={key} label={label} type="number" min="0" step="any" value={meal[key]} onChange={value => patchItem("meals", meal.id, key, value === "" ? "" : Number(value))}/>)}<Field label="อีโมจิแทนรูป" maxLength={32} value={meal.emoji} onChange={value => patchItem("meals", meal.id, "emoji", value)}/><ColorField label="สีพื้นหลังรูป" value={meal.color} onChange={value => patchItem("meals", meal.id, "color", value)}/></div><AssetField label="รูปอาหาร" value={meal.photo} onChange={value => patchItem("meals", meal.id, "photo", value)} onUpload={event => uploadAsset(event, url => patchItem("meals", meal.id, "photo", url))}/></div></details>)}</div></Card></div>
-          <div hidden={tab !== "guides"}><Card title="คู่มือโภชนาการ" text="จัดการหัวข้อและคำอธิบายที่แสดงท้ายหน้าหลักได้สูงสุด 40 รายการ"><button type="button" className="admin-btn admin-btn-light" disabled={draft.guides.length >= 40} onClick={() => { setDraft(current => ({ ...current, guides: [...current.guides, { id: newId("guide"), title: "หัวข้อใหม่", text: "คำอธิบายโภชนาการ" }] })); setNotice(""); }}>＋ เพิ่มหัวข้อคู่มือ</button>{!draft.guides.length && <p className="admin-empty">ยังไม่มีคู่มือ กดเพิ่มหัวข้อเพื่อเริ่มต้น</p>}<div className="admin-item-list">{draft.guides.map((guide, index) => <article className="admin-guide" key={guide.id}><ItemActions name={guide.title} index={index} length={draft.guides.length} move={direction => moveItem("guides", index, direction)} remove={() => removeItem("guides", guide.id)}/><Field label={`หัวข้อที่ ${index + 1}`} value={guide.title} maxLength={160} onChange={value => patchItem("guides", guide.id, "title", value)}/><Field label="คำอธิบาย" value={guide.text} maxLength={3000} multiline onChange={value => patchItem("guides", guide.id, "text", value)}/></article>)}</div></Card></div>
+          <div {...panelProps("meals")}><Card title="เมนูอาหาร" text="เพิ่ม แก้ไข ลบ หรือเลื่อนลำดับได้สูงสุด 40 เมนู เมนูชื่อซ้ำได้"><button className="admin-btn admin-btn-light" type="button" disabled={draft.meals.length >= 40} onClick={() => { setDraft(current => ({ ...current, meals: [...current.meals, { id: newId("meal"), name: "เมนูใหม่", tag: "ทั่วไป", calories: 0, protein: 0, carbs: 0, fat: 0, emoji: "🍽️", color: "#eaf0dd", photo: "" }] })); setNotice(""); }}>＋ เพิ่มเมนูอาหาร</button>{!draft.meals.length && <p className="admin-empty">ยังไม่มีเมนูอาหาร กดเพิ่มเมนูเพื่อเริ่มต้น</p>}<div className="admin-item-list">{draft.meals.map((meal, index) => <details className="admin-accordion" key={meal.id}><summary><span className="admin-item-number">{String(index + 1).padStart(2, "0")}</span><span className="admin-item-name">{meal.emoji} {meal.name || "เมนูยังไม่มีชื่อ"}</span><span className="admin-summary-meta">{meal.calories || 0} kcal</span></summary><div className="admin-accordion-body"><ItemActions name={meal.name} index={index} length={draft.meals.length} move={direction => moveItem("meals", index, direction)} remove={() => removeItem("meals", meal.id)}/><div className="admin-grid"><Field label="ชื่ออาหาร" value={meal.name} maxLength={120} onChange={value => patchItem("meals", meal.id, "name", value)}/><Field label="หมวดหมู่" value={meal.tag} maxLength={80} onChange={value => patchItem("meals", meal.id, "tag", value)} hint="ใช้ชื่อเดียวกันเพื่อจัดอาหารไว้ในตัวกรองเดียวกัน"/>{Object.entries(nutrientLabels).map(([key, label]) => <Field key={key} label={label} type="number" min="0" step="any" value={meal[key]} onChange={value => patchItem("meals", meal.id, key, value === "" ? "" : Number(value))}/>)}<Field label="อีโมจิแทนรูป" maxLength={32} value={meal.emoji} onChange={value => patchItem("meals", meal.id, "emoji", value)}/><ColorField label="สีพื้นหลังรูป" value={meal.color} onChange={value => patchItem("meals", meal.id, "color", value)}/></div><AssetField label="รูปอาหาร" value={meal.photo} onChange={value => patchItem("meals", meal.id, "photo", value)} onUpload={event => uploadAsset(event, url => patchItem("meals", meal.id, "photo", url))}/></div></details>)}</div></Card></div>
+          <div {...panelProps("guides")}><Card title="คู่มือโภชนาการ" text="จัดการหัวข้อและคำอธิบายที่แสดงท้ายหน้าหลักได้สูงสุด 40 รายการ"><button type="button" className="admin-btn admin-btn-light" disabled={draft.guides.length >= 40} onClick={() => { setDraft(current => ({ ...current, guides: [...current.guides, { id: newId("guide"), title: "หัวข้อใหม่", text: "คำอธิบายโภชนาการ" }] })); setNotice(""); }}>＋ เพิ่มหัวข้อคู่มือ</button>{!draft.guides.length && <p className="admin-empty">ยังไม่มีคู่มือ กดเพิ่มหัวข้อเพื่อเริ่มต้น</p>}<div className="admin-item-list">{draft.guides.map((guide, index) => <article className="admin-guide" key={guide.id}><ItemActions name={guide.title} index={index} length={draft.guides.length} move={direction => moveItem("guides", index, direction)} remove={() => removeItem("guides", guide.id)}/><Field label={`หัวข้อที่ ${index + 1}`} value={guide.title} maxLength={160} onChange={value => patchItem("guides", guide.id, "title", value)}/><Field label="คำอธิบาย" value={guide.text} maxLength={3000} multiline onChange={value => patchItem("guides", guide.id, "text", value)}/></article>)}</div></Card></div>
         </fieldset>
-        <div hidden={tab !== "users"}><UsersPanel currentUser={user} setUser={setUser} markDirty={markDirty} markBusy={markBusy}/></div>
-        <div hidden={tab !== "community"}><PostsPanel markDirty={markDirty} markBusy={markBusy}/></div>
+        <div {...panelProps("users")}><UsersPanel currentUser={user} setUser={setUser} markDirty={markDirty} markBusy={markBusy}/></div>
+        <div {...panelProps("community")}><PostsPanel markDirty={markDirty} markBusy={markBusy}/></div>
       </div>
       {!["users", "community"].includes(tab) && <DraftPreview draft={draft} dirty={siteDirty} loading={!loaded}/>}
     </div>
@@ -186,82 +196,155 @@ function DraftPreview({ draft, dirty, loading }) {
   return <aside className="admin-preview"><div className="admin-preview-heading"><h2>ตัวอย่างแบบร่าง</h2><span>{loading ? "กำลังโหลด" : dirty ? "ยังไม่เผยแพร่" : "เวอร์ชันปัจจุบัน"}</span></div><div className="admin-preview-window" style={{ background: theme.background, color: theme.text }}><div className="admin-preview-brand"><span style={{ background: theme.primary, color: theme.accent }}><Asset value={draft.brand.logoUrl || draft.brand.logoText} fallback="n"/></span><b>{draft.brand.name}</b></div><div className="admin-preview-hero" style={{ background: theme.primary }}><small style={{ color: theme.accent }}>{copy.heroEyebrow}</small><h3>{copy.heroTitle}<br/><span style={{ color: theme.accent }}>{copy.heroHighlight}</span></h3><p>{copy.heroDescription}</p><div className="admin-preview-hero-row"><span className="admin-preview-cta" style={{ background: theme.accent, color: theme.primary }}>{copy.heroButton}</span><span className="admin-preview-hero-asset"><Asset value={draft.icons.hero} fallback="🥗"/></span></div></div><div className="admin-preview-meals"><h4>{copy.menuTitle} {copy.menuHighlight}</h4>{draft.meals.slice(0, 3).map(meal => <div key={meal.id} className="admin-preview-meal"><span style={{ background: colorOr(meal.color, "#eaf0dd") }}><Asset value={meal.photo || meal.emoji} fallback="🍽️"/></span><div><b>{meal.name || "เมนูยังไม่มีชื่อ"}</b><small>{meal.tag} · {meal.calories || 0} kcal</small></div></div>)}{!draft.meals.length && <p>{copy.emptyMeals}</p>}</div></div><p className="admin-preview-note">ตัวอย่างย่อของหน้าหลัก การแก้ไขเว็บไซต์มีผลเมื่อกดบันทึกทั้งหมด</p></aside>;
 }
 
-function UsersPanel({ currentUser, setUser, markDirty, markBusy }) {
-  const [users, setUsers] = useState([]); const [loading, setLoading] = useState(true); const [error, setError] = useState(""); const [query, setQuery] = useState(""); const [version, setVersion] = useState(0);
-  const dirtyRef = useRef({}); const busyRef = useRef({});
-  const load = async () => {
-    if (Object.values(busyRef.current).some(Boolean)) return;
-    if (Object.values(dirtyRef.current).some(Boolean) && !window.confirm("โหลดรายชื่อสมาชิกใหม่และทิ้งการแก้ไขสมาชิกที่ยังไม่บันทึก?")) return;
+function useAdminList(fetchItems, discardMessage, prefix, markDirty, markBusy) {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [version, setVersion] = useState(0);
+  const [hasBusyRows, setHasBusyRows] = useState(false);
+  const dirtyRef = useRef({}); const busyRef = useRef({}); const loadingRef = useRef(false); const alive = useRef(true);
+  const load = useCallback(async () => {
+    if (loadingRef.current || Object.values(busyRef.current).some(Boolean)) return;
+    if (Object.values(dirtyRef.current).some(Boolean) && !window.confirm(discardMessage)) return;
+    loadingRef.current = true;
     setLoading(true); setError("");
-    try { setUsers(await api.users()); setVersion(value => value + 1); } catch (loadError) { setError(loadError.message); }
-    finally { setLoading(false); }
-  };
-  useEffect(() => { load(); }, []);
-  const dirty = useCallback((id, value) => { dirtyRef.current[id] = value; markDirty(`user-${id}`, value); }, [markDirty]);
-  const busy = useCallback((id, value) => { busyRef.current[id] = value; markBusy(`user-${id}`, value); }, [markBusy]);
+    try {
+      const next = await fetchItems();
+      if (!alive.current) return;
+      setItems(next); setVersion(value => value + 1);
+    } catch (loadError) { if (alive.current) setError(loadError.message); }
+    finally { loadingRef.current = false; if (alive.current) setLoading(false); }
+  }, [fetchItems, discardMessage]);
+  useEffect(() => { alive.current = true; load(); return () => { alive.current = false; }; }, [load]);
+  const dirty = useCallback((id, value) => {
+    dirtyRef.current[id] = value;
+    markDirty(`${prefix}-${id}`, value);
+  }, [prefix, markDirty]);
+  const busy = useCallback((id, value) => {
+    busyRef.current[id] = value;
+    if (alive.current) setHasBusyRows(Object.values(busyRef.current).some(Boolean));
+    markBusy(`${prefix}-${id}`, value);
+  }, [prefix, markBusy]);
+  return { items, setItems, loading, error, version, hasBusyRows, load, dirty, busy };
+}
+
+function UsersPanel({ currentUser, setUser, markDirty, markBusy }) {
+  const { items: users, setItems: setUsers, loading, error, version, hasBusyRows, load, dirty, busy } = useAdminList(api.users, "โหลดรายชื่อสมาชิกใหม่และทิ้งการแก้ไขสมาชิกที่ยังไม่บันทึก?", "user", markDirty, markBusy);
+  const [query, setQuery] = useState(""); const [role, setRole] = useState("all");
   const saved = updated => {
     setUsers(current => current.map(item => item.id === updated.id ? { ...item, ...updated } : item));
-    if (updated.id === currentUser.id) setUser(current => ({ ...current, ...updated }));
+    if (updated.id === currentUser.id) setUser(current => current ? { ...current, ...updated } : current);
   };
   const needle = query.trim().toLocaleLowerCase();
-  return <Card title="จัดการสมาชิก" text="แก้ชื่อ อีเมล และสิทธิ์ แล้วบันทึกแยกทีละบัญชี"><div className="admin-panel-toolbar"><Field label="ค้นหาสมาชิก" value={query} onChange={setQuery} placeholder="ชื่อหรืออีเมล"/><button className="admin-btn admin-btn-light" disabled={loading} onClick={load}>{loading ? "กำลังโหลด…" : "โหลดรายชื่อล่าสุด"}</button></div>{error && <p className="admin-message admin-error" role="alert">{error}</p>}<div className="admin-user-list">{users.map(account => <div key={`${account.id}-${version}`} hidden={!!needle && !`${account.name} ${account.email}`.toLocaleLowerCase().includes(needle)}><AdminUserRow account={account} currentUser={currentUser} onSaved={saved} markDirty={dirty} markBusy={busy}/></div>)}</div>{!loading && !users.length && !error && <p className="admin-empty">ยังไม่มีสมาชิก</p>}{!loading && users.length > 0 && !users.some(account => `${account.name} ${account.email}`.toLocaleLowerCase().includes(needle)) && <p className="admin-empty">ไม่พบสมาชิกที่ตรงกับการค้นหา</p>}</Card>;
+  const matches = account => (role === "all" || account.role === role) && `${account.name} ${account.email}`.toLocaleLowerCase().includes(needle);
+  const visibleCount = users.filter(matches).length;
+  const adminCount = users.filter(account => account.role === "admin").length;
+  return <Card title="จัดการสมาชิก" text="แก้ชื่อ อีเมล และสิทธิ์ แล้วบันทึกแยกทีละบัญชี">
+    <div className="admin-list-summary"><span>ทั้งหมด <b>{users.length}</b></span><span>ผู้ดูแลระบบ <b>{adminCount}</b></span><span>สมาชิก <b>{users.length - adminCount}</b></span></div>
+    <div className="admin-panel-toolbar">
+      <Field label="ค้นหาสมาชิก" type="search" value={query} onChange={setQuery} placeholder="ชื่อหรืออีเมล"/>
+      <label className="admin-field admin-filter"><span>ประเภทบัญชี</span><select className="admin-input" value={role} onChange={event => setRole(event.target.value)}><option value="all">ทุกประเภท</option><option value="admin">ผู้ดูแลระบบ</option><option value="user">สมาชิก</option></select></label>
+      <button className="admin-btn admin-btn-light" disabled={loading || hasBusyRows} onClick={load}>{loading ? "กำลังโหลด…" : "โหลดรายชื่อล่าสุด"}</button>
+    </div>
+    {error && <div className="admin-message admin-error" role="alert"><p>โหลดรายชื่อสมาชิกไม่สำเร็จ: {error}</p><button className="admin-btn admin-btn-light" disabled={loading || hasBusyRows} onClick={load}>ลองอีกครั้ง</button></div>}
+    <p className="admin-result-count" role="status">{loading ? "กำลังโหลดรายชื่อสมาชิก…" : `แสดง ${visibleCount} จาก ${users.length} บัญชี`}</p>
+    <div className="admin-user-list" aria-busy={loading}>{users.map(account => <div key={`${account.id}-${version}`} hidden={!matches(account)}><AdminUserRow account={account} currentUser={currentUser} locked={loading} onSaved={saved} markDirty={dirty} markBusy={busy}/></div>)}</div>
+    {!loading && !users.length && !error && <p className="admin-empty">ยังไม่มีสมาชิก</p>}
+    {!loading && users.length > 0 && !visibleCount && <p className="admin-empty">ไม่พบสมาชิกที่ตรงกับตัวกรอง <button className="admin-text-btn" onClick={() => { setQuery(""); setRole("all"); }}>ล้างตัวกรอง</button></p>}
+  </Card>;
 }
-function AdminUserRow({ account, currentUser, onSaved, markDirty, markBusy }) {
+
+function AdminUserRow({ account, currentUser, locked, onSaved, markDirty, markBusy }) {
   const [draft, setDraft] = useState(account); const [saving, setSaving] = useState(false); const [error, setError] = useState(""); const [notice, setNotice] = useState("");
+  const savingRef = useRef(false);
+  const ownAccount = account.id === currentUser.id;
   const dirty = ["name", "email", "role"].some(key => draft[key] !== account[key]);
   useEffect(() => { setDraft(account); }, [account]);
   useEffect(() => { markDirty(account.id, dirty); return () => markDirty(account.id, false); }, [account.id, dirty, markDirty]);
   useEffect(() => { markBusy(account.id, saving); return () => markBusy(account.id, false); }, [account.id, saving, markBusy]);
-  const patch = (key, value) => { setDraft(current => ({ ...current, [key]: value })); setNotice(""); };
+  const patch = (key, value) => { setDraft(current => ({ ...current, [key]: value })); setNotice(""); setError(""); };
   const save = async event => {
-    event.preventDefault(); if (saving || !dirty) return;
+    event.preventDefault(); if (savingRef.current || locked || !dirty) return;
     if (!draft.name.trim() || !draft.email.trim()) { setError("กรุณากรอกชื่อและอีเมลให้ครบ"); return; }
-    if (account.id === currentUser.id && draft.role !== "admin" && !window.confirm("ลดสิทธิ์บัญชีของคุณเป็นสมาชิก? หลังบันทึกคุณจะออกจากหน้าแอดมิน โปรดบันทึกการแก้ไขเว็บไซต์ก่อน")) return;
+    if (ownAccount && draft.role !== "admin") { setError("ไม่สามารถลดสิทธิ์บัญชีของคุณเองได้ ให้ผู้ดูแลคนอื่นเป็นผู้เปลี่ยนสิทธิ์"); return; }
+    savingRef.current = true; markBusy(account.id, true);
     setSaving(true); setError(""); setNotice("");
     try { const updated = await api.updateUser(account.id, { name: draft.name.trim(), email: draft.email.trim(), role: draft.role }); onSaved(updated); setNotice("บันทึกบัญชีแล้ว"); }
     catch (saveError) { setError(saveError.message); }
-    finally { setSaving(false); }
+    finally { savingRef.current = false; markBusy(account.id, false); setSaving(false); }
   };
-  return <form className="admin-user-row" onSubmit={save}><div className="admin-user-heading"><b>{account.name}</b><span>{account.id === currentUser.id ? "บัญชีของคุณ" : account.role === "admin" ? "ผู้ดูแลระบบ" : "สมาชิก"}</span></div><fieldset disabled={saving} className="admin-user-fields"><Field label="ชื่อ" value={draft.name} required maxLength={80} onChange={value => patch("name", value)}/><Field label="อีเมล" type="email" required value={draft.email} maxLength={254} onChange={value => patch("email", value)}/><label className="admin-field"><span>สิทธิ์</span><select className="admin-input" value={draft.role} onChange={event => patch("role", event.target.value)}><option value="user">สมาชิก</option><option value="admin">ผู้ดูแลระบบ</option></select></label><button className="admin-btn admin-btn-primary" disabled={saving || !dirty}>{saving ? "กำลังบันทึก…" : "บันทึกบัญชี"}</button></fieldset>{error && <p className="admin-row-error" role="alert">{error}</p>}{notice && <p className="admin-row-success" role="status">{notice}</p>}</form>;
+  return <form className={`admin-user-row ${ownAccount ? "is-current" : ""}`} onSubmit={save} aria-busy={saving}>
+    <div className="admin-user-heading"><div><b>{account.name}</b>{account.createdAt && <small>สมัครเมื่อ {new Date(account.createdAt).toLocaleDateString("th-TH")}</small>}</div><span className="admin-role-badge">{ownAccount && "บัญชีของคุณ · "}{account.role === "admin" ? "ผู้ดูแลระบบ" : "สมาชิก"}</span></div>
+    <fieldset disabled={saving || locked} className="admin-user-fields">
+      <Field label="ชื่อ" value={draft.name} required maxLength={80} onChange={value => patch("name", value)}/>
+      <Field label="อีเมล" type="email" required value={draft.email} maxLength={254} onChange={value => patch("email", value)}/>
+      <label className="admin-field"><span>สิทธิ์</span><select className="admin-input" disabled={ownAccount} value={draft.role} onChange={event => patch("role", event.target.value)}><option value="user">สมาชิก</option><option value="admin">ผู้ดูแลระบบ</option></select></label>
+      <button className="admin-btn admin-btn-primary" disabled={saving || locked || !dirty}>{saving ? "กำลังบันทึก…" : "บันทึกบัญชี"}</button>
+    </fieldset>
+    {ownAccount && <p className="admin-row-hint">หากต้องการเปลี่ยนสิทธิ์บัญชีของคุณ ให้ผู้ดูแลคนอื่นดำเนินการ</p>}
+    {error && <p className="admin-row-error" role="alert">{error}</p>}{notice && <p className="admin-row-success" role="status">{notice}</p>}
+  </form>;
 }
 
 function PostsPanel({ markDirty, markBusy }) {
-  const [posts, setPosts] = useState([]); const [loading, setLoading] = useState(true); const [error, setError] = useState(""); const [version, setVersion] = useState(0);
-  const dirtyRef = useRef({}); const busyRef = useRef({});
-  const load = async () => {
-    if (Object.values(busyRef.current).some(Boolean)) return;
-    if (Object.values(dirtyRef.current).some(Boolean) && !window.confirm("โหลดโพสต์ล่าสุดและทิ้งการแก้ไขโพสต์ที่ยังไม่บันทึก?")) return;
-    setLoading(true); setError("");
-    try { setPosts(await api.posts()); setVersion(value => value + 1); } catch (loadError) { setError(loadError.message); }
-    finally { setLoading(false); }
-  };
-  useEffect(() => { load(); }, []);
-  const dirty = useCallback((id, value) => { dirtyRef.current[id] = value; markDirty(`post-${id}`, value); }, [markDirty]);
-  const busy = useCallback((id, value) => { busyRef.current[id] = value; markBusy(`post-${id}`, value); }, [markBusy]);
-  return <Card title="ดูแลชุมชน" text="แก้ข้อความและหมวดหมู่ ลบโพสต์หรือความคิดเห็น การบันทึกและการลบมีผลทันที"><div className="admin-panel-toolbar"><p>{loading ? "กำลังโหลดโพสต์…" : `${posts.length} โพสต์ล่าสุด`}</p><button className="admin-btn admin-btn-light" disabled={loading} onClick={load}>โหลดโพสต์ล่าสุด</button></div>{error && <p role="alert" className="admin-message admin-error">{error}</p>}<div className="admin-post-list">{posts.map(post => <AdminPost key={`${post._id}-${version}`} post={post} markDirty={dirty} markBusy={busy} onSaved={updated => setPosts(current => current.map(item => item._id === updated._id ? updated : item))} onDeleted={() => setPosts(current => current.filter(item => item._id !== post._id))}/>)}</div>{!posts.length && !loading && !error && <p className="admin-empty">ยังไม่มีโพสต์ในชุมชน</p>}</Card>;
+  const { items: posts, setItems: setPosts, loading, error, version, hasBusyRows, load, dirty, busy } = useAdminList(api.posts, "โหลดโพสต์ล่าสุดและทิ้งการแก้ไขโพสต์ที่ยังไม่บันทึก?", "post", markDirty, markBusy);
+  const [query, setQuery] = useState(""); const [category, setCategory] = useState("all");
+  const needle = query.trim().toLocaleLowerCase();
+  const matches = post => (category === "all" || post.category === category) && `${post.authorName} ${post.content} ${(post.comments || []).map(comment => `${comment.authorName} ${comment.content}`).join(" ")}`.toLocaleLowerCase().includes(needle);
+  const visibleCount = posts.filter(matches).length;
+  return <Card title="ดูแลชุมชน" text="แก้ข้อความและหมวดหมู่ ลบโพสต์หรือความคิดเห็น การบันทึกและการลบมีผลทันที">
+    <div className="admin-panel-toolbar">
+      <Field label="ค้นหาโพสต์" type="search" value={query} onChange={setQuery} placeholder="ผู้เขียน ข้อความ หรือความคิดเห็น"/>
+      <label className="admin-field admin-filter"><span>หมวดหมู่</span><select className="admin-input" value={category} onChange={event => setCategory(event.target.value)}><option value="all">ทุกหมวดหมู่</option>{Object.entries(postCategories).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+      <button className="admin-btn admin-btn-light" disabled={loading || hasBusyRows} onClick={load}>{loading ? "กำลังโหลด…" : "โหลดโพสต์ล่าสุด"}</button>
+    </div>
+    {error && <div role="alert" className="admin-message admin-error"><p>โหลดโพสต์ไม่สำเร็จ: {error}</p><button className="admin-btn admin-btn-light" disabled={loading || hasBusyRows} onClick={load}>ลองอีกครั้ง</button></div>}
+    <p className="admin-result-count" role="status">{loading ? "กำลังโหลดโพสต์…" : `แสดง ${visibleCount} จาก ${posts.length} โพสต์ล่าสุด`}</p>
+    <div className="admin-post-list" aria-busy={loading}>{posts.map(post => <div key={`${post._id}-${version}`} hidden={!matches(post)}><AdminPost post={post} locked={loading} markDirty={dirty} markBusy={busy} onSaved={updated => setPosts(current => current.map(item => item._id === updated._id ? updated : item))} onDeleted={() => setPosts(current => current.filter(item => item._id !== post._id))}/></div>)}</div>
+    {!posts.length && !loading && !error && <p className="admin-empty">ยังไม่มีโพสต์ในชุมชน</p>}
+    {!loading && posts.length > 0 && !visibleCount && <p className="admin-empty">ไม่พบโพสต์ที่ตรงกับตัวกรอง <button className="admin-text-btn" onClick={() => { setQuery(""); setCategory("all"); }}>ล้างตัวกรอง</button></p>}
+  </Card>;
 }
-function AdminPost({ post, onSaved, onDeleted, markDirty, markBusy }) {
+
+function AdminPost({ post, locked, onSaved, onDeleted, markDirty, markBusy }) {
   const [content, setContent] = useState(post.content); const [category, setCategory] = useState(post.category); const [busy, setBusy] = useState(false); const [error, setError] = useState(""); const [notice, setNotice] = useState("");
+  const busyRef = useRef(false);
   const dirty = content !== post.content || category !== post.category;
   useEffect(() => { setContent(post.content); setCategory(post.category); }, [post.content, post.category]);
   useEffect(() => { markDirty(post._id, dirty); return () => markDirty(post._id, false); }, [post._id, dirty, markDirty]);
   useEffect(() => { markBusy(post._id, busy); return () => markBusy(post._id, false); }, [post._id, busy, markBusy]);
   const act = async (operation, message) => {
-    if (busy) return;
+    if (busyRef.current || locked) return;
+    busyRef.current = true; markBusy(post._id, true);
     setBusy(true); setError(""); setNotice("");
-    try { await operation(); setNotice(message); } catch (actionError) { setError(actionError.message); } finally { setBusy(false); }
+    try { await operation(); setNotice(message); } catch (actionError) { setError(actionError.message); }
+    finally { busyRef.current = false; markBusy(post._id, false); setBusy(false); }
   };
   const save = () => {
+    if (busyRef.current || locked || !dirty) return;
     if (!content.trim()) { setError("กรุณาระบุข้อความโพสต์"); return; }
     act(async () => onSaved(await api.updatePost(post._id, { content: content.trim(), category })), "บันทึกโพสต์แล้ว");
   };
   const removePost = () => {
-    if (!window.confirm("ลบโพสต์นี้รวมถึงความคิดเห็นทั้งหมดอย่างถาวร?")) return;
+    if (busyRef.current || locked || !window.confirm("ลบโพสต์นี้รวมถึงความคิดเห็นทั้งหมดอย่างถาวร?")) return;
     act(async () => { await api.deletePost(post._id); onDeleted(); }, "");
   };
   const removeComment = comment => {
-    if (!window.confirm(`ลบความคิดเห็นของ ${comment.authorName} อย่างถาวร?`)) return;
-    act(async () => { await api.deleteComment(post._id, comment._id); onSaved({ ...post, comments: post.comments.filter(item => item._id !== comment._id) }); }, "ลบความคิดเห็นแล้ว");
+    if (busyRef.current || locked || !window.confirm(`ลบความคิดเห็นของ ${comment.authorName} อย่างถาวร?`)) return;
+    act(async () => {
+      const updated = await api.deleteComment(post._id, comment._id);
+      onSaved({ ...post, comments: updated.comments });
+    }, "ลบความคิดเห็นแล้ว");
   };
-  return <article className="admin-post"><div className="admin-user-heading"><div><b>{post.authorName}</b><small>{new Date(post.createdAt).toLocaleString("th-TH")}</small></div><span>{post.comments?.length || 0} ความคิดเห็น</span></div><fieldset className="admin-fieldset" disabled={busy}><Field label="ข้อความโพสต์" multiline value={content} maxLength={800} onChange={value => { setContent(value); setNotice(""); }}/><label className="admin-field"><span>หมวดหมู่</span><select className="admin-input" value={category} onChange={event => { setCategory(event.target.value); setNotice(""); }}><option value="food">มื้ออาหาร</option><option value="recipe">สูตรอาหาร</option><option value="knowledge">ความรู้ด้านอาหาร</option><option value="workout">สุขภาพและการออกกำลังกาย</option></select></label>{post.mediaData && isHttps(post.mediaData) && <div className="admin-post-media">{post.mediaType === "video" ? <video src={post.mediaData} controls preload="metadata"/> : <img src={post.mediaData} alt="ไฟล์แนบโพสต์" loading="lazy"/>}</div>}<div className="admin-actions"><button className="admin-btn admin-btn-primary" disabled={busy || !dirty} onClick={save}>{busy ? "กำลังดำเนินการ…" : "บันทึกโพสต์"}</button><button className="admin-text-btn admin-danger" onClick={removePost}>ลบโพสต์</button></div><div className="admin-comments">{post.comments?.map(comment => <div key={comment._id}><p><b>{comment.authorName}</b><span>{comment.content}</span></p><button className="admin-text-btn admin-danger" onClick={() => removeComment(comment)} aria-label={`ลบความคิดเห็นของ ${comment.authorName}`}>ลบ</button></div>)}</div></fieldset>{error && <p role="alert" className="admin-row-error">{error}</p>}{notice && <p role="status" className="admin-row-success">{notice}</p>}</article>;
+  return <article className="admin-post" aria-busy={busy}>
+    <div className="admin-user-heading"><div><b>{post.authorName}</b><small>{new Date(post.createdAt).toLocaleString("th-TH")}</small></div><span>{postCategories[post.category]} · {post.comments?.length || 0} ความคิดเห็น</span></div>
+    <fieldset className="admin-fieldset" disabled={busy || locked}>
+      <Field label="ข้อความโพสต์" multiline value={content} maxLength={800} onChange={value => { setContent(value); setNotice(""); setError(""); }}/>
+      <label className="admin-field"><span>หมวดหมู่</span><select className="admin-input" value={category} onChange={event => { setCategory(event.target.value); setNotice(""); setError(""); }}>{Object.entries(postCategories).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>
+      {post.mediaData && isHttps(post.mediaData) && <div className="admin-post-media">{post.mediaType === "video" ? <video src={post.mediaData} controls preload="metadata"/> : <img src={post.mediaData} alt="ไฟล์แนบโพสต์" loading="lazy"/>}</div>}
+      <div className="admin-actions"><button type="button" className="admin-btn admin-btn-primary" disabled={busy || locked || !dirty} onClick={save}>{busy ? "กำลังดำเนินการ…" : "บันทึกโพสต์"}</button><button type="button" className="admin-text-btn admin-danger" onClick={removePost}>ลบโพสต์</button></div>
+      <div className="admin-comments">{post.comments?.map(comment => <div key={comment._id}><p><b>{comment.authorName}</b><span>{comment.content}</span></p><button type="button" className="admin-text-btn admin-danger" onClick={() => removeComment(comment)} aria-label={`ลบความคิดเห็นของ ${comment.authorName}`}>ลบ</button></div>)}</div>
+    </fieldset>
+    {error && <p role="alert" className="admin-row-error">{error}</p>}{notice && <p role="status" className="admin-row-success">{notice}</p>}
+  </article>;
 }

@@ -1,12 +1,16 @@
-const request = async (path, options = {}) => {
-  const token = localStorage.getItem("nouri-token");
+import { expireSession, readAccessToken } from "./session";
+
+export const request = async (path, options = {}) => {
+  const { auth = true, headers, ...fetchOptions } = options;
+  const token = auth ? readAccessToken() : null;
   const response = await fetch(`/api${path}`, {
-    headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...options.headers },
-    ...options,
+    ...fetchOptions,
+    headers: { "Content-Type": "application/json", ...(token ? { Authorization: `Bearer ${token}` } : {}), ...headers },
     cache: "no-store",
   });
   const body = await response.json().catch(() => ({}));
   if (!response.ok) {
+    if (response.status === 401 && token) expireSession(token);
     const error = new Error(body.message || "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้");
     error.status = response.status;
     throw error;
@@ -15,12 +19,12 @@ const request = async (path, options = {}) => {
 };
 
 export const api = {
-  health: () => request("/health"),
-  site: () => request("/site"),
+  health: () => request("/health", { auth: false }),
+  site: () => request("/site", { auth: false }),
   saveSite: (data) => request("/site", { method: "PUT", body: JSON.stringify(data) }),
-  register: (data) => request("/users/register", { method: "POST", body: JSON.stringify(data) }),
-  login: (data) => request("/users/login", { method: "POST", body: JSON.stringify(data) }),
-  me: () => request("/users/me"),
+  register: (data) => request("/users/register", { auth: false, method: "POST", body: JSON.stringify(data) }),
+  login: (data) => request("/users/login", { auth: false, method: "POST", body: JSON.stringify(data) }),
+  me: (options) => request("/users/me", options),
   activity: () => request("/users/me/activity"),
   recordSession: (durationSeconds) => request("/users/me/activity", { method: "POST", body: JSON.stringify({ durationSeconds }) }),
   users: () => request("/users"),
